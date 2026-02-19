@@ -37,3 +37,15 @@ npm run lint
 - [Vue 3](https://vuejs.org/) – JavaScript-Frontend-Framework
 - [Vite](https://vitejs.dev/) – Dev-Build-Tool
 - [Tanstack Query](https://tanstack.com/query/) - Data Fetching
+
+## 📊 TBA3-Schnittstelle
+
+Die TBA3-Schnittstelle soll die Daten für Abbildungen möglichst standardisieren. Die Schnittstelle muss zwingend für Abbildungen bedient werden (Projektziel von TBA3).
+
+### Dokumentation
+
+Die Dokumentation der Schnittstelle liegt hier vor: https://apps.indibit.eu/tba3-api/docs
+
+### Mock Server
+
+Beispieldaten können hier abgerufen werden: https://apps.indibit.eu/tba3-api
