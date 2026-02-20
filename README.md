@@ -49,3 +49,9 @@ Die Dokumentation der Schnittstelle liegt hier vor: https://apps.indibit.eu/tba3
 ### Mock Server
 
 Beispieldaten können hier abgerufen werden: https://apps.indibit.eu/tba3-api
+
+## Entwürfe
+
+Klassenbericht https://5s9qgq.axshare.com/?id=5l8t5y&p=titel
+
+Schülerbericht https://www.figma.com/proto/onlT4EAaua1e4Hzd0fRmJE/TBAIII-L%C3%B6sungsdiagramm?page-id=0%3A1&node-id=5-35302&p=f&t=AUILFieapbO7wo9E-0&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=5%3A35302
