@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/vue-query'
 import { GroupsApi } from '@tba3/api-resources'
 import { apiConfiguration } from '@/queries/utils'
 import { GUIDE_MAP, type GuideKey } from '@/types'
+import guidingIdeaTexts from '../assets/competence_guidingideas_texts.json'
 
 const activeSubStep = ref(0)
 
@@ -19,11 +20,13 @@ export function useGuidingIdeas(id: string, types: string) {
     })
 
     const guidingIdeaStats = computed(() => {
-        const stats: Record<string, { label: string; hits: number; total: number; percentage: number }> = {}
+        const stats: Record<string, { label: string; text: string; description: string; hits: number; total: number; percentage: number }> = {}
 
         ;(Object.keys(GUIDE_MAP) as GuideKey[]).forEach((key) => {
             stats[key] = {
                 label: GUIDE_MAP[key],
+                text: guidingIdeaTexts.guiding_ideas_texts[key].text.excellent,
+                description:guidingIdeaTexts.guiding_ideas_texts[key].description,
                 hits: 0,
                 total: 0,
                 percentage: 0,
@@ -56,12 +59,22 @@ export function useGuidingIdeas(id: string, types: string) {
         return Object.values(guidingIdeaStats.value).filter((s) => s.percentage > 80)
     })
 
+    // const badPerformers = computed(()=>{
+    //     if (!guidingIdeaStats.value) return []
+    //     return Object.values(guidingIdeaStats.value).filter((s) => s.percentage < 40)
+    // })
+    const badPerformers = computed(() => {
+        if (!data.value || data.value.length === 0) return []
+        return Object.values(guidingIdeaStats.value).filter((s) => s.percentage < 60)
+    })
+
     const extraStepsCount = computed(() => {
         return topPerformers.value.length > 0 ? topPerformers.value.length - 1 : 0
     })
 
     return {
         topPerformers,
+        badPerformers,
         extraStepsCount,
         activeSubStep,
         guidingIdeaStats,

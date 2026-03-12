@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/vue-query'
 import { GroupsApi } from '@tba3/api-resources'
 import { apiConfiguration } from '@/queries/utils'
 import { COMPETENCE_MAP, type CompetenceKey } from '@/types'
+import competenceTexts from '../assets/competence_guidingideas_texts.json'
 
 const activeSubStep = ref(0)
 
@@ -19,11 +20,12 @@ export function useCompetences(id: string, types: string) {
     })
 
     const competenceStats = computed(() => {
-        const stats: Record<string, { label: string; hits: number; total: number; percentage: number }> = {}
+        const stats: Record<string, { label: string; text:string; hits: number; total: number; percentage: number }> = {}
 
         ;(Object.keys(COMPETENCE_MAP) as CompetenceKey[]).forEach((key) => {
             stats[key] = {
                 label: COMPETENCE_MAP[key],
+                text: competenceTexts.competence_texts[key].text.excellent,
                 hits: 0,
                 total: 0,
                 percentage: 0,
@@ -61,12 +63,19 @@ export function useCompetences(id: string, types: string) {
         const candidates = Object.values(competenceStats.value).filter((s) => s.percentage > 80)
         return candidates.filter((item, index, self) => index === self.findIndex((t) => t.label === item.label))
     })
+
+    const badPerformers = computed(() => {
+        if (!competenceStats.value) return []
+        const candidates = Object.values(competenceStats.value).filter((s) => s.percentage < 80)
+        return candidates.filter((item, index, self) => index === self.findIndex((t) => t.label === item.label))
+    })
     const extraStepsCount = computed(() => {
         return topPerformers.value.length > 0 ? topPerformers.value.length - 1 : 0
     })
 
     return {
         topPerformers,
+        badPerformers,
         extraStepsCount,
         activeSubStep,
         competenceStats,
