@@ -1,0 +1,105 @@
+{
+    "competence_texts": {
+        "K1": {
+            "title": "Mathematisch argumentieren",
+            "text": {
+                "excellent": "Im Vergleich zu anderen Schülern war deine stärkste mathematische Kompetenz das mathematische Argumentieren. Das bedeutet, dass du sicher mathematische Zusammenhänge beschreiben und begründen kannst. Das ist wichtig, um andere von deiner Argumentation überzeugen zu können.",
+                "good": "",
+                "normal": "",
+                "bad": ""
+            }
+        },
+        "K2": {
+            "title": "Probleme mathematisch lösen",
+            "text": {
+                "excellent": "Im Vergleich zu anderen Schülern war deine stärkste mathematische Kompetenz das Lösen mathematischer Probleme. Du hast gezeigt, dass du selbstständig geeignete Lösungswege finden kannst.",
+                "good": "",
+                "normal": "",
+                "bad": ""
+            }
+        },
+        "K3": {
+            "title": "Mathematisch modellieren",
+            "text": {
+                "excellent": "Im Vergleich zu anderen Schülern war deine stärkste mathematische Kompetenz das mathematische Modellieren.",
+                "good": "",
+                "normal": "",
+                "bad": ""
+            }
+        },
+        "K4": {
+            "title": "Mathematisch darstellen",
+            "text": {
+                "excellent": "Im Vergleich zu anderen Schülern war deine stärkste mathematische Kompetenz das Verwenden mathematischer Darstellungen. ",
+                "good": "",
+                "normal": "",
+                "bad": ""
+            }
+        },
+        "K5": {
+            "title": "Mit mathematischen Objekten umgehen",
+            "text": {
+                "excellent": "Im Vergleich zu anderen Schülern war deine stärkste mathematische Kompetenz der Umgang mit mathematischen Objekten.",
+                "good": "",
+                "normal": "",
+                "bad": ""
+            }
+        },
+        "K6": {
+            "title": "Mathematisch kommunizieren",
+            "text": {
+                "excellent": "Im Vergleich zu anderen Schülern war deine stärkste mathematische Kompetenz das mathematische Kommunizieren.",
+                "good": "",
+                "normal": "",
+                "bad": ""
+            }
+        }
+    },
+    "guiding_ideas_texts": {
+        "L1": {
+            "title": "Zahl und Operation",
+            "text": {
+                "excellent": "Im Vergleich zu anderen Schülern konntest du im Bereich Umgang mit Zahlen und dem geschickten Rechnen deine besten Ergebnisse erzielen. Das ist eine gute Grundlage für alle weiteren Anwendungen in Mathematik!",
+                "good": "Im Vergleich zu anderen Schülern hast du gezeigt, dass du besser mit Zahlen umgehen und geschickt rechnen kannst – eine starke Grundlage für alles Weitere in Mathematik!",
+                "normal": "Im Umgang mit Zahlen und dem geschickten Rechnen konntest du im Vergleich zu anderen Schülern ähnlich gute Ergebnisse erziehlen – eine starke Grundlage für alles Weitere in der Mathematik!",
+                "bad": "Beim Rechnen hast du noch Unsicherheiten. Im Vergleich zu anderen Schülern konntest du hier weniger Aufgaben richtig lösen. Mit mehr Übung kannst du dir aber eine sichere Grundlage schaffen."
+            }
+        },
+        "L2": {
+            "title": "Größen und Messen",
+            "text": {
+                "excellent": "Im Vergleich zu anderen Schülern konntest du beim Einschätzen und Berechnen von Größen und Maßen deine besten Ergebnisse erzielen. Das ist nicht nur in Mathe sondern auch im Alltag sehr wertvoll.",
+                "good": "Deine Ergebnisse zeigen, dass du im Vergleich zu anderen Schülern Größen und Maße besser einschätzen und berechnen kannst – das ist nicht nur in Mathe, sondern auch im Alltag sehr wertvoll.",
+                "normal": "Deine Ergebnisse zeigen, dass du im Vergleich zu anderen Schülern Größen und Maße ähnlich gut einschätzen und berechnen kannst – das ist nicht nur in Mathe, sondern auch im Alltag sehr wertvoll.",
+                "bad": "Beim Umgang mit Größen und Einheiten hast du im Vergleich zu anderen Schülern noch größere Schwierigkeiten. Schrittweises Üben wird dir helfen, sicherer zu werden."
+            }
+        },
+        "L3": {
+            "title": "Raum und Form",
+            "text": {
+                "excellent": "Im Vergleich zu anderen Schülern konntest du im Bereich Raum und Form deine besten Ergebnisse erzielen. Hier geht es um Flüchen und Körper und deren Eigenschaften wie Kongruenz oder Ähnlichkeit.",
+                "good": "Im Bereich Raum und Form konntest du im Vergleich zu anderen Schülern mehr Aufgaben richtig lösen. Du erkennst Zusammenhänge zuverlässig und kannst sie anwenden – das zeigt dein gutes räumliches Denken.",
+                "normal": "Im Bereich Raum und Form konntest du im Vergleich zu anderen Schülern ähnlich gute Ergebnisse erreichen. Du erkennst Zusammenhänge und kannst sie anwenden – das zeigt dein gutes räumliches Denken.",
+                "bad": "Im Bereich Raum und Form fällt es dir noch schwer, Zusammenhänge zu erkennen. Wenn du weiter trainierst, wirst du dich besser orientieren können."
+            }
+        },
+        "L4": {
+            "title": "Strukturen und funktionaler Zusammenhang",
+            "text": {
+                "excellent": "Im Vergleich zu anderen Schülern konntest du im Bereich funktionaler Zusammenhang deine besten Ergebnisse erzielen. In diesem Bereich geht es um funktionale Beziehungen zwischen Zahlen, Daten bzw. Größen sowie deren Darstellungen und Eigenschaften.",
+                "good": "Im Vergleich zu anderen Schülern kannst Du besser erkennen, wie Größen voneinander abhängen, und diese Zusammenhänge klar darstellen – eine wichtige Fähigkeit für die Mathematik in den höheren Klassen.",
+                "normal": "Du kannst ähnlich gut wie andere Schüler erkennen, wie Größen voneinander abhängen, und diese Zusammenhänge darstellen – eine wichtige Fähigkeit für die Mathematik in den höheren Klassen.",
+                "bad": "Zusammenhänge zwischen Zahlen und Darstellungen (z. B. Tabellen oder Koordinatensysteme) sind für dich im Vergleich zu anderen Schülern noch herausfordernd. Mit gezielten Übungen wirst du sie besser verstehen."
+            }
+        },
+        "L5": {
+            "title": "Daten und Zufall",
+            "text": {
+                "excellent": "Im Vergleich mit anderen Schülern konntest du im Bereich der Auswertung von Daten und der Einschätzung von Wahrscheinlichkeiten deine besten Ergebnisse erzielen.",
+                "good": "Im Vergleich zu anderen Schülern kannst du Daten sicherer lesen, darstellen und interpretieren. Auch Wahrscheinlichkeiten kannst du gut einschätzen – ein Beweis für dein gutes mathematisches Verständnis.",
+                "normal": "Du kannst Daten ähnlich gut wie andere Schüler lesen, darstellen und interpretieren. Auch Wahrscheinlichkeiten kannst du ähnlich gut einschätzen – ein Beweis für dein gutes mathematisches Verständnis.",
+                "bad": "Beim Lesen und Auswerten von Daten bist du noch unsicherer als andere Schüler. Wenn du Schritt für Schritt übst, kannst du hier deutlich sicherer werden."
+            }
+        }
+    }
+}

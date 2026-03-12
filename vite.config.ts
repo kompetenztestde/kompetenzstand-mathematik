@@ -10,6 +10,20 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  server: {
+    proxy: {
+      '/api-proxy': {
+        // target: 'http://localhost:9000',
+        // target: 'https://raw.githubusercontent.com/indibit-eu/tba3/refs/heads/main/tba3-spec.yml',
+        target: 'https://apps.indibit.eu/tba3-api/',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api-proxy/, ''),
+      },
+    },
+    host: true,      
+    port: 3000,        
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

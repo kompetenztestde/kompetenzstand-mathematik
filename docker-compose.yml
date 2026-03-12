@@ -1,0 +1,14 @@
+services:
+  node:
+    image: git.uni-jena.de:5050/inio/tba3/report-outermedia/node:24-dev
+    volumes:
+      - .:/application
+    networks:
+      default:
+    ports:
+      - "3000:3000"
+    entrypoint: ./docker/development.entrypoint
+    container_name: tba3-report
+
+networks:
+  default:

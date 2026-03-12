@@ -7,12 +7,14 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+.pnpm-store
 node_modules
 .DS_Store
 dist
 dist-ssr
 coverage
 *.local
+.tanstack
 
 # Editor directories and files
 .vscode/*
@@ -37,3 +39,10 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# development
+certs
+bundle-analysis.html
+
+# public configuration files
+config.js
