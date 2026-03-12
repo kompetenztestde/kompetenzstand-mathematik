@@ -1,0 +1,46 @@
+
+.statPaginator {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.barBg {
+  height: 12px;
+  background: #eee;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.barFill {
+  height: 100%;
+  background: #42b883;
+  transition: width 0.5s ease-out;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.miniDot {
+  width: 6px;
+  height: 6px;
+  background: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 3px;
+}
+
+.miniDot.active {
+  background: #42b883;
+}
+
+button:disabled {
+  opacity: 0.3;
+}

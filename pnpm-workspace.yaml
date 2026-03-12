@@ -1,0 +1,11 @@
+packages:
+  - packages/*
+
+#minimumReleaseAge: 10080
+
+onlyBuiltDependencies:
+  - '@openapitools/openapi-generator-cli'
+  - esbuild
+
+ignoredBuiltDependencies:
+  - '@nestjs/core'
