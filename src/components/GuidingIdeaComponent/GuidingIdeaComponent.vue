@@ -76,6 +76,7 @@ const currentItem = computed(() => topPerformers.value[activeSubStep.value])
   <div v-if="currentItem" :class="styles.statPaginator">
     <div :class="styles.card">
       <h3>{{ currentItem.label }}</h3>
+       <span :class="styles.text">{{ currentItem.text }}</span>
       </div>    
     </div>
 </template>

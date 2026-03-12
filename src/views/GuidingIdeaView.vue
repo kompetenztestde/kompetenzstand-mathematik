@@ -2,7 +2,7 @@
 import { useQuery } from '@tanstack/vue-query'
 import { GroupsApi } from '@tba3/api-resources'
 import { apiConfiguration } from '@/queries/utils'
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 import { GUIDE_MAP, type GuideKey } from '@/types'
 import GuidingIdeaComponent from '@/components/GuidingIdeaComponent/GuidingIdeaComponent.vue'
 const id = '8b-mathe'
@@ -58,24 +58,24 @@ const total = computed(() => {
 })
 
 const topPerformers = computed(() => {
-  return Object.values(guidingIdeaStats.value).filter(stat => stat.percentage > 80);
-});
-
+    return Object.values(guidingIdeaStats.value).filter((stat) => stat.percentage > 80)
+})
 </script>
 
 <template>
     <div class="page">
         <h1>Leitideen</h1>
         <div class="container"></div>
-        <div>In den folgenden Leitideen hast du sehr gute Ergebnisse geliefert</div>
         <GuidingIdeaComponent />
     </div>
 </template>
 
 <style scoped>
 .page {
-    padding: 20px;
+    padding: 40px 20px;
     text-align: center;
+    text-align: center;
+    min-height: 100vh;
 }
 
 .container {
