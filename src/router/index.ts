@@ -5,7 +5,7 @@ import SpecialView from '@/views/SpecialView.vue'
 import GuidingIdeaView from '@/views/GuidingIdeaView.vue'
 import CompetenceView from '@/views/CompetenceView.vue'
 import BadResultsView from '@/views/BadResultsView.vue'
-
+import FinalView from '@/views/FinalView.vue'
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -19,6 +19,7 @@ const router = createRouter({
         { path: '/step-4/:subId?', name: 'step4', component: CompetenceView },
         { path: '/step-5/:subId?', name: 'step5', component: GuidingIdeaView },
         { path: '/step-6', name: 'step6', component: BadResultsView },
+        { path: '/step-7', name: 'step7', component: FinalView },
     ],
 })
 

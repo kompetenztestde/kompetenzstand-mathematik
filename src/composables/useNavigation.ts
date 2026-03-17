@@ -39,8 +39,8 @@ export function useNavigation(
 
         steps.push({ path: '/step-6', sub: null })
         steps.push({ path: '/step-7', sub: null })
-        steps.push({ path: '/step-8', sub: null })
-        steps.push({ path: '/step-9', sub: null })
+        // steps.push({ path: '/step-8', sub: null })
+        // steps.push({ path: '/step-9', sub: null })
 
         return steps
     })

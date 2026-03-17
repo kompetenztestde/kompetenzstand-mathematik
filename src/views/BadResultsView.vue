@@ -8,6 +8,7 @@ import BarCharts from '@/components/BarCharts/BarCharts.vue'
 <template>
     <div class="page">
         <h1>In den folgenden Bereichen warst du nicht so gut</h1>
+        <span>Schrittweises Üben wird dir helfen, sicherer zu werden.</span>
         <BarCharts :badPerformers="badPerformers" />
     </div>
 </template>
