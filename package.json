@@ -17,13 +17,16 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
-    "@tba3/api-resources": "workspace:*",
+    "@lottiefiles/dotlottie-vue": "^0.11.6",
     "@tanstack/vue-query": "^5.92.9",
+    "@tba3/api-resources": "workspace:*",
     "pinia": "^3.0.4",
     "vue": "^3.5.28",
-    "vue-router": "^5.0.2"
+    "vue-router": "^5.0.2",
+    "echarts": "6.0.0",
+    "vue-echarts": "^8.0.1"
   },
-  "devDependencies": {    
+  "devDependencies": {
     "@tsconfig/node24": "^24.0.4",
     "@types/jsdom": "^27.0.0",
     "@types/node": "^24.10.13",
