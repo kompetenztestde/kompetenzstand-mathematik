@@ -1,0 +1,160 @@
+.page {
+    padding: 2rem;
+    font-family: sans-serif;
+}
+
+.chartContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 900px;
+}
+
+.chartRow {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    align-items: center;
+    gap: 1rem;
+}
+
+.labelArea {
+    text-align: right;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.barTrack {
+    position: relative;
+    height: 35px;
+    background-color: #f2f2f2;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.gridSection {
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: #bbb;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.gridSection:last-child {
+    border-right: none;
+}
+
+.bar {
+    height: 100%;
+    transition: width 1s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    border-radius: 4px;
+    position: relative;
+    z-index: 2;
+}
+
+.barLow {
+    background: linear-gradient(90deg, #ff8787, #ff6b6b);
+}
+.barMid {
+    background: linear-gradient(90deg, #ffd43b, #fcc419);
+}
+.barHigh {
+    background: linear-gradient(90deg, #63e6be, #42b883);
+}
+
+.valueBadge {
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.xAxisLabels {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 1rem;
+    margin-top: -0.5rem;
+}
+
+.axisTicks {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5px;
+    color: #999;
+    font-size: 0.7rem;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.closeBtn {
+    margin-top: 1.5rem;
+    padding: 8px 16px;
+    background: #42b883;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.closeBtn:hover {
+    background: #3aa876;
+}
+
+.infoBtn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    background: #fff;
+    color: #666;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.infoBtn:hover {
+    background: #f0f0f0;
+    border-color: #999;
+}
+
+.labelArea {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-right: 10px;
+}

@@ -1,0 +1,71 @@
+.singleChartWrapper {
+    margin: 24px 0;
+    width: 100%;
+}
+
+.axisTicksTop {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: #aaa;
+    margin-bottom: 4px;
+    padding: 0 2px;
+}
+
+.barTrack {
+    position: relative;
+    height: 28px;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.gridOverlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.gridSection {
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.gridSection:last-child {
+    border-right: none;
+}
+
+.bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
+    transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+    border-radius: 0 4px 4px 0;
+}
+
+.barLow {
+    background: linear-gradient(90deg, #ff8787, #ff6b6b);
+}
+.barMid {
+    background: linear-gradient(90deg, #ffd43b, #fcc419);
+}
+.barHigh {
+    background: linear-gradient(90deg, #63e6be, #42b883);
+}
+
+.valueBadge {
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px;
+}
+
+.header {
+    text-align: left;
+    width: 100%;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #666;
+}

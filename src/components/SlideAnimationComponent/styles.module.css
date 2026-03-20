@@ -21,7 +21,8 @@
 }
 
 .sliderTrack {
-    height: 400px;
+    /* height: 400px; */
+    height: 150px;
     width: 100%;
     background-color: #eee;
     border-radius: 20px;
@@ -30,7 +31,7 @@
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.sliderTrack::after {
+/* .sliderTrack::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -41,7 +42,7 @@
     border-radius: 8px;
     transform: translate(-50%, -50%);
     pointer-events: none;
-}
+} */
 
 .sliderMarker {
     width: 30px;
@@ -76,6 +77,9 @@
     width: 100%;
     border-radius: 20px;
     overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .segment {
@@ -117,4 +121,54 @@
     100% {
         top: 5px;
     }
+}
+
+.main-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.stage {
+    width: 400px;
+    height: 400px;
+}
+
+.full-size {
+    width: 100%;
+    height: 100%;
+}
+
+
+.movableContainer {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    top: 80%;
+    transform: translate(-50%, -50%); 
+    z-index: 10;
+    transition: left 2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.lottie-icon {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.score-label {
+    font-weight: bold;
+    margin-top: -5px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }

@@ -1,8 +1,8 @@
 .chartWrapper {
   width: 100%;
+  margin-top: 32px;
   margin-bottom: 24px;
   font-family: sans-serif;
-  margin-top: 32px;
 }
 
 .chartLabel {
@@ -16,51 +16,33 @@
   color: #666;
 }
 
-.progressContainer {
+.floatingLabels {
   display: flex;
-  height: 32px;
   width: 100%;
-  background-color: #eee; 
-  border-radius: 8px;
-  /* overflow: hidden; */
-  overflow: visible; 
-  position: relative;
-  margin-top: 25px;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 4px;
 }
 
-.segment {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: width 0.5s ease;
-  height: 100%;
-}
-
-.floatingLabel {
-  position: absolute;
-  top: -22px; 
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  font-size: 14px;
+.fLabel {
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
   color: #444;
-  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
 }
 
-.segmentText {
-  color: white;
-  font-size: 11px;
-  font-weight: bold;
+.chartContainer {
+  height: 32px; 
+  width: 100%;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden; 
 }
-
-.segment1 { background-color: #42b883; } 
-.segment2 { background-color: #35495e; } 
-.segment3 { background-color: #64748b; } 
 
 .error {
   color: #e74c3c;
   font-size: 12px;
-  margin-top: 4px;
+  margin-top: 8px;
 }
