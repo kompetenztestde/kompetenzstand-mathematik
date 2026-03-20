@@ -1,6 +1,6 @@
 services:
   node:
-    image: gitlab.innermedia.de:5050/outermedia/docker/node/node:24-dev
+    image: git.uni-jena.de:5050/inio/tba3/report-outermedia/node:24-dev
     volumes:
       - .:/application
     networks:
