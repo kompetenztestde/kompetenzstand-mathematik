@@ -4,10 +4,18 @@ import { use } from 'echarts/core'
 import { SVGRenderer } from 'echarts/renderers'
 import { BarChart } from 'echarts/charts'
 import VChart from 'vue-echarts'
-import { GridComponent, TooltipComponent } from 'echarts/components'
+import { GraphicComponent, GridComponent, TooltipComponent } from 'echarts/components'
 import styles from './styles.module.css'
+import '../../assets/styles/variables.css'
+import { useI18n } from 'vue-i18n'
+import { useModalStore } from '@/stores/modalStore'
+import darkWavesIcon from '@/themes/icons/dark_waves.svg'
+import wavesIcon from '@/themes/icons/waves.svg'
+import lightWavesIcon from '@/themes/icons/light_waves.svg'
 
-use([SVGRenderer, BarChart, GridComponent, TooltipComponent])
+import { watch } from 'vue'
+
+use([SVGRenderer, BarChart, GridComponent, TooltipComponent, GraphicComponent])
 interface Performer {
     label: string
     text: string
@@ -16,35 +24,87 @@ interface Performer {
     total: number
     percentage: number
 }
+
+const { t } = useI18n()
+const modalStore = useModalStore()
+
 const props = defineProps<{
     badPerformers: Performer[]
+    areas: number[]
 }>()
 
 const chartOption = computed(() => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+    
+
+    const area1End = props.areas[0] ?? 33
+    const area2End = props.areas[1] ?? 66
+
+    const splitAreaColors = Array.from({ length: 100 }, (_, i) => {
+        if (i < area1End) return { image: darkWavesIcon, repeat: 'repeat' }
+        if (i < area2End) return { image: wavesIcon, repeat: 'repeat' }
+        return { image: lightWavesIcon, repeat: 'repeat' }
+    })
+
     return {
         renderer: 'svg',
         grid: {
-            left: '3%',
+            left: isMobile ? '0%' : '5%',
             right: '10%',
-            bottom: '15%',
+            bottom: isMobile ? '20%' : '15%',
             top: '5%',
             containLabel: true,
         },
+
         xAxis: {
             type: 'value',
             max: 100,
-            interval: 50,
-            splitLine: { lineStyle: { color: 'rgba(0,0,0,0.05)' } },
+            // interval: 33.33,
+            interval: 1,
+            // splitLine: { lineStyle: { color: 'rgba(0,0,0,0.05)' } },
+            splitLine: {show:false},
             axisLabel: {
                 hideOverlap: false,
+                margin: 12,
+                rotate: isMobile ? 45 : 0,
                 formatter: (value: number) => {
-                    if (value === 0) return 'Unterer Bereich'
-                    if (value === 50) return 'Erwartungsbereich'
-                    if (value === 100) return 'Optimalbereich'
+                    if (value === 0) return t('areas.first')
+                    if (value === 50) return t('areas.middle')
+                    if (value === 100) return t('areas.last')
                     return ''
                 },
-                color: '#aaa',
-                fontSize: 11,
+                color: 'var(--color-navigation-blue)',
+                fontSize: 16,
+            },
+            // splitArea: {
+            //     show: true,
+            //     areaStyle: {
+            //         // color: {
+            //         //     image: wavesIcon,
+            //         //     repeat: 'repeat',
+            //         // },
+            //         color: [
+            //             {
+            //                 image: darkWavesIcon,
+            //                 repeat: 'repeat',
+            //             },
+            //             {
+            //                 image: wavesIcon,
+            //                 repeat: 'repeat',
+            //             },
+            //             {
+            //                 image: lightWavesIcon,
+            //                 repeat: 'repeat',
+            //             },
+            //         ],
+            //         //opacity: 0.3,
+            //     },
+            // },
+            splitArea: {
+                show: true,
+                areaStyle: {
+                    color: splitAreaColors
+                },
             },
         },
         yAxis: {
@@ -52,19 +112,24 @@ const chartOption = computed(() => {
             triggerEvent: true,
             data: props.badPerformers.map((item) => item.label),
             axisLabel: {
-                formatter: (value: string) => `{infoIcon|i}  ${value}`,
+                formatter: (value: string) => `${value} {infoIcon|?}  `,
                 rich: {
                     infoIcon: {
-                        color: '#fff',
-                        backgroundColor: '#42b883',
+                        color: 'var(--color-navigation-blue)',
+                        backgroundColor: 'var(--color-white)',
                         borderRadius: 10,
                         width: 16,
                         height: 16,
                         align: 'center',
-                        fontWeight: 'bold',
-                        fontSize: 10,
+                        shadowColor: 'rgba(0, 32, 137, 0.25)',
+                        padding: [1, 1, 1, 1],
+                        shadowBlur: 6,
+                        shadowOffsetX: 0,
+                        shadowOffsetY: 0,
                     },
                 },
+                color: 'var(--color-navigation-blue)',
+                fontSize: 18,
             },
         },
         series: [
@@ -73,45 +138,18 @@ const chartOption = computed(() => {
                 data: props.badPerformers.map((item) => ({
                     value: item.percentage,
                     itemStyle: {
-                        borderRadius: [0, 4, 4, 0],
-                        color: getEChartsGradient(item.percentage),
+                        color: 'var(--color-berry)',
                     },
                 })),
-                barWidth: 20,
+                barWidth: 40,
                 showBackground: true,
-                backgroundStyle: {
-                    color: 'rgba(0, 0, 0, 0.05)',
-                    borderRadius: 4,
-                },
-                label: {
-                    show: true,
-                    position: 'right',
-                    formatter: '{c}%',
-                    color: '#666',
-                    fontSize: 12,
-                },
+                // backgroundStyle: {
+                //     color: 'rgba(0, 0, 0, 0.05)',
+                // },
             },
         ],
     }
 })
-
-function getEChartsGradient(pct: number) {
-    let colors = ['#ff8787', '#ff6b6b']
-    if (pct >= 33 && pct < 66) colors = ['#ffd43b', '#fcc419']
-    if (pct >= 66) colors = ['#63e6be', '#42b883']
-
-    return {
-        type: 'linear',
-        x: 0,
-        y: 0,
-        x2: 1,
-        y2: 0,
-        colorStops: [
-            { offset: 0, color: colors[0] },
-            { offset: 1, color: colors[1] },
-        ],
-    }
-}
 
 const handleChartClick = (params: any) => {
     let index = -1
@@ -125,73 +163,15 @@ const handleChartClick = (params: any) => {
     if (index !== -1) {
         const performer = props.badPerformers[index]
         if (performer) {
-            activeDescription.value = performer.description
+            modalStore.openModal(performer.label, performer.description || performer.text)
         }
     }
 }
-
-const activeDescription = ref<string | null>(null)
-const showInfo = (desc: string | undefined) => {
-    activeDescription.value = desc || 'Keine Beschreibung verfügbar.'
-}
-
-const closeInfo = () => {
-    activeDescription.value = null
-}
-const getBarClass = (percentage: number) => {
-    if (percentage < 33) return styles.barLow
-    if (percentage < 66) return styles.barMid
-    return styles.barHigh
-}
 </script>
-<!-- <template>
-    <div :class="styles.page">
-        <div :class="styles.chartContainer">
-            <div v-for="item in badPerformers" :key="item.label" :class="styles.chartRow">
-                <div :class="styles.labelArea">
-                    <button @click="showInfo(item.description)" :class="styles.infoBtn" title="Mehr Informationen">i</button>
-                    <span :class="styles.labelText">{{ item.label }}</span>
-                </div>
-
-                <div :class="styles.barTrack">
-                    <div :class="[styles.bar, getBarClass(item.percentage)]" :style="{ width: `${item.percentage}%` }">
-                        <span :class="styles.valueBadge">{{ item.percentage }}%</span>
-                    </div>
-                </div>
-            </div>
-
-            <div :class="styles.xAxisLabels">
-                <div :class="styles.axisSpace"></div>
-                <div :class="styles.axisTicks">
-                    <span>Unterer Bereich</span>
-                    <span>Erwartungsbereich</span>
-                    <span>Optimalbereich</span>
-                </div>
-            </div>
-        </div>
-
-        <div v-if="activeDescription" :class="styles.modalOverlay" @click="closeInfo">
-            <div :class="styles.modalContent" @click.stop>
-                <h3>Details</h3>
-                <p>{{ activeDescription }}</p>
-                <button @click="closeInfo" :class="styles.closeBtn">Schließen</button>
-            </div>
-        </div>
-    </div>
-</template> -->
-
 <template>
     <div :class="styles.page">
         <div class="chart-wrapper">
             <VChart class="chart" :option="chartOption" :init-options="{ renderer: 'svg' }" @click="handleChartClick" autoresize />
-        </div>
-
-        <div v-if="activeDescription" :class="styles.modalOverlay" @click="closeInfo">
-            <div :class="styles.modalContent" @click.stop>
-                <h3>Details</h3>
-                <p>{{ activeDescription }}</p>
-                <button @click="closeInfo" :class="styles.closeBtn">Schließen</button>
-            </div>
         </div>
     </div>
 </template>
