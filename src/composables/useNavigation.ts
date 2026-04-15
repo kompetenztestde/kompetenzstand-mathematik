@@ -11,8 +11,7 @@ interface Performer {
 export function useNavigation(
     competenceTopPerformers: ComputedRef<Performer[]>,
     guidingIdeaTopPerformers: ComputedRef<Performer[]>,
-    groupId: string,
-    type: string,
+    badPerformers: ComputedRef<Performer[]>,
 ) {
     const allSteps = computed(() => {
         const steps = []
@@ -37,10 +36,10 @@ export function useNavigation(
             steps.push({ path: '/step-5', sub: null })
         }
 
-        steps.push({ path: '/step-6', sub: null })
+        if (badPerformers.value && badPerformers.value.length > 0) {
+            steps.push({ path: '/step-6', sub: null })
+        }
         steps.push({ path: '/step-7', sub: null })
-        // steps.push({ path: '/step-8', sub: null })
-        // steps.push({ path: '/step-9', sub: null })
 
         return steps
     })

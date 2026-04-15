@@ -2,18 +2,22 @@
 import { computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useNavigation } from './composables/useNavigation'
-import { useCompetences } from './composables/useCompetences' // Importiere deine Datenquelle
+import { useCompetences } from './composables/useCompetences'
 import { useGuidingIdeas } from './composables/useGuidingIdeas'
+import './assets/styles/variables.css'
+import './assets/styles/base.css'
+import { useI18n } from 'vue-i18n';
+import SideModal from './components/SideModal/SideModal.vue'
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n();
 
-const groupId = '8b-mathe'
-const type = 'students'
-const { topPerformers: guidingIdeaTopPerformers } = useGuidingIdeas(groupId, type)
-const { topPerformers: competencesTopPerformers } = useCompetences(groupId, type)
+const currentUserName = computed(() => route.query.user as string)
 
-const { allSteps } = useNavigation(competencesTopPerformers, guidingIdeaTopPerformers, groupId, type)
+const { topPerformers: guidingIdeaTopPerformers, badPerformers } = useGuidingIdeas(currentUserName)
+const { topPerformers: competencesTopPerformers } = useCompetences(currentUserName)
+const { allSteps } = useNavigation(competencesTopPerformers, guidingIdeaTopPerformers, badPerformers)
 
 const currentIndex = computed(() => {
     const pathSegments = route.path.split('/').filter(Boolean)
@@ -39,7 +43,10 @@ const goNext = () => {
     const next = allSteps.value[currentIndex.value + 1]
     if (next) {
         const targetPath = next.sub !== null ? `${next.path}/${next.sub}` : next.path
-        router.push(targetPath)
+        router.push({
+            path: targetPath,
+            query: { user: route.query.user },
+        })
     }
 }
 
@@ -47,7 +54,10 @@ const goBack = () => {
     const prev = allSteps.value[currentIndex.value - 1]
     if (prev) {
         const targetPath = prev.sub !== null ? `${prev.path}/${prev.sub}` : prev.path
-        router.push(targetPath)
+        router.push({
+            path: targetPath,
+            query: { user: route.query.user },
+        })
     }
 }
 
@@ -56,9 +66,11 @@ const goTo = (newIndex: number) => {
     if (!newPath) return
     const targetPath = newPath.sub !== null ? `${newPath.path}/${newPath.sub}` : newPath.path
 
-    router.push(targetPath)
+    router.push({
+        path: targetPath,
+        query: { user: route.query.user },
+    })
 }
-const isFirstPage = computed(() => currentIndex.value <= 0)
 
 watch(
     () => route.fullPath,
@@ -74,17 +86,30 @@ watch(
     },
     { immediate: true },
 )
+const isHome = computed(() => route.path === '/step-1' || route.path === '/')
+const isSecond = computed(() => route.path === '/step-2')
+
+const appBackground = computed(() => {
+    if (isHome.value || isSecond.value) {
+        return { background: 'linear-gradient(180deg, #87F9F5 0%, #FFF 90.2%)' }
+    }
+    return { backgroundColor: 'var(--color-turquise)' }
+})
 </script>
 
 <template>
-    <div class="appWrapper">
-        <main class="content">
+    <div class="appWrapper" :style="appBackground">
+        <main class="content" :class="{ 'no-padding': isHome || isSecond }">
             <RouterView :key="route.fullPath" />
         </main>
 
-        <footer class="navigationBar">
-            <button :disabled="currentIndex <= 0" @click="goBack" class="navBtn">Zurück</button>
+        <SideModal />
 
+        <footer v-if="!isHome" class="navigationBar">
+            <h2 class="reportH1">{{t("home.feedback")}}</h2>
+            <button :disabled="currentIndex <= 0" @click="goBack" class="navBtn" aria-label="Zurück">
+                <img src="@/assets/svgs/page_left.svg" alt="" class="navIcon" />
+            </button>
             <div class="pageIndicator">
                 <div
                     v-for="(step, index) in allSteps"
@@ -94,35 +119,35 @@ watch(
                     @click="goTo(index)"
                 ></div>
             </div>
-
-            <button :disabled="currentIndex >= allSteps.length - 1 || currentIndex === -1" @click="goNext" class="navBtn next">
-                Weiter
+            <button
+                :disabled="currentIndex >= allSteps.length - 1 || currentIndex === -1"
+                @click="goNext"
+                class="navBtn next"
+                aria-label="Weiter"
+            >
+                <img src="@/assets/svgs/page_right.svg" alt="" class="navIcon" />
             </button>
         </footer>
     </div>
 </template>
-<style scoped>
-.greeting {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    text-align: center;
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
 .appWrapper {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background-color: var(--color-turquise);
+    transition: background 0.5s ease;
 }
 
 .content {
     flex: 1;
-    padding-bottom: 80px;
+    /* margin-bottom: 10dvh; */
 }
 
 .navigationBar {
@@ -130,22 +155,22 @@ watch(
     bottom: 0;
     left: 0;
     right: 0;
-    height: 70px;
-    background: white;
+    min-height: 10dvh;
+
+    background: var(--color-turquise);
     border-top: 1px solid #ddd;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
+    /* padding: 15px 20px 15px 20px; */
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .navBtn {
-    padding: 10px 25px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background: white;
     cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
 }
 
 .navBtn:disabled {
@@ -153,38 +178,18 @@ watch(
     cursor: not-allowed;
 }
 
-.navBtn.next {
-    background: #42b883;
-    color: white;
-    border: none;
-}
-
-.startBtn {
-    padding: 18px 45px;
-    font-size: 1.4rem;
-    font-weight: bold;
-    background-color: #42b883;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    box-shadow: 0 10px 20px rgba(66, 184, 131, 0.2);
-    transition: all 0.3s ease;
-}
-
-.startBtn:hover {
-    background-color: #3aa876;
-    box-shadow: 0 15px 25px rgba(66, 184, 131, 0.3);
-}
-
-.startBtn:active {
-    transform: translate(-50%, -48%);
-}
-
 @media (min-width: 768px) {
     .navBtn {
         padding: 15px 40px;
-        font-size: 1.1rem;
+    }
+    .navigationBar{
+        padding: 0px 20px 0px 20px;
+    }
+}
+
+@media (max-width: 900px) {  
+    .reportH1{
+        display:none
     }
 }
 
@@ -197,14 +202,14 @@ watch(
 .dot {
     width: 10px;
     height: 10px;
-    background-color: #ddd;
+    background-color: var(--color-navigation-blue);
     border-radius: 50%;
     transition: all 0.3s ease;
     position: relative;
 }
 
 .dot.active {
-    background-color: #42b883;
+    background-color: var(--color-navigation-blue);
     transform: scale(1.2);
 }
 
@@ -215,13 +220,18 @@ watch(
     left: -4px;
     right: -4px;
     bottom: -4px;
-    border: 2px solid #42b883;
+    background-color: var(--color-white);
     border-radius: 50%;
+    border: 1px solid var(--color-navigation-blue);
     opacity: 0.5;
 }
 
 .dot:hover {
-    background-color: #bbb; 
+    background-color: #bbb;
     transform: scale(1.1);
+}
+
+.appWrapper .content.no-padding {
+    padding-bottom: 0 !important;
 }
 </style>
