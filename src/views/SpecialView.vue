@@ -1,27 +1,17 @@
 <script setup>
-import { useRouter } from 'vue-router'
-import { useQuery } from '@tanstack/vue-query'
-const router = useRouter()
+import '@/assets/styles/base.css'
 import StackedBarChart from '@/components/StackedBarChart/StackedBarChart.vue'
-import { GroupsApi } from '@tba3/api-resources'
-import { apiConfiguration } from '@/queries/utils'
 import { computed, watch } from 'vue'
-const name = 'gross.zitrone.81'
-const id = '8b-mathe'
-const types = 'students'
+import { useRoute } from 'vue-router'
+import { useUserItems } from '@/composables/useUserItems'
+import { useI18n } from 'vue-i18n'
+import { useSpecialCases } from '@/composables/useSpecialCases'
 
-const { data: data } = useQuery({
-    queryKey: ['items'],
-    queryFn: async () => {
-        const config = await apiConfiguration()
-        const api = new GroupsApi(config)
-        const response = await api.getGroupItems({ name: name, id: id, type: types })
-        const finalItems = response[0]?.items ?? []
-
-        return finalItems
-    },
-})
-
+const route = useRoute()
+const currentUserName = computed(() => route.query.user)
+const { data: data } = useUserItems(currentUserName)
+const { t } = useI18n()
+const { specialCaseResult } = useSpecialCases(currentUserName)
 const correct = computed(() => {
     if (!data.value) return 0
     const itemsWithOneFrequency = data.value.filter((item) => item.descriptiveStatistics?.frequency === 1)
@@ -46,11 +36,17 @@ watch(data, (newVal) => {
         console.log('Anzahl der Items:', total.value)
     }
 })
+
+watch(specialCaseResult, (newVal) => {
+    if (newVal) {
+        console.log('Die Aggregationen sind da:', newVal)
+    }
+})
 </script>
 
 <template>
     <div class="page">
-        <h1>Das ist aufgefallen (Sonderfolie)</h1>
+        <h1>{{ t('specialView.title') }}</h1>
         <div class="container">
             <StackedBarChart
                 label="Aufgabenverteilung"
@@ -60,19 +56,39 @@ watch(data, (newVal) => {
                 :total="total"
             />
         </div>
-        <div>Text...</div>
+        <div class="text-body-big-bold">{{ specialCaseResult.resultAndAdvice.result }}</div>
+        <div class="text-body-big advice">{{ specialCaseResult.resultAndAdvice.advice }}</div>
     </div>
 </template>
 
 <style scoped>
 .page {
     padding: 20px;
-    text-align: center;
+    margin: 20px;
+    text-align: left;
+    border-radius: 20px;
+    background-color: var(--color-white);
+    box-shadow: 0 0 20px 0 rgba(34, 92, 115, 0.1);
+    overflow-y: auto;
+    min-height: calc(100dvh - 10dvh - 40px);
 }
 
-.container{
-    width: 50%;
+.container {
+    width: 100%;
     padding: 16px;
-    margin: auto;
+    padding-left: 88px;
+    padding-right: 87px;
+    margin-top: 100px;
+}
+
+.advice {
+    padding-top: 20px;
+}
+
+@media (max-width: 767px) {
+    .container {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 }
 </style>
