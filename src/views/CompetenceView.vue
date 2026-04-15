@@ -1,22 +1,39 @@
 <script setup lang="ts">
+import layout from '@/assets/styles/component-layout.module.css'
 import { useCompetences } from '@/composables/useCompetences'
-import { computed } from 'vue'
+import { useModalStore } from '@/stores/modalStore';
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-const id = '8b-mathe'
-const types = 'students'
+
+const modalStore = useModalStore();
 const route = useRoute()
-const { topPerformers } = useCompetences(id, types)
+const currentUserName = computed(() => route.query.user as string)
+const { topPerformers } = useCompetences(currentUserName)
 const activeSubStep = computed(() => parseInt(route.params.subId as string) || 0)
 const currentItem = computed(() => topPerformers.value[activeSubStep.value])
+
+const showDetails = () => {
+    if (currentItem.value) {
+        modalStore.openModal(
+            currentItem.value.label, 
+            currentItem.value.description 
+        );
+    }
+};
+
 </script>
 
 <template>
     <div class="page">
-        <h1>Kompetenzstärke</h1>
-        <div v-if="currentItem" class="contentWrapper">
-            <div v-if="currentItem" class="card">
-                <h3>{{ currentItem.label }}</h3>
-                <span class="text">{{ currentItem.text }}</span>
+        <div v-if="currentItem" class="contentWrapper" >
+            <div v-if="currentItem" :class="layout.baseCard">
+                <div :class="layout.baseIllustration" class="illustration-header">
+                    <h2>{{ currentItem.label }}</h2>
+                    <img @click="showDetails" class="mobile-hint info" src="@/themes/icons/info.svg"/>
+                </div>
+                <div :class="layout.baseContentArea">
+                    <span class="text-body-big">{{ currentItem.text }}</span>                    
+                </div>
             </div>
         </div>
     </div>
@@ -26,41 +43,28 @@ const currentItem = computed(() => topPerformers.value[activeSubStep.value])
 .page {
     padding: 40px 20px;
     text-align: center;
-    min-height: 100vh;
 }
-
-.container {
-    width: 50%;
-    padding: 16px;
-    margin: auto;
-}
-
-h3 {
-    font-size: 24px;
-    margin: 0 0 12px 0;
-    color: #2d3436;
-}
-
 .contentWrapper {
     display: flex;
-    justify-content: center; 
-    align-items: center;    
+    justify-content: center;
+    min-height: calc(100dvh - 10dvh - 40px);
 }
 
-.text {
-    font-size: 16px;
-    line-height: 1.6;
-    color: #4a5568;
+.info{
+    cursor:pointer;
+}
+
+.illustration-header {
+    display: flex;
+    flex-direction: row; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 12px; 
+    width: 100%;
+}
+
+.illustration-header h2 {
     margin: 0;
 }
 
-.card {
-    background: white;
-    border-radius: 16px;
-    padding: 30px;
-    border: 1px solid #edf2f7;
-    transition: transform 0.2s ease;
-    width: 100%;
-    max-width: 400px;
-}
 </style>
