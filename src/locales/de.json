@@ -1,0 +1,40 @@
+{
+    "home": {
+        "feedback": "Deine Rückmeldung zu Vera 8 Mathe",
+        "next": "Weiter",
+        "back": "Zurück",
+        "chooseUser": "Wähle einen Test-User:",
+        "placeHolder": "Bitte wählen...",
+        "start": "Start",
+        "info": "i"
+    },
+    "specialView": {
+        "title": "Das ist uns aufgefallen",
+        "false": "Falsch gelöst",
+        "correct": "Richtig gelöst",
+        "notWorkedOn": "Nicht bearbeitet",
+        "warning": "Warnung: Summe der Werte übersteigt Gesamtanzahl!"
+    },
+    "animationView": {},
+    "finalView": {
+        "title": "Noch etwas spannendes zum Schluss",
+        "text": "Willst du deine Eltern oder Freunde beeindrucken? Dann sind hier ein paar Tricks, ..."
+    },
+    "areas": {
+        "first": "Unterer Bereich",
+        "middle": "Erwartungsbereich",
+        "last": "Optimalbereich"
+    },
+    "common": {
+        "result": "Dein Ergebnis",
+        "details": "Details",
+        "close": "Schließen"
+    },
+    "badResults": {
+        "title": "In den folgenden Bereichen warst du nicht so gut",
+        "text": "Schrittweises Üben wird dir helfen, sicherer zu werden."
+    },
+    "sideModal":{
+        "speaker":"vorlesen"
+    }
+}
