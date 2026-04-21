@@ -1,0 +1,48 @@
+.page {
+    padding: 40px 20px;
+    text-align: center;
+}
+.contentWrapper {
+    display: flex;
+    justify-content: center;
+    min-height: calc(100dvh - 10dvh - 40px);
+}
+
+.info {
+    cursor: pointer;
+}
+
+.illustrationHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.illustrationHeader h2 {
+    margin: 0;
+}
+
+.trophyImg {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 783px) {
+    .trophyImg {
+        width: 173px;
+        height: 195px;
+        aspect-ratio: 55/62;
+    }    
+}
+
+.titleRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
