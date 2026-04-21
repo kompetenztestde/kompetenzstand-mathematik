@@ -46,3 +46,5 @@ bundle-analysis.html
 
 # public configuration files
 config.js
+docker-compose.yml
+.env
