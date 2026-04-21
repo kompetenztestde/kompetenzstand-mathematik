@@ -1,6 +1,6 @@
 {
     "home": {
-        "feedback": "Deine Rückmeldung zu Vera 8 Mathe",
+        "feedback": "Deine Rückmeldung zu Vera 8 Mathematik",
         "next": "Weiter",
         "back": "Zurück",
         "chooseUser": "Wähle einen Test-User:",
@@ -36,5 +36,8 @@
     },
     "sideModal":{
         "speaker":"vorlesen"
+    },
+    "competence":{
+        "result":"Hier bist du stark"
     }
 }
