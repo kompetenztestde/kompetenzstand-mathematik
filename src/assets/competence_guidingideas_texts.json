@@ -170,7 +170,7 @@
             "advice": "Leider ist es dir diesmal noch nicht gelungen deine Kenntnisse richtig anzuwenden. Lass dich von diesem Ergebnis nicht entmutigen! Du kannst dich deutlich verbessern, wenn du regelmäßig übst und Fragen stellst, sobald etwas unklar ist."
         },
         "K1B": {
-            "result": "Die Aufgaben, die du bearbeitet hast, konntes du weitgehend richtig lösen.",
+            "result": "Die Aufgaben, die du bearbeitet hast, konntest du weitgehend richtig lösen.",
             "advice": "Das ist eine sehr gute Grundlage. Leider hast du viele Aufgaben gar nicht bearbeitet oder zeitlich nicht mehr geschafft. Durch weiteres Üben kannst du es schaffen noch schneller zu Arbeiten und in noch mehr Aufgaben gute Ergebnisse zu erzielen."
         },
         "K1A": {
@@ -187,12 +187,12 @@
         "K5": "Du kannst komplexe mathematische Zusammenhänge gut erklären und eigene Lösungswege entwickeln und bewerten. Anspruchsvolle Probleme löst du mit passenden Strategien und reflektierst dabei dein Vorgehen. Du kannst mathematische Modelle sinnvoll einsetzen und kritisch hinterfragen sowie auch schwierige Texte und Darstellungen sicher verstehen und beurteilen."
     },
     "areas": {
-        "middleCertitficate": [
+        "middleCertificate": [
             [0, 14],
             [15, 28],
             [29, 43]
         ],
-        "defaultCertitficate": [
+        "defaultCertificate": [
             [0, 14],
             [15, 21],
             [22, 43]
