@@ -1,5 +1,4 @@
 import { computed, type ComputedRef } from 'vue'
-import { useCompetences } from './useCompetences'
 
 interface Performer {
     label: string
