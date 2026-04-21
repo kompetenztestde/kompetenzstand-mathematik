@@ -53,20 +53,44 @@ watch(props, (newVal) => {
 
 const isIntroSliding = ref(false)
 
+// const dynamicLeftPosition = computed(() => {
+//     if (step.value === 1 && isIntroSliding.value) {
+//         return '120%'
+//     }
+
+//     if (isSliding.value) {
+//         return `${currentScore.value * 20 - 10}%`
+//         // const offset = isMobile.value ? 5 : 10;
+//         // return `${currentScore.value * 20 - offset}%`;
+//     }
+
+//     //return '-32%';
+//     // return isMobile.value ? '-15%' : '-32%';
+//     return isMobile.value ? '0%' : '-10%'
+// })
+
+
 const dynamicLeftPosition = computed(() => {
-    if (step.value === 1 && isIntroSliding.value) {
-        return '120%'
+    const width = window.innerWidth
+    if (step.value === 1) {
+        if (isIntroSliding.value) {
+            return '120%'; 
+        }
+        if (width < 768) {
+            return '0%'
+        }
+        if (width >= 768 && width <= 1024) {
+            return '-7%'
+        }
+        //return isMobile.value ? '0%' : '-7%'; 
+        return '-30%'
     }
 
     if (isSliding.value) {
-        return `${currentScore.value * 20 - 10}%`
-        // const offset = isMobile.value ? 5 : 10;
-        // return `${currentScore.value * 20 - offset}%`;
+        return `${currentScore.value * 20 - 10}%`;
     }
 
-    //return '-32%';
-    // return isMobile.value ? '-15%' : '-32%';
-    return isMobile.value ? '0%' : '-10%'
+    return '0%';
 })
 
 onMounted(() => {
@@ -112,11 +136,11 @@ onUnmounted(() => {
                 <div :class="styles.introStage">
                     <div :class="styles.fixedIntroWaves"></div>
 
-                    <!-- <div
+                    <div
                     :class="styles.introMovable"
                     :style="{ left: dynamicLeftPosition, transition: isIntroSliding ? 'left 3s linear' : 'none' }"
-                > -->
-                    <div :class="[styles.introMovable, isIntroSliding ? styles.isSliding : styles.isWaiting]">
+                >
+                    <!-- <div :class="[styles.introMovable, isIntroSliding ? styles.isSliding : styles.isWaiting]"> -->
                         <DotLottieVue :data="scene1_3" autoplay :class="styles.scene1Style" />
                     </div>
                 </div>
