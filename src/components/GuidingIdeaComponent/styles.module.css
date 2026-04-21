@@ -6,10 +6,10 @@
 
 .illustrationHeader {
     display: flex;
-    flex-direction: row; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 12px; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
     width: 100%;
 }
 
@@ -17,7 +17,28 @@
     margin: 0;
 }
 
+.info {
+    cursor: pointer;
+}
 
-.info{
-    cursor:pointer;
+.title-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.icon {
+    width: 287.689px;
+    height: 298px;
+    aspect-ratio: 251/260;
+}
+
+@media (max-width: 783px) {
+    .icon {
+        width: 212px;
+        height: 220px;
+        aspect-ratio: 53/55;
+    }
 }
