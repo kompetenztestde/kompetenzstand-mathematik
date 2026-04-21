@@ -67,7 +67,7 @@ watch(() => modalStore.isOpen, (newVal) => {
 }
 
 .modal-container {
-    background: white;
+    background-color: var(--color-turquise);
     position: relative;
     padding: 40px 25px;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);

@@ -4,14 +4,14 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.4);
+    /* background: rgba(0, 0, 0, 0.4); */
+    background-color: var(--color-turquise);
     z-index: 1000;
     display: flex;
     justify-content: flex-end; 
 }
 
-.modal-container {
-    background: white;
+.modal-container {    
     position: relative;
     padding: 40px 25px;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
