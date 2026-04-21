@@ -35,7 +35,6 @@ const props = defineProps<{
 
 const chartOption = computed(() => {
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-    
 
     const area1End = props.areas[0] ?? 33
     const area2End = props.areas[1] ?? 66
@@ -59,10 +58,10 @@ const chartOption = computed(() => {
         xAxis: {
             type: 'value',
             max: 100,
-            // interval: 33.33,
             interval: 1,
-            // splitLine: { lineStyle: { color: 'rgba(0,0,0,0.05)' } },
-            splitLine: {show:false},
+            splitLine: { show: false },
+            axisTick: { show: false },
+            axisLine: { show: false },
             axisLabel: {
                 hideOverlap: false,
                 margin: 12,
@@ -103,7 +102,7 @@ const chartOption = computed(() => {
             splitArea: {
                 show: true,
                 areaStyle: {
-                    color: splitAreaColors
+                    color: splitAreaColors,
                 },
             },
         },
@@ -111,6 +110,9 @@ const chartOption = computed(() => {
             type: 'category',
             triggerEvent: true,
             data: props.badPerformers.map((item) => item.label),
+            splitLine: { show: false },
+            axisTick: { show: false },
+            axisLine: { show: false },
             axisLabel: {
                 formatter: (value: string) => `${value} {infoIcon|?}  `,
                 rich: {
@@ -142,10 +144,7 @@ const chartOption = computed(() => {
                     },
                 })),
                 barWidth: 40,
-                showBackground: true,
-                // backgroundStyle: {
-                //     color: 'rgba(0, 0, 0, 0.05)',
-                // },
+                // showBackground: true,                
             },
         ],
     }

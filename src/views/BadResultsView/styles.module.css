@@ -1,0 +1,44 @@
+.page {
+    margin: 40px 20px;
+    padding: 20px;
+    padding-bottom: 10dvh;
+    border-radius: 20;
+    border-radius: 20px;
+    background: var(--color-white);
+    box-shadow: 0 0 20px 0 rgba(34, 92, 115, 0.1);
+    text-align: center;
+    color: var(--color-navigation-blue);
+    min-height: calc(100dvh - 10dvh - 40px);
+    margin-bottom: 10dvh;
+}
+
+h1 {
+    padding: 10px;
+}
+
+.mobileList {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.mobileCard {
+    padding: 10px;
+}
+
+.mobileCardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.mobileCardHeader h3 {
+    margin: 0;
+}
+
+.infoTrigger {
+    width: 24px;
+    height: 24px;
+    opacity: 0.7;
+}
