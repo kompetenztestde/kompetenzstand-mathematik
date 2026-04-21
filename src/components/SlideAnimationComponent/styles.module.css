@@ -1,8 +1,84 @@
-.pageContainer {
-    /* padding: 32px; */
-    padding-top: 50px;
-    font-family: sans-serif;
+/* first animation part */
+
+.introContainer {
+    width: 100%;
+    height: 450px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
 }
+
+.introStage {
+    position: relative;
+    width: 100%;
+    height: 300px; 
+
+    bottom: 0;
+}
+
+.fixedIntroWaves {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 250px;
+    background-image: url('@/themes/icons/dark_waves.svg');
+    background-repeat: repeat-x;
+    background-size: auto 250px;
+    z-index: 1;
+}
+
+.introMovable {
+    position: absolute;
+    width: 100%;
+    bottom: -60px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 2;
+    pointer-events: none;
+
+    left: 0;
+    transform: translateX(0vw);
+    transition: transform 3s linear;
+}
+
+.scene1Style {
+    /* position: relative; */
+    /* top: 100%; */
+    height: 550px;
+    width: 700px;
+    image-rendering: -webkit-optimize-contrast;
+    /* transform: translateZ(0); */
+    display: block;
+}
+
+.isSliding {
+    transform: translateX(100vw);
+}
+
+.isWaiting {
+    transform: translateX(-25vw); 
+}
+
+@media (max-width: 768px) {
+    .scene1Style {
+        height: 400px; 
+        width: 500px;
+    }
+    
+    .introMovable {
+
+        bottom: 25px; 
+    }
+}
+
+/* second animation part */
+
+/* .pageContainer {
+    padding-top: 130px;
+} */
 
 .sliderWrapper {
     width: 100%;
@@ -10,129 +86,22 @@
     position: relative;
 }
 
-.sliderTrack {
-    height: 300px;
-    width: 100%;
-    background-color: #eee;
-    background-image: url('@/themes/icons/Ebene_1.png');
-    background-repeat: repeat-x;
-    background-position: bottom;
-    background-size: contain;
-    position: relative;
-    overflow: visible;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.sliderMarker {
-    width: 30px;
-    height: 30px;
-    background-color: #42b883;
-    position: absolute;
-    top: -100px;
-    left: 10%;
-    transform: translate(-50%, -50%);
-    transition:
-        top 1.5s ease-in-out,
-        left 1.2s ease-out;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-}
-
-.trackSegments {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-}
-
-.segment {
-    flex: 1;
-    border-right: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-.segment:last-child {
-    border-right: none;
-}
-
-.s1 {
-    background-color: rgba(121, 121, 121, 0.2);
-}
-.s2 {
-    background-color: rgba(130, 130, 130, 0.2);
-}
-.s3 {
-    background-color: rgba(146, 146, 146, 0.2);
-}
-.s4 {
-    background-color: rgba(147, 147, 147, 0.2);
-}
-.s5 {
-    background-color: rgba(189, 189, 189, 0.2);
-}
-
 .scaleLabels {
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
     font-size: 12px;
     padding: 0 10px;
 }
 
-
-
-.main-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.stage {
-    width: 400px;
-    height: 400px;
-
-    background-image: url('@/themes/icons/dark_waves.svg');
-    background-repeat: no-repeat;
-    /* background-position: bottom center; */
-    background-size: contain;
-}
-
-.full-size {
-    width: 100%;
-    height: 100%;
-}
-
 .movableContainer {
-    position: absolute;
-    width: 250px;
-    height: 250px;
-    top: 70%;
+    position: relative;
+    top: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
     transition: left 2s ease-in-out;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.lottie-icon {
-    width: 100% !important;
-    height: 100% !important;
-}
-
-.score-label {
-    font-weight: bold;
-    margin-top: -5px;
 }
 
 .fade-enter-active,
@@ -144,25 +113,30 @@
     opacity: 0;
 }
 
-.fullSize {
-    background-image: url('@/themes/icons/dark_waves.svg');
-    background-repeat: no-repeat;
-    background-position: 50% 75%;
-    background-size: contain;
+/* 
+@media (max-width: 900px) {
+    .movableContainer {
+        position: relative;
+    }
+
+    .pageContainer {
+        padding-top: 30px;
+    }
+} */
+
+
+
+.scene3Style {
+    height: 650px;
+    width: 800px;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
-@media (min-width: 786px) {
-    .charIcon {
-        width: 256.253px;
-        height: 235px;
-        aspect-ratio: 205/188;
-    }
-}
 
-@media (max-width: 786px) {
-    .charIcon {
-        width: 189.186px;
-        height: 173.495px;
-        aspect-ratio: 189.19/173.5;
-    }
-}
+
