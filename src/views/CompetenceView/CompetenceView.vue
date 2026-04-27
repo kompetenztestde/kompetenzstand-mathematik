@@ -7,6 +7,9 @@ import { useRoute } from 'vue-router'
 import Trophy from './icons/trophy.png'
 import { useI18n } from 'vue-i18n'
 import styles from './styles.module.css'
+import InfoIcon from '@/themes/icons/info.svg?component'
+import Confetti from '@/components/Confetti/Confetti.vue'
+
 const modalStore = useModalStore()
 const route = useRoute()
 const currentUserCode = computed(() => route.query.user as string)
@@ -27,12 +30,21 @@ const showDetails = () => {
     <div :class="styles.page">
         <div v-if="currentItem" :class="styles.contentWrapper">
             <div v-if="currentItem" :class="layout.baseCard">
+                <Confetti/>
                 <div :class="[layout.baseIllustration, styles.illustrationHeader]">
-                    <!-- <h2>{{ currentItem.label }}</h2>
-                    <img @click="showDetails" class="mobile-hint info" src="@/themes/icons/info.svg"/> -->
                     <div :class="styles.titleRow">
                         <h1>{{ currentItem.label }}</h1>
-                        <img @click="showDetails" :class="[styles.mobileHint, styles.info]" src="@/themes/icons/info.svg" />
+                        <!-- <img @click="showDetails" :class="[styles.mobileHint, styles.info]" src="@/themes/icons/info.svg" /> -->
+                        <button
+                            type="button"
+                            @click="showDetails"
+                            :class="styles.infoButton"
+                            :aria-label="t('competence.show_details_label')"
+                            title="Details anzeigen"
+                        >
+                            <!-- <img src="@/themes/icons/info.svg" :class="styles.infoIcon" alt="" aria-hidden="true" /> -->
+                            <InfoIcon :class="styles.infoIcon" aria-hidden="true" />
+                        </button>
                     </div>
                     <img :src="Trophy" :class="styles.trophyImg" alt="Illustration" />
                 </div>
