@@ -23,7 +23,10 @@
     "areas": {
         "first": "Unterer Bereich",
         "middle": "Erwartungsbereich",
-        "last": "Optimalbereich"
+        "last": "Optimalbereich",
+        "mobileFirst": "Unterer Bereich",
+        "mobileMiddle": "Erwartungs- bereich",
+        "mobileLast": "Optimal-bereich"
     },
     "common": {
         "result": "Dein Ergebnis",
@@ -34,10 +37,10 @@
         "title": "In den folgenden Bereichen warst du nicht so gut",
         "text": "Schrittweises Üben wird dir helfen, sicherer zu werden."
     },
-    "sideModal":{
-        "speaker":"vorlesen"
+    "sideModal": {
+        "speaker": "vorlesen"
     },
-    "competence":{
-        "result":"Hier bist du stark"
+    "competence": {
+        "result": "Hier bist du stark"
     }
 }
