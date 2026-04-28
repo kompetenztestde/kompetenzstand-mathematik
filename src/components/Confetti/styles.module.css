@@ -1,16 +1,3 @@
-.confetti:nth-child(4n) {
-    color: #e41e26;
-}
-.confetti:nth-child(4n + 1) {
-    color: #42b983;
-}
-.confetti:nth-child(4n + 2) {
-    color: #35495e;
-}
-.confetti:nth-child(4n + 3) {
-    color: #ffbc00;
-}
-
 .rotate {
     animation: driftyRotate 1s infinite both ease-in-out;
     perspective: 1000;
@@ -31,22 +18,27 @@
     height: 1rem;
     display: inline-block;
     position: absolute;
-    top: -1rem;
+    top: -10vh;
     left: 0;
     z-index: 50;
+    pointer-events: none;
 }
 
 .confetti:nth-child(4n) {
-    color: #e41e26;
+    /* color: #e41e26; */
+    color: var(--color-navigation-blue);
 }
 .confetti:nth-child(4n + 1) {
-    color: #42b983;
+    /* color: #42b983; */
+    color: var(--color-turquoise);
 }
 .confetti:nth-child(4n + 2) {
-    color: #35495e;
+    /* color: #35495e; */
+    color: var(--color-berry)
 }
 .confetti:nth-child(4n + 3) {
-    color: #ffbc00;
+    /* color: #ffbc00; */
+    color: var(--color-pink);
 }
 
 .rotate {
