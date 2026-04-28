@@ -22,7 +22,7 @@ export function useUserItems(userName: ComputedRef<string | undefined>) {
 }
 
 export function useUserItemsNew(code: ComputedRef<string | undefined>) {
-    return useQuery({
+    const query = useQuery({
         queryKey: ['user-items-base', code.value],
         queryFn: async () => {
             if (!code.value) return []
@@ -35,7 +35,7 @@ export function useUserItemsNew(code: ComputedRef<string | undefined>) {
                 type: 'students',
                 studentCode: code.value,
             })
-            const students = response.data?.studentsData ?? [];
+            const students = response.data?.studentsData ?? []
 
             const targetUser = students.find((u) => u.code === code.value)
             return targetUser?.items ?? []
@@ -43,4 +43,25 @@ export function useUserItemsNew(code: ComputedRef<string | undefined>) {
         enabled: computed(() => !!code.value),
         staleTime: 1000 * 60 * 60,
     })
+
+    const stats = computed(() => calculateUserStats(query.data.value))
+
+    return {
+        ...query,
+        stats,
+    }
 }
+
+export const calculateUserStats = (items: any[] | undefined) => {
+    if (!items || items.length === 0) {
+        return { correct: 0, total: 0, percentage: 0 }
+    }
+
+    const correct = items.filter((item) => item.descriptiveStatistics?.frequency === 1).length
+
+    const total = items.length
+    const percentage = (correct / total) * 100
+
+    return { correct, total, percentage }
+}
+

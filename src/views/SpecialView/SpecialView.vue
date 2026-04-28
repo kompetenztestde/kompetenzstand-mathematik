@@ -3,16 +3,14 @@ import '@/assets/styles/base.css'
 import StackedBarChart from '@/components/StackedBarChart/StackedBarChart.vue'
 import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useUserItems, useUserItemsNew } from '@/composables/useUserItems'
+import { useUserItemsNew } from '@/composables/useUserItems'
 import { useI18n } from 'vue-i18n'
-import { useSpecialCases } from '@/composables/useSpecialCases'
 import { useSpecialCasesNew } from '@/composables/useSpecialCasesNew'
 import styles from './styles.module.css'
 const route = useRoute()
 const currentUserCode = computed(() => route.query.user)
 const { data: data } = useUserItemsNew(currentUserCode)
 const { t } = useI18n()
-// const { specialCaseResult } = useSpecialCases(currentUserName)
 const { specialCaseResult } = useSpecialCasesNew(currentUserCode)
 
 const correct = computed(() => {
@@ -30,9 +28,16 @@ const total = computed(() => {
     return data.value?.length || 0
 })
 
+// const notWorkedOn = computed(() => {
+//     return total - correct - failed
+// })
+
 const notWorkedOn = computed(() => {
-    return total - correct - failed
+    if (!data.value) return 0
+    const itemsWithMinusFrequency = data.value.filter((item) => item.descriptiveStatistics?.frequency === -1)
+    return itemsWithMinusFrequency.length
 })
+
 watch(data, (newVal) => {
     if (newVal) {
         console.log('Die Items sind da:', newVal)
@@ -40,11 +45,6 @@ watch(data, (newVal) => {
     }
 })
 
-watch(specialCaseResult, (newVal) => {
-    if (newVal) {
-        console.log('Die Aggregationen sind da:', newVal)
-    }
-})
 </script>
 
 <template>
