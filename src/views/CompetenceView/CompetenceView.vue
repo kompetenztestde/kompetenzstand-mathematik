@@ -32,12 +32,11 @@ const showDetails = () => {
             <div v-if="currentItem" :class="layout.baseCard">
                 <Confetti/>
                 <div :class="[layout.baseIllustration, styles.illustrationHeader]">
-                    <div :class="styles.titleRow">
+                    <div @click="showDetails" :class="styles.titleRow">
                         <h1>{{ currentItem.label }}</h1>
                         <!-- <img @click="showDetails" :class="[styles.mobileHint, styles.info]" src="@/themes/icons/info.svg" /> -->
                         <button
-                            type="button"
-                            @click="showDetails"
+                            type="button"                            
                             :class="styles.infoButton"
                             :aria-label="t('competence.show_details_label')"
                             title="Details anzeigen"
