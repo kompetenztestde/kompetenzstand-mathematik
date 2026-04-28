@@ -94,7 +94,19 @@
                 "normal": "Im Umgang mit Zahlen und dem geschickten Rechnen konntest du im Vergleich zu anderen Schülern ähnlich gute Ergebnisse erziehlen – eine starke Grundlage für alles Weitere in der Mathematik!",
                 "bad": "Beim Rechnen hast du noch Unsicherheiten. Im Vergleich zu anderen Schülern konntest du hier weniger Aufgaben richtig lösen. Mit mehr Übung kannst du dir aber eine sichere Grundlage schaffen."
             },
-            "description": "Hier geht es um verschiedene Zahlbereiche wie z. B. natürliche Zahlen, ganze Zahlen, Brüche, Dezimalzahlen und damit verbundene Operationen (rechnen, umwandeln, vergleichen). Auch die Prozentrechnung zählt beispielsweise hier dazu. Beispiel: „Wie viel sind 25 % von 200?“ oder „Rechne mit negativen Zahlen“."
+            "description": "Hier geht es um verschiedene Zahlbereiche wie z. B. natürliche Zahlen, ganze Zahlen, Brüche, Dezimalzahlen und damit verbundene Operationen (rechnen, umwandeln, vergleichen). Auch die Prozentrechnung zählt beispielsweise hier dazu. Beispiel: „Wie viel sind 25 % von 200?“ oder „Rechne mit negativen Zahlen“.",
+            "cutOffs": {
+                "gym": {
+                    "lower": [0, 1],
+                    "middle": [2],
+                    "upper": [3]
+                },
+                "nonGym": {
+                    "lower": [0, 2],
+                    "middle": [3],
+                    "upper": [4]
+                }
+            }
         },
         "L2": {
             "title": "Größen und Messen",
@@ -104,7 +116,19 @@
                 "normal": "Deine Ergebnisse zeigen, dass du im Vergleich zu anderen Schülern Größen und Maße ähnlich gut einschätzen und berechnen kannst – das ist nicht nur in Mathe, sondern auch im Alltag sehr wertvoll.",
                 "bad": "Beim Umgang mit Größen und Einheiten hast du im Vergleich zu anderen Schülern noch größere Schwierigkeiten. Schrittweises Üben wird dir helfen, sicherer zu werden."
             },
-            "description": "Alles, was mit Größen zu tun hat: Längen, Flächen, Volumen, Zeit, Geschwindigkeit usw. Wir lernen, wie man Längen, Flächen und Körper – aber auch weitere Größen wie Winkel und Zeitspannen – misst oder berechnet. Auch die Arbeit mit Einheiten gehört hierzu. Beispiel: 'Wie groß ist der Umfang eines Kreises?“ oder „Wie viel Wasser passt in einen Eimer?"
+            "description": "Alles, was mit Größen zu tun hat: Längen, Flächen, Volumen, Zeit, Geschwindigkeit usw. Wir lernen, wie man Längen, Flächen und Körper – aber auch weitere Größen wie Winkel und Zeitspannen – misst oder berechnet. Auch die Arbeit mit Einheiten gehört hierzu. Beispiel: 'Wie groß ist der Umfang eines Kreises?“ oder „Wie viel Wasser passt in einen Eimer?",
+            "cutOffs": {
+                "gym": {
+                    "lower": [0, 3],
+                    "middle": [4, 6],
+                    "upper": [7]
+                },
+                "nonGym": {
+                    "lower": [0, 4],
+                    "middle": [5, 6],
+                    "upper": [7]
+                }
+            }
         },
         "L3": {
             "title": "Raum und Form",
@@ -114,7 +138,19 @@
                 "normal": "Im Bereich Raum und Form konntest du im Vergleich zu anderen Schülern ähnlich gute Ergebnisse erreichen. Du erkennst Zusammenhänge und kannst sie anwenden – das zeigt dein gutes räumliches Denken.",
                 "bad": "Im Bereich Raum und Form fällt es dir noch schwer, Zusammenhänge zu erkennen. Wenn du weiter trainierst, wirst du dich besser orientieren können."
             },
-            "description": "Hier geht es um geometrische Objekte in der Ebene und im Raum sowie deren Eigenschaften (z. B. Symmetrie), Beziehungen (z. B. Kongruenz und Ähnlichkeit) und Darstellung. Beispiel: „Wann sind zwei Dreiecke ähnlich?“ oder „Wie berechnet man die Oberfläche eines Quaders?“"
+            "description": "Hier geht es um geometrische Objekte in der Ebene und im Raum sowie deren Eigenschaften (z. B. Symmetrie), Beziehungen (z. B. Kongruenz und Ähnlichkeit) und Darstellung. Beispiel: „Wann sind zwei Dreiecke ähnlich?“ oder „Wie berechnet man die Oberfläche eines Quaders?“",
+            "cutOffs": {
+                "gym": {
+                    "lower": [0],
+                    "middle": [1],
+                    "upper": [2]
+                },
+                "nonGym": {
+                    "lower": [0],
+                    "middle": [1],
+                    "upper": [2]
+                }
+            }
         },
         "L4": {
             "title": "Strukturen und funktionaler Zusammenhang",
@@ -124,7 +160,19 @@
                 "normal": "Du kannst ähnlich gut wie andere Schüler erkennen, wie Größen voneinander abhängen, und diese Zusammenhänge darstellen – eine wichtige Fähigkeit für die Mathematik in den höheren Klassen.",
                 "bad": "Zusammenhänge zwischen Zahlen und Darstellungen (z. B. Tabellen oder Koordinatensysteme) sind für dich im Vergleich zu anderen Schülern noch herausfordernd. Mit gezielten Übungen wirst du sie besser verstehen."
             },
-            "description": "Wir untersuchen funktionale Beziehungen zwischen Zahlen, Daten und Größen sowie deren Darstellungen und Eigenschaften (z. B. verschiedene Arten von Funktionen). Also: Wenn sich eine Variable ändert, was bedeutet das für eine andere? Beispiel: „Wie viel mehr Geld verdient man, wenn man länger arbeitet?” oder „Welcher Funktion entspricht der Graph im Koordinatensystem?“"
+            "description": "Wir untersuchen funktionale Beziehungen zwischen Zahlen, Daten und Größen sowie deren Darstellungen und Eigenschaften (z. B. verschiedene Arten von Funktionen). Also: Wenn sich eine Variable ändert, was bedeutet das für eine andere? Beispiel: „Wie viel mehr Geld verdient man, wenn man länger arbeitet?” oder „Welcher Funktion entspricht der Graph im Koordinatensystem?“",
+            "cutOffs": {
+                "gym": {
+                    "lower": [0, 1],
+                    "middle": [2],
+                    "upper": [3]
+                },
+                "nonGym": {
+                    "lower": [0, 1],
+                    "middle": [2, 3],
+                    "upper": [4]
+                }
+            }
         },
         "L5": {
             "title": "Daten und Zufall",
@@ -134,7 +182,19 @@
                 "normal": "Du kannst Daten ähnlich gut wie andere Schüler lesen, darstellen und interpretieren. Auch Wahrscheinlichkeiten kannst du ähnlich gut einschätzen – ein Beweis für dein gutes mathematisches Verständnis.",
                 "bad": "Beim Lesen und Auswerten von Daten bist du noch unsicherer als andere Schüler. Wenn du Schritt für Schritt übst, kannst du hier deutlich sicherer werden."
             },
-            "description": "Hier geht es um Daten, Wahrscheinlichkeiten und Zufall: Man sammelt und sortiert sie, stellt sie dar und interpretiert sie oder berechnet, wie häufig Ereignisse eintreten. Beispiel: „Wie wahrscheinlich ist es, beim Würfeln eine 6 zu bekommen?“ oder „Welche Informationen finde ich in einem Balkendiagramm?“"
+            "description": "Hier geht es um Daten, Wahrscheinlichkeiten und Zufall: Man sammelt und sortiert sie, stellt sie dar und interpretiert sie oder berechnet, wie häufig Ereignisse eintreten. Beispiel: „Wie wahrscheinlich ist es, beim Würfeln eine 6 zu bekommen?“ oder „Welche Informationen finde ich in einem Balkendiagramm?“",
+            "cutOffs": {
+                "gym": {
+                    "lower": [0, 6],
+                    "middle": [7, 9],
+                    "upper": [10]
+                },
+                "nonGym": {
+                    "lower": [0, 6],
+                    "middle": [7, 9],
+                    "upper": [10]
+                }
+            }
         }
     },
     "start": {
@@ -154,12 +214,12 @@
     },
     "specialCasesAdvices": {
         "K5": {
-            "result": "Im Vergleich zu anderen Schülern hast du in allen getesteten Teilbereichen ähnlich gute Ergebnisse erzielt.",
-            "advice": "Bleibe dran und übe fleißig weiter, dann kannst du es schaffen, dich noch weiter zu verbessern."
-        },
-        "K4": {
             "result": "Du hast es geschafft, in vielen Bereichen sehr gute Ergebnisse zu erzielen.",
             "advice": "Das sind hervorragende Voraussetzungen, um dich tiefer mit mathematischen Inhalten auseinanderzusetzen."
+        },
+        "K4": {
+            "result": "Im Vergleich zu anderen Schülern hast du in allen getesteten Teilbereichen ähnlich gute Ergebnisse erzielt.",
+            "advice": "Bleibe dran und übe fleißig weiter, dann kannst du es schaffen, dich noch weiter zu verbessern."
         },
         "K3": {
             "result": "Es ist dir noch schwer gefallen, die gestellten Aufgaben richtig zu bearbeiten.",
@@ -197,5 +257,13 @@
             [15, 21],
             [22, 43]
         ]
+    },
+    "cutOffs": {
+        "1A": [0, 8],
+        "1B": [9, 14],
+        "2": [15, 21],
+        "3": [22, 28],
+        "4": [29, 34],
+        "5": [35, 43]
     }
 }
