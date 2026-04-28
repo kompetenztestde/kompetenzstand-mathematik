@@ -4,7 +4,7 @@
   font-family: 'League Spartan';
   font-style: normal;
   font-weight: 400;
-  src: url('../fonts/league-spartan-v15-latin_latin-ext-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url('./fonts/league-spartan-v15-latin_latin-ext-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 
 /* league-spartan-600 - latin_latin-ext */
@@ -13,7 +13,7 @@
   font-family: 'League Spartan';
   font-style: normal;
   font-weight: 600;
-  src: url('../fonts/league-spartan-v15-latin_latin-ext-600.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url('./fonts/league-spartan-v15-latin_latin-ext-600.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 
 /* league-spartan-700 - latin_latin-ext */
@@ -22,7 +22,7 @@
   font-family: 'League Spartan';
   font-style: normal;
   font-weight: 700;
-  src: url('../fonts/league-spartan-v15-latin_latin-ext-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url('./fonts/league-spartan-v15-latin_latin-ext-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 
 /* league-spartan-800 - latin_latin-ext */
@@ -31,5 +31,5 @@
   font-family: 'League Spartan';
   font-style: normal;
   font-weight: 800;
-  src: url('../fonts/league-spartan-v15-latin_latin-ext-800.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url('./fonts/league-spartan-v15-latin_latin-ext-800.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
