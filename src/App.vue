@@ -2,6 +2,7 @@
 import { computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useNavigation } from './composables/useNavigation'
+import './themes/fonts.css'
 import './assets/styles/variables.css'
 import './assets/styles/base.css'
 import { useI18n } from 'vue-i18n'
@@ -9,6 +10,12 @@ import SideModal from './components/SideModal/SideModal.vue'
 import { useGuidingIdeasNew } from './composables/useGuidingIdeasNew'
 import { useCompetencesNew } from './composables/useCompetencesNew'
 import styles from './styles.module.css'
+import IconPageLeft from '@/assets/svgs/page_left.svg?component'
+import IconPageRight from '@/assets/svgs/page_right.svg?component'
+import InfoIcon from '@/themes/icons/info.svg?component'
+import competenceTexts from '@/assets/competence_guidingideas_texts.json'
+import { useModalStore } from './stores/modalStore'
+
 const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
@@ -82,6 +89,18 @@ const appBackground = computed(() => {
     }
     return { backgroundColor: 'var(--color-turquise)' }
 })
+const modalStore = useModalStore()
+
+const title = competenceTexts.start.title
+const infoText = competenceTexts.start.info.text
+const importantText = competenceTexts.start.info.important
+
+const showDetails = () => {
+    const formattedBody = infoText.replace(/\.($|\s+)/g, '.<br><br>').trim()
+    const combinedContent = importantText ? `${formattedBody}<br><br><strong>${importantText}</strong>` : formattedBody
+
+    modalStore.openModal(title, combinedContent)
+}
 </script>
 
 <template>
@@ -90,12 +109,12 @@ const appBackground = computed(() => {
             <RouterView :key="route.fullPath" />
         </main> -->
         <main :class="[styles.content, { 'no-padding': isHome || isSecond }]">
-    <RouterView :key="route.fullPath" />
-</main>
+            <RouterView :key="route.fullPath" />
+        </main>
 
         <SideModal />
 
-        <footer v-if="!isHome" :class="styles.navigationBar">
+        <!-- <footer v-if="!isHome" :class="styles.navigationBar">
             <h2 :class="styles.reportH1">{{ t('home.feedback') }}</h2>
             <button :disabled="currentIndex <= 0" @click="goBack" :class="styles.navBtn" aria-label="Zurück">
                 <img src="@/assets/svgs/page_left.svg" alt="" :class="styles.navIcon" />
@@ -116,6 +135,50 @@ const appBackground = computed(() => {
             >
                 <img src="@/assets/svgs/page_right.svg" alt="" :class="styles.navIcon" />
             </button>
+        </footer> -->
+
+        <footer v-if="!isHome" role="contentinfo">
+            <nav :aria-label="t('accessibility.pagination')" :class="styles.navigationBar">
+                <div :class="styles.reportDiv">
+                    <h2 :class="styles.reportH1">{{ t('home.feedback') }}</h2>
+                    <button
+                        type="button"
+                        @click="showDetails"
+                        :class="styles.infoButton"
+                        :aria-label="t('competence.show_details_label')"
+                        title="Details anzeigen"
+                    >
+                        <!-- <img src="@/themes/icons/info.svg" :class="styles.infoIcon" alt="" aria-hidden="true" /> -->
+                        <InfoIcon :class="styles.infoIcon" aria-hidden="true" />
+                    </button>
+                </div>
+
+                <button :disabled="currentIndex <= 0" @click="goBack" :class="styles.navBtn" :aria-label="t('accessibility.prev_page')">
+                    <!-- <img src="@/assets/svgs/page_left.svg" alt="" aria-hidden="true" :class="styles.navIcon" /> -->
+                    <IconPageLeft :class="styles.navIcon" aria-hidden="true" />
+                </button>
+
+                <ul :class="styles.pageIndicator" role="list">
+                    <li v-for="(step, index) in allSteps" :key="index">
+                        <button
+                            :class="`${styles.dot} ${index === currentIndex ? styles.active : ''}`"
+                            :aria-current="index === currentIndex ? 'page' : undefined"
+                            :aria-label="t('accessibility.go_to_page', { num: index + 1 })"
+                            @click="goTo(index)"
+                        ></button>
+                    </li>
+                </ul>
+
+                <button
+                    :disabled="currentIndex >= allSteps.length - 1 || currentIndex === -1"
+                    @click="goNext"
+                    :class="[styles.navBtn, styles.next]"
+                    :aria-label="t('accessibility.next_page')"
+                >
+                    <!-- <img src="@/assets/svgs/page_right.svg" alt="" aria-hidden="true" :class="styles.navIcon" /> -->
+                    <IconPageRight :class="styles.navIcon" aria-hidden="true" />
+                </button>
+            </nav>
         </footer>
     </div>
 </template>

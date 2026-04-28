@@ -7,22 +7,30 @@
 .appWrapper {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     background-color: var(--color-turquise);
     transition: background 0.5s ease;
+
+    height: 100dvh;
+    overflow: hidden;
 }
 
 .content {
     flex: 1;
-    min-height: calc(100dvh - 10dvh - 40px);
+    /* min-height: calc(100dvh - 10dvh - 40px); */
+    overflow-y: auto;
+    height: calc(100dvh - 10dvh - 40px);
 }
 
 .navigationBar {
-    position: fixed;
+    /* position: fixed; */
+    position: relative;
+    flex-shrink: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    min-height: 10dvh;
+    /* min-height: 10dvh; */
+    height: 10dvh;
 
     background: var(--color-turquise);
     display: flex;
@@ -44,18 +52,27 @@
     cursor: not-allowed;
 }
 
+.reportDiv{
+    display: flex;
+    align-items: flex-start;
+}
+
 @media (min-width: 768px) {
     .navBtn {
         padding: 15px 40px;
     }
-    .navigationBar{
+    .navigationBar {
         padding: 0px 20px 0px 20px;
     }
 }
 
-@media (max-width: 900px) {  
-    .reportH1{
-        display:none
+@media (max-width: 900px) {
+    .reportH1 {
+        display: none;
+    }
+
+    .reportDiv {
+        display: none;
     }
 }
 
@@ -63,40 +80,97 @@
     display: flex;
     gap: 12px;
     align-items: center;
+
+    list-style: none;
 }
 
 .dot {
-    width: 10px;
+    /* width: 10px;
     height: 10px;
     background-color: var(--color-navigation-blue);
     border-radius: 50%;
     transition: all 0.3s ease;
+    position: relative; */
+
+    display: block;
+    cursor: pointer;
+    background-color: var(--color-navigation-blue);
+    border: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    padding: 0;
+
     position: relative;
+    z-index: 2;
 }
 
 .dot.active {
     background-color: var(--color-navigation-blue);
-    transform: scale(1.2);
+    /* transform: scale(1.2); */
+    transform: scale(1);
 }
 
 .dot.active::after {
     content: '';
     position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    background-color: var(--color-white);
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: var(--color-navigation-blue);
     border-radius: 50%;
     border: 1px solid var(--color-navigation-blue);
-    opacity: 0.5;
-}
-
-.dot:hover {
-    background-color: #bbb;
-    transform: scale(1.1);
+    /* opacity: 0.5; */
 }
 
 .appWrapper .content.no-padding {
     padding-bottom: 0 !important;
+}
+
+.dot.active::before {
+    content: '';
+    position: absolute;
+    /* Zentrieren des Rings hinter dem Dot */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* Größe des Hintergrund-Rings (größer als die 10px des Dots) */
+    width: 20px;
+    height: 20px;
+
+    background-color: var(--color-white);
+    border: 1px solid var(--color-navigation-blue);
+    border-radius: 50%;
+
+    /* Z-Index -1, damit es hinter dem blauen Dot liegt */
+    z-index: -1;
+}
+
+.dot:focus-visible,
+.navBtn:focus-visible {
+    outline: 2px solid var(--color-navigation-blue);
+    outline-offset: 4px;
+}
+
+.flexContainer {
+    display: flex;
+}
+
+.infoButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.infoButton:focus-visible {
+    outline: 2px solid var(--color-navigation-blue);
+    outline-offset: 2px;
 }
