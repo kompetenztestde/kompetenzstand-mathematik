@@ -31,9 +31,10 @@ export function useNavigation(
             guidingIdeaTopPerformers.value.forEach((_, index) => {
                 steps.push({ path: '/step-5', sub: index })
             })
-        } else {
-            steps.push({ path: '/step-5', sub: null })
-        }
+        } 
+        // else {
+        //     steps.push({ path: '/step-5', sub: null })
+        // }
 
         if (badPerformers.value && badPerformers.value.length > 0) {
             steps.push({ path: '/step-6', sub: null })
