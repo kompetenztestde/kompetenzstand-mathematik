@@ -17,6 +17,7 @@ const updateBreakpoint = () => {
 const props = defineProps<{
     level?: LevelLabel
     score: number
+    correctScore: number
     areas?: number[]
 }>()
 
@@ -37,7 +38,6 @@ const dynamicMask = computed(() => {
     )`
 })
 
-// const currentScore = computed(() => LEVEL_MAP[props.level] || 1)
 const currentScore = computed(() => {
     if (!props.level) {
         return 1
@@ -47,50 +47,61 @@ const currentScore = computed(() => {
 
 watch(props, (newVal) => {
     if (newVal) {
-        console.log('Value:', props.level)
+        console.log('Value:', props.areas)
     }
 })
 
 const isIntroSliding = ref(false)
 
-// const dynamicLeftPosition = computed(() => {
-//     if (step.value === 1 && isIntroSliding.value) {
-//         return '120%'
-//     }
-
-//     if (isSliding.value) {
-//         return `${currentScore.value * 20 - 10}%`
-//         // const offset = isMobile.value ? 5 : 10;
-//         // return `${currentScore.value * 20 - offset}%`;
-//     }
-
-//     //return '-32%';
-//     // return isMobile.value ? '-15%' : '-32%';
-//     return isMobile.value ? '0%' : '-10%'
-// })
-
+const calculatedPercentage = computed(() => {
+    const total = 43
+    return (props.correctScore / total) * 100
+})
 
 const dynamicLeftPosition = computed(() => {
     const width = window.innerWidth
+    const height = window.innerHeight
     if (step.value === 1) {
         if (isIntroSliding.value) {
-            return '120%'; 
+            return '120%'
         }
-        if (width < 768) {
+
+        if (width < 500) {
             return '0%'
         }
-        if (width >= 768 && width <= 1024) {
-            return '-7%'
+        if (width <= 650 && width >= 500) {
+            return '-12%'
         }
-        //return isMobile.value ? '0%' : '-7%'; 
+        if (width >= 650 && width < 768) {
+            return '-17%'
+        }
+        if (width >= 768 && width <= 850) {
+            return '-9%'
+        }
+        if (width >= 850 && width <= 950) {
+            return '-13%'
+        }
+        if (width >= 950 && width <= 1024) {
+            return '-15%'
+        }
+        if (width >= 1024 && width <= 1200) {
+            return '-20%'
+        }
+        if (width >= 1200 && width <= 1300) {
+            return '-22%'
+        }
+        if (width >= 1300 && width <= 1400) {
+            return '-25%'
+        }
+
         return '-30%'
     }
 
     if (isSliding.value) {
-        return `${currentScore.value * 20 - 10}%`;
+        return `${calculatedPercentage.value}%`
     }
 
-    return '0%';
+    return '0%'
 })
 
 onMounted(() => {
@@ -121,77 +132,61 @@ onUnmounted(() => {
 <template>
     <div>
         <Transition name="fade" mode="out-in">
-            <!-- <div v-if="step === 1" key="intro" :class="styles.introContainer">
+            <div v-if="step === 1" key="intro" :class="styles.introContainer">
                 <div :class="styles.fixedIntroWaves"></div>
-
                 <div
                     :class="styles.introMovable"
                     :style="{ left: dynamicLeftPosition, transition: isIntroSliding ? 'left 3s linear' : 'none' }"
                 >
                     <DotLottieVue :data="scene1_3" autoplay :class="styles.scene1Style" />
                 </div>
-            </div> -->
-
-            <div v-if="step === 1" key="intro" :class="styles.introContainer">
-                <div :class="styles.introStage">
-                    <div :class="styles.fixedIntroWaves"></div>
-
-                    <div
-                    :class="styles.introMovable"
-                    :style="{ left: dynamicLeftPosition, transition: isIntroSliding ? 'left 3s linear' : 'none' }"
-                >
-                    <!-- <div :class="[styles.introMovable, isIntroSliding ? styles.isSliding : styles.isWaiting]"> -->
-                        <DotLottieVue :data="scene1_3" autoplay :class="styles.scene1Style" />
-                    </div>
-                </div>
             </div>
 
-            <div v-else key="content" :class="styles.pageContainer">
-                <div :class="styles.sliderWrapper">
-                    <div class="sliderTrack" :style="{ '--mask': dynamicMask }">
-                        <div :class="styles.movableContainer" :style="{ left: dynamicLeftPosition }">
-                            <DotLottieVue
-                                :class="styles.scene3Style"
-                                :render-settings="{
-                                    viewBoxSize: '800 650',
-                                    preserveAspectRatio: 'xMidYMid meet',
-                                    progressiveLoad: false,
-                                    hideOnTransparent: true,
-                                }"
-                                v-if="step === 2"
-                                :data="scene2Moving"
-                                autoplay
-                                loop
-                                :speed="0.5"
-                            />
-                            <DotLottieVue
-                                v-if="step === 3"
-                                :data="scene3"
-                                autoplay
-                                :loop="false"
-                                :class="styles.scene3Style"
-                                :render-settings="{
-                                    viewBoxSize: '800 650',
-                                    preserveAspectRatio: 'xMidYMid meet',
-                                    progressiveLoad: false,
-                                    hideOnTransparent: true,
-                                }"
-                            />
-                        </div>
+            <div v-else key="content" :class="styles.sliderWrapper">
+                <div class="sliderTrack" :style="{ '--mask': dynamicMask }">
+                    <div :class="styles.movableContainer" :style="{ left: dynamicLeftPosition }">
+                        <DotLottieVue
+                            :class="styles.scene3Style"
+                            :render-settings="{
+                                viewBoxSize: '800 650',
+                                preserveAspectRatio: 'xMidYMid meet',
+                                progressiveLoad: false,
+                                hideOnTransparent: true,
+                            }"
+                            v-if="step === 2"
+                            :data="scene2Moving"
+                            autoplay
+                            loop
+                            :speed="0.5"
+                        />
+                        <DotLottieVue
+                            v-if="step === 3"
+                            :data="scene3"
+                            autoplay
+                            :loop="false"
+                            :class="styles.scene3Style"
+                            :render-settings="{
+                                viewBoxSize: '800 650',
+                                preserveAspectRatio: 'xMidYMid meet',
+                                progressiveLoad: false,
+                                hideOnTransparent: true,
+                            }"
+                        />
                     </div>
-                    <div :class="styles.scaleLabels">
-                        <span :style="{ left: (areas?.[0] ?? 33) / 2 + '%' }">
-                            {{ t('areas.first') }}
-                        </span>
+                    <div :class="styles.triangleBottom" :style="{ left: dynamicLeftPosition }"></div>
+                </div>
+                <div :class="styles.scaleLabels" class="labels">
+                    <span :class="styles.label" :style="{ left: (props.areas?.[0] ?? 33) / 2 + '%' }">
+                        {{ isMobile ? t('areas.mobileFirst') : t('areas.first') }}
+                    </span>
 
-                        <span :style="{ left: ((areas?.[0] ?? 33) + (areas?.[1] ?? 66)) / 2 + '%' }">
-                            {{ t('areas.middle') }}
-                        </span>
+                    <span :class="styles.label" :style="{ left: ((props.areas?.[0] ?? 33) + (props.areas?.[1] ?? 66)) / 2 + '%' }">
+                        {{ isMobile ? t('areas.mobileMiddle') : t('areas.middle') }}
+                    </span>
 
-                        <span :style="{ left: ((areas?.[1] ?? 66) + 100) / 2 + '%' }">
-                            {{ t('areas.last') }}
-                        </span>
-                    </div>
+                    <span :class="styles.label" :style="{ left: ((props.areas?.[1] ?? 66) + 100) / 2 + '%' }">
+                        {{ isMobile ? t('areas.mobileLast') : t('areas.last') }}
+                    </span>
                 </div>
             </div>
         </Transition>
@@ -204,10 +199,9 @@ onUnmounted(() => {
     width: 100%;
     position: relative;
     overflow: hidden;
-    background-color: transparent;
 }
 
-.sliderTrack::before {
+/* .sliderTrack::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -218,5 +212,88 @@ onUnmounted(() => {
     -webkit-mask-image: var(--mask);
     mask-image: var(--mask);
     z-index: 1;
+} */
+/* .sliderTrack::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0; 
+    width: 100%;
+    height: 250px; 
+    background-image: url('@/themes/icons/dark_waves.svg');
+    background-repeat: repeat-x;
+    background-position: bottom; 
+    background-size: auto 250px;
+    -webkit-mask-image: var(--mask);
+    mask-image: var(--mask);
+    z-index: 1;
+} */
+
+.sliderTrack::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 250px;
+    background-image: url('@/themes/icons/dark_waves.svg');
+    background-repeat: repeat-x;
+    background-position: bottom left;
+    background-size: auto 250px;
+    z-index: 1;
+
+    animation: slideOutToLeft 5.5s cubic-bezier(0.25, 1, 0.5, 1) 0.5s forwards;
+}
+
+.sliderTrack::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 250px;
+    background-image: url('@/themes/icons/dark_waves.svg');
+    background-repeat: repeat-x;
+    background-position: bottom left;
+    background-size: auto 250px;
+
+    -webkit-mask-image: var(--mask);
+    mask-image: var(--mask);
+    z-index: 2;
+
+    transform: translateX(100%);
+
+    animation: slideInFromRight 5.5s cubic-bezier(0.25, 1, 0.5, 1) 0.5s forwards;
+}
+
+.labels {
+    animation: slideInFromRight 5.5s cubic-bezier(0.25, 1, 0.5, 1) 0.5s forwards;
+}
+
+@keyframes slideOutToLeft {
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .sliderTrack {
+        height: 250px;
+    }
 }
 </style>

@@ -2,19 +2,13 @@
 
 .introContainer {
     width: 100%;
-    height: 450px;
-    overflow: hidden;
+    height: 400px;
+    /* overflow: hidden; */
+    overflow: visible;
     position: relative;
     display: flex;
     align-items: flex-end;
-}
-
-.introStage {
-    position: relative;
-    width: 100%;
-    height: 300px; 
-
-    bottom: 0;
+    margin-bottom: 50px;
 }
 
 .fixedIntroWaves {
@@ -39,18 +33,13 @@
     z-index: 2;
     pointer-events: none;
 
-    left: 0;
-    transform: translateX(0vw);
     transition: transform 3s linear;
 }
 
 .scene1Style {
-    /* position: relative; */
-    /* top: 100%; */
     height: 550px;
     width: 700px;
     image-rendering: -webkit-optimize-contrast;
-    /* transform: translateZ(0); */
     display: block;
 }
 
@@ -59,26 +48,39 @@
 }
 
 .isWaiting {
-    transform: translateX(-25vw); 
+    transform: translateX(-25vw);
 }
 
 @media (max-width: 768px) {
     .scene1Style {
-        height: 400px; 
+        height: 400px;
         width: 500px;
     }
-    
-    .introMovable {
 
-        bottom: 25px; 
+    .introMovable {
+        bottom: 25px;
+    }
+    .introContainer {
+        /* height: 300px; */
+        height: 250px;
+    }
+    .label {
+        hyphens: auto;
+        text-wrap: wrap;
+        text-align: left;
+        word-break: break-word;
+        max-width: 12vw;
+        display: inline-block;
+    }
+}
+
+@media (max-width: 700px) {
+    .label {
+        max-width: 20vw;
     }
 }
 
 /* second animation part */
-
-/* .pageContainer {
-    padding-top: 130px;
-} */
 
 .sliderWrapper {
     width: 100%;
@@ -89,7 +91,8 @@
 .scaleLabels {
     display: flex;
     justify-content: space-between;
-    font-size: 12px;
+    /* font-size: 12px; */
+    height: 50px;
     padding: 0 10px;
 }
 
@@ -113,30 +116,74 @@
     opacity: 0;
 }
 
-/* 
-@media (max-width: 900px) {
-    .movableContainer {
-        position: relative;
-    }
-
-    .pageContainer {
-        padding-top: 30px;
-    }
-} */
-
-
-
 .scene3Style {
     height: 650px;
     width: 800px;
     image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    /* image-rendering: crisp-edges; */
+    /* image-rendering: pixelated; */
     transform: translateZ(0);
     backface-visibility: hidden;
 }
 
+@media (min-width: 786px) {
+    .scene3Style {
+        width: 1600px;
+        height: 1300px;
+    }
+    .movableContainer {
+        top: 45%;
+    }
+}
 
+.label {
+    position: absolute;
+    transform: translateX(-50%);
+    padding-top: 10px;
+}
 
+.triangleBottom {
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%);
+
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 20px solid white;
+    transition: left 2s ease-in-out;
+    z-index: 20;
+}
+
+.triangleBottom::after {
+    content: '';
+    position: absolute;
+
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 2px;
+    height: 50px;
+
+    background-image: linear-gradient(to bottom, white 50%, transparent 50%);
+    background-size: 100% 10px;
+    background-repeat: repeat-y;
+    pointer-events: none;
+
+    opacity: 0;
+
+    animation: fadeInDash 0.5s ease-in 5s forwards;
+}
+
+@keyframes fadeInDash {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}

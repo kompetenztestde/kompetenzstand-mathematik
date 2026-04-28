@@ -10,6 +10,8 @@ import { useOverallResultsNew } from '@/composables/useOverallResultsNew'
 import { LEVEL_MAP, ROMAN_TO_LABEL, type LevelLabel } from '@/types'
 import { useGuidingIdeasNew } from '@/composables/useGuidingIdeasNew'
 import styles from './styles.module.css'
+import { useUserItemsNew } from '@/composables/useUserItems'
+import RefreshIcon from '@/assets/svgs/refreshStarIcon.svg?component'
 const route = useRoute()
 const currentUserCode = computed<string | undefined>(() => {
     const user = route.query.user
@@ -71,6 +73,7 @@ const levelLabel = computed<LevelLabel | undefined>(() => {
 const levelNumber = computed(() => {
     return levelLabel.value ? LEVEL_MAP[levelLabel.value] : 0
 })
+const { stats } = useUserItemsNew(currentUserCode)
 
 watch(
     data,
@@ -78,6 +81,9 @@ watch(
         if (newVal && newVal.length > 0) {
             console.log('Rohdaten:', newVal)
             console.log('Berechnetes Level:', level.value)
+            console.log('TOTAL:', stats.value.total)
+            console.log('PERCENTAGE', stats.value.percentage)
+            console.log('CORRECT', stats.value.correct)
         }
     },
     { immediate: true },
@@ -94,9 +100,12 @@ const handleRefresh = () => {
             <div :class="styles.headerTopRow">
                 <h2 :class="styles.resultTitle">{{ t('common.result') }}</h2>
 
-                <div :class="styles.feedbackTrigger" @click="handleRefresh">
+                <div :class="styles.feedbackTrigger">
                     <span :class="styles.feedbackText">{{ t('home.feedback') }}</span>
-                    <img src="@/assets/svgs/refreshStarIcon.svg" :class="styles.edgeIcon" alt="" />
+                    <button type="button" @click="handleRefresh" :class="styles.iconButtonOnly" :aria-label="t('home.feedback')">
+                        <!-- <img src="@/assets/svgs/refreshStarIcon.svg" :class="styles.edgeIcon" alt="" aria-hidden="true" /> -->
+                        <RefreshIcon :class="styles.edgeIcon" aria-hidden="true"/>
+                    </button>
                 </div>
             </div>
 
@@ -106,12 +115,14 @@ const handleRefresh = () => {
         </div>
 
         <div :class="styles.animationContainer">
-            <div :class="styles.feedbackTriggerAnimation" @click="handleRefresh">
+            <div :class="styles.feedbackTriggerAnimation" >
                 <h2 :class="styles.feedbackText">{{ t('home.feedback') }}</h2>
-                <img src="@/assets/svgs/refreshStarIcon.svg" :class="styles.edgeIcon" alt="" />
+                <button type="button" @click="handleRefresh" :class="styles.edgeIcon" :aria-label="t('home.feedback')">
+                    <!-- <img src="@/assets/svgs/refreshStarIcon.svg" alt="" aria-hidden="true" /> -->
+                     <RefreshIcon aria-hidden="true"/>
+                </button>
             </div>
-            <SlideAnimationComponent :areas="calculatedAreas" :level="levelLabel" :score="levelNumber"/>
+            <SlideAnimationComponent :areas="calculatedAreas" :level="levelLabel" :score="levelNumber" :correctScore="stats.correct" />
         </div>
     </div>
 </template>
-
