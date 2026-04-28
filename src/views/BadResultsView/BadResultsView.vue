@@ -45,7 +45,7 @@ const openInfo = (item: any) => {
                 <div :class="styles.mobileCardHeader" @click="openInfo(item)">
                     <h3>{{ item.label }}</h3>
                     <!-- <img :src="infoIcon" :class="styles.infoTrigger" alt="info" /> -->
-                    <InfoIcon :class="styles.infoTrigger" aria-hidden="true" />
+                    <InfoIcon aria-hidden="true" />
                 </div>
                 <!-- <SingleBarCharts :percentage="item.percentage" :areas="calculatedAreas" /> -->
                 <SingleBarCharts :percentage="item.percentage" :areas="item.areas" />
