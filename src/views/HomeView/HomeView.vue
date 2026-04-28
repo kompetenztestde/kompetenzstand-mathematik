@@ -1,29 +1,20 @@
 <script setup lang="ts">
-import {  ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import '@/assets/styles/variables.css'
 import competenceTexts from '@/assets/competence_guidingideas_texts.json'
 import { useQuery } from '@tanstack/vue-query'
-import { apiConfiguration, inioApiConfiguration } from '@/queries/utils'
-import { GroupsApi } from '@tba3/api-resources'
+import { inioApiConfiguration } from '@/queries/utils'
 import { useI18n } from 'vue-i18n'
 import { useModalStore } from '@/stores/modalStore'
 import { ReportDataTba3Api } from '@tba3/api-new'
 import styles from './styles.module.css'
+import Speaker from './icons/speaker.svg?component'
 
 const modalStore = useModalStore()
 
 const { t } = useI18n()
 const router = useRouter()
-const selectedUserName = ref('')
-const startApp = () => {
-    if (selectedUserName.value) {
-        router.push({
-            path: '/step-2',
-            query: { user: selectedUserName.value },
-        })
-    }
-}
 
 const selectedUserCode = ref('')
 const startAppWithCode = () => {
@@ -72,7 +63,7 @@ const showDetails = () => {
         <div :class="styles.greeting">
             <h1>{{ t('home.feedback') }}</h1>
             <div :class="styles.userSelection">
-                <label for="user-select">{{ t('home.chooseUser') }}</label>                
+                <label for="user-select">{{ t('home.chooseUser') }}</label>
                 <select id="user-select" v-model="selectedUserCode" :class="styles.customSelect">
                     <option value="" disabled>{{ t('home.placeHolder') }}</option>
                     <option v-for="user in newUserData" :key="user.code" :value="user.code">
@@ -80,7 +71,10 @@ const showDetails = () => {
                     </option>
                 </select>
             </div>
-            <button :class="styles.startBtn" @click="startAppWithCode" :disabled="!selectedUserCode">{{ t('home.start') }}</button>
+            <button :class="styles.startBtn" @click="startAppWithCode" :disabled="!selectedUserCode">
+                <Speaker />
+                <span>{{ t('home.start') }}</span>
+            </button>
             <button :class="styles.infoBtn" @click="showDetails" title="Mehr Informationen">
                 {{ t('home.info') }}
             </button>
