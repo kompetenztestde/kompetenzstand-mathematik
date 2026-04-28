@@ -12,7 +12,10 @@ import RaumUndForm from './icons/raum_und_form.png'
 import GroessenUndMessen from './icons/groessen_messen.png'
 import Strukturen from './icons/strukturen.png'
 import ZahlUndOperationen from './icons/zahl_und_operationen.png'
+import DatenUndZufall from './icons/Daten_und_Zufall.png'
 import { useI18n } from 'vue-i18n'
+import InfoIcon from '@/themes/icons/info.svg?component'
+import Celebrate from './icons/celebrate.png'
 
 const modalStore = useModalStore()
 
@@ -42,11 +45,84 @@ watch(topPerformers, (newVal) => {
     }
 })
 
-const imageMap: Record<string, string> = {
-    'Raum und Form': RaumUndForm,
-    'Größen und Messen': GroessenUndMessen,
-    'Strukturen und funktionaler Zusammenhang': Strukturen,
-    'Zahl und Operation': ZahlUndOperationen
+interface SizeConfig {
+    width: string
+    height: string
+    aspectRatio: string
+}
+
+interface ImageConfig {
+    src: string
+    mobile: SizeConfig
+    desktop: SizeConfig
+}
+
+const imageMap: Record<string, ImageConfig> = {
+    'Raum und Form': {
+        src: RaumUndForm,
+        mobile: {
+            width: '247px',
+            height: '206px',
+            aspectRatio: '241/201',
+        },
+        desktop: {
+            width: '348px',
+            height: '289px',
+            aspectRatio: '59/49',
+        },
+    },
+    'Größen und Messen': {
+        src: GroessenUndMessen,
+        mobile: {
+            width: '276px',
+            height: '200px',
+            aspectRatio: '69/50',
+        },
+        desktop: {
+            width: '350px',
+            height: '253px',
+            aspectRatio: '83/60',
+        },
+    },
+    'Strukturen und funktionaler Zusammenhang': {
+        src: Strukturen,
+        mobile: {
+            width: '219px',
+            height: '158px',
+            aspectRatio: '140/101',
+        },
+        desktop: {
+            width: '350px',
+            height: '253px',
+            aspectRatio: '83/60',
+        },
+    },
+    'Zahl und Operation': {
+        src: ZahlUndOperationen,
+        mobile: {
+            width: '280px',
+            height: '280px',
+            aspectRatio: '1/1',
+        },
+        desktop: {
+            width: '280px',
+            height: '280px',
+            aspectRatio: '1/1',
+        },
+    },
+    'Daten und Zufall': {
+        src: DatenUndZufall,
+        mobile: {
+            width: '320px',
+            height: '240px',
+            aspectRatio: '4/3',
+        },
+        desktop: {
+            width: '320px',
+            height: '240px',
+            aspectRatio: '4/3',
+        },
+    },
 }
 
 const currentIllustration = computed(() => {
@@ -59,16 +135,46 @@ const currentIllustration = computed(() => {
     <div v-if="currentItem" :class="styles.statPaginator">
         <div :class="layout.baseCard">
             <div :class="[layout.baseIllustration, styles.illustrationHeader]">
-                <div class="title-row">
+                <div @click="showDetails" :class="styles.titleRow">
                     <h1>{{ currentItem.label }}</h1>
-                    <img @click="showDetails" :class="styles.info" src="@/themes/icons/info.svg" />
+                    <!-- <img @click="showDetails" :class="styles.info" src="@/themes/icons/info.svg" /> -->
+                    <button
+                        type="button"
+                        :class="styles.infoButton"
+                        :aria-label="t('competence.show_details_label')"
+                        title="Details anzeigen"
+                    >
+                        <!-- <img src="@/themes/icons/info.svg" :class="styles.infoIcon" alt="" aria-hidden="true" /> -->
+                        <InfoIcon :class="styles.infoIcon" aria-hidden="true" />
+                    </button>
                 </div>
                 <!-- <img @click="showDetails" :class="styles.info" src="./icons/strukturen.png"/> -->
-                <img v-if="currentIllustration" :class="styles.icon" :src="currentIllustration" alt="Illustration" />
+                <!-- <img v-if="currentIllustration" :class="styles.icon" :src="currentIllustration" alt="Illustration" /> -->
+                 <img 
+    v-if="currentIllustration" 
+    :src="currentIllustration.src" 
+    :style="{
+        '--w-mob': currentIllustration.mobile.width,
+        '--h-mob': currentIllustration.mobile.height,
+        '--ar-mob': currentIllustration.mobile.aspectRatio,
+        '--w-desk': currentIllustration.desktop.width,
+        '--h-desk': currentIllustration.desktop.height,
+        '--ar-desk': currentIllustration.desktop.aspectRatio
+    }"
+    :class="styles.icon" 
+    alt="Illustration" 
+/>
+                <!-- <InfoIcon v-if="currentIllustration" :class="styles.infoIcon" aria-hidden="true" /> -->
             </div>
             <div :class="layout.baseContentArea">
-                <h2>{{ t('common.result') }}</h2>
-                <SingleBarChart :areas="calculatedAreas" :percentage="currentItem.percentage" />
+                <div :class="styles.result">
+                    <h2>{{ t('common.result') }}</h2>
+                    <img :class="styles.celebrate" :src="Celebrate" alt="Contemptive Icon" />
+                </div>
+
+                <!--<SingleBarChart :areas="calculatedAreas" :percentage="currentItem.percentage" />-->
+                <SingleBarChart :areas="currentItem.areas" :percentage="currentItem.percentage" />
+
                 <span class="text-body">
                     {{ currentItem.text }}
                 </span>
