@@ -4,10 +4,12 @@ import { inioApiConfiguration } from '@/queries/utils'
 import competenceTexts from '../assets/competence_guidingideas_texts.json'
 import { ReportDataTba3Api } from '@tba3/api-new'
 import dayjs from 'dayjs'
+import { useUserItemsNew } from './useUserItems'
 
 export function useSpecialCasesNew(code: ComputedRef<string | undefined>) {
     const { properties } = useUserProperties(code)
     const { data: aggregations } = useUserAggregations(code)
+    const { data: items } = useUserItemsNew(code)
     const processingDuration = computed(() => {
         const startProp = properties.value.find((p) => p.key === 'startTime')
         const endProp = properties.value.find((p) => p.key === 'endTime')
@@ -36,6 +38,15 @@ export function useSpecialCasesNew(code: ComputedRef<string | undefined>) {
             return acc + res
         }, 0)
 
+        const currentItems = items.value ?? []
+
+        const totalItemsCount = currentItems.length
+        const notWorkedOnCount = currentItems.filter((item) => item.descriptiveStatistics?.frequency === -1).length
+        const correctCount = currentItems.filter((item) => item.descriptiveStatistics?.frequency === 1).length
+        const workedOnCount = totalItemsCount - notWorkedOnCount
+        const notWorkedOnRatio = totalItemsCount > 0 ? notWorkedOnCount / totalItemsCount : 0
+        const correctRatioOfWorkedOn = workedOnCount > 0 ? correctCount / workedOnCount : 0
+
         // let key = ''
         // if (totalScore >= 35) key = 'K5'
         // else if (totalScore >= 29) key = 'K4'
@@ -51,10 +62,14 @@ export function useSpecialCasesNew(code: ComputedRef<string | undefined>) {
             key = 'K3'
         } else if (totalScore === 0) {
             key = 'K2'
-        } else if (duration !== null && duration <= 60) {
+        } else if (duration !== null && duration < 60 && duration > 40) {
             key = 'K1A'
-        } else if (totalScore >= 9) {
-            key = 'K1B'
+        } else if (duration !== null && duration > 70) {
+            if (notWorkedOnRatio < 0.5 && correctRatioOfWorkedOn >= 2 / 3) {
+                key = 'K1B'
+            } else {
+                key = 'K4'
+            }
         } else {
             key = 'K4'
         }
