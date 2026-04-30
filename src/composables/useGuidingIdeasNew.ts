@@ -4,10 +4,6 @@ import guidingIdeaTexts from '../assets/competence_guidingideas_texts.json'
 import { useUserItemsNew } from './useUserItems'
 
 const activeSubStep = ref(0)
-// interface CompetenceObject {
-//     type?: string;
-//     name?: string;
-// }
 
 interface CoreIdeaObject {
     description?: string
@@ -60,7 +56,6 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
         if (!items.value || items.value.length === 0) return stats
 
         items.value.forEach((item) => {
-            // const competences = (item.parameters?.competences as CompetenceObject[]) || []
             const parameters = item.parameters
             const guide = parameters?.coreIdea as CoreIdeaObject
 
@@ -75,7 +70,8 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
             }
         })
 
-        Object.values(stats).forEach((s) => {
+        Object.entries(stats).forEach(([k, s]) => {
+            const key = k as keyof typeof guidingIdeaTexts.guiding_ideas_texts
             s.percentage = s.total > 0 ? Math.round((s.hits / s.total) * 100) : 0
             if (s.total > 0 && s.cutOffs?.gym) {
                 const gym = s.cutOffs.gym
@@ -91,15 +87,16 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
                     Math.round((middleMax / reference) * 100),
                     Math.round((upperMax / reference) * 100),
                 ]
-                // if (s.total > 0 && s.cutOffs?.gym) {
-                //     const gym = s.cutOffs.gym
-                //     const reference = s.total
 
-                //     const lowerThreshold = gym.lower[gym.lower.length - 1] ?? 0
-                //     const middleThreshold = gym.middle[gym.middle.length - 1] ?? 0
-
-                //     s.areas = [Math.round(((lowerThreshold + 1) / reference) * 100), Math.round(((middleThreshold + 1) / reference) * 100), 100]
-                //     s.areas = s.areas.map((val) => Math.min(val, 100))
+                const percentage = (s.hits / s.total) * 100
+                const middleOfMiddle = (middleMax + lowerMax) / 2
+                if ((s.areas[1] ?? 66) >= percentage && percentage >= (s.areas[0] ?? 33)) {
+                    if (percentage >= middleOfMiddle) {
+                        s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.good
+                    } else {
+                        s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.normal
+                    }
+                }
             } else {
                 s.areas = [33, 66, 100]
             }
@@ -108,17 +105,11 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
         return stats
     })
 
-    // const topPerformers = computed(() => {
-    //     return Object.values(guidingIdeaStats.value).filter((s) => s.percentage >= 80)
-    // })
-
     const topPerformers = computed(() => {
         const allGuides = Object.values(guidingIdeaStats.value)
-        // const qualified = allGuides.filter((s) => s.percentage >= 80 && s.total >= 5)
         const qualified = allGuides.filter((s) => {
             if (s.total < 5) return false
 
-            // const upperThreshold = s.cutOffs?.gym?.upper?.[0] ?? Infinity
             const upperThreshold = s.cutOffs?.gym?.middle?.[0] ?? Infinity
 
             return s.hits >= upperThreshold
@@ -128,9 +119,7 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
 
     const badPerformers = computed(() => {
         if (!items.value || items.value.length === 0) return []
-        // return Object.values(guidingIdeaStats.value).filter((s) => s.percentage <= 60)
         return Object.values(guidingIdeaStats.value).filter((s) => {
-            // const lowerThreshold = s.cutOffs?.gym?.middle?.[s.cutOffs.gym.middle.length - 1] ?? -1
             const lowerThreshold = s.cutOffs?.gym?.lower?.[s.cutOffs.gym.lower.length - 1] ?? -1
             return s.hits <= lowerThreshold && s.total > 0
         })
@@ -141,7 +130,6 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
     })
 
     const calculatedAreas = computed(() => {
-        //const rawAreas = guidingIdeaTexts?.areas?.middleCertificate
         const rawAreas = guidingIdeaTexts?.areas?.defaultCertificate
         if (!Array.isArray(rawAreas) || rawAreas.length === 0) {
             return [33, 66, 100]
