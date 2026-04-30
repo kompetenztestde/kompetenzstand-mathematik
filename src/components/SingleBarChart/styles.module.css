@@ -45,22 +45,6 @@
     border-radius: 0 4px 4px 0;
 }
 
-.barLow {
-    background: linear-gradient(90deg, #ff8787, #ff6b6b);
-}
-.barMid {
-    background: linear-gradient(90deg, #ffd43b, #fcc419);
-}
-.barHigh {
-    background: linear-gradient(90deg, #63e6be, #42b883);
-}
-
-.valueBadge {
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 12px;
-}
 
 .header {
     text-align: left;

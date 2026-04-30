@@ -1,39 +1,98 @@
 .statPaginator {
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     display: flex;
     justify-content: center;
-    align-items: center;
+    min-height: calc(100dvh - 10dvh - 40px);
 }
 
-.controls {
+.illustrationHeader {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    gap: 15px;
-    margin-top: 20px;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
 }
 
-.text {
-    font-size: 1.05rem;
-    line-height: 1.6;
-    color: #4a5568;
+.illustrationHeader h2 {
     margin: 0;
 }
 
-
-
-button:disabled {
-    opacity: 0.3;
+.info {
+    cursor: pointer;
 }
 
-.card {
-    background: white;
-    border-radius: 16px;
-    padding: 30px;
-    border: 1px solid #edf2f7;
-    transition: transform 0.2s ease;
-    width: 100%;
-    max-width: 400px;
+.titleRow {
+    display: flex;
+    flex-direction: row;
+    /* align-items: center; */
+    align-items: flex-start;
+    justify-content: center;
+    gap: 12px;
+}
+.icon {
+    width: var(--w-desk, 287px);
+    height: var(--h-desk, 298px);
+    aspect-ratio: var(--ar-desk, 251/260);
+    
+    display: block;
+    object-fit: contain;
+    max-width: 100%; 
+}
+
+@media (max-width: 783px) {
+    .icon {
+        width: var(--w-mob);
+        height: var(--h-mob);
+        aspect-ratio: var(--ar-mob);
+    }
+}
+
+.infoButton {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.infoButton:focus-visible {
+    outline: 2px solid var(--color-navigation-blue);
+    outline-offset: 2px;
+}
+
+.celebrate {
+    width: 70px;
+    height: 65px;
+    aspect-ratio: 1/1;
+    margin-left: 32px;
+}
+
+.result{
+    display: flex;
+    align-items: center;
+    
+}
+.result h2 {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .scaleLabel {
+        font-size: 12px;
+        line-height: 18px;
+        transform: rotate(-45deg);
+    }
+    .celebrate {        
+        width: 60px;
+        height: 56px;
+        margin-left: auto;
+        margin-right: 0;
+    }
+    .result{
+        justify-content: space-between;
+    }
 }

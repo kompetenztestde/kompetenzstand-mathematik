@@ -1,0 +1,29 @@
+.page {
+    padding: 20px;
+    margin: 20px;
+    text-align: left;
+    border-radius: 20px;
+    background-color: var(--color-white);
+    box-shadow: 0 0 20px 0 rgba(34, 92, 115, 0.1);
+    overflow-y: auto;
+    min-height: calc(100dvh - 10dvh - 40px);
+}
+
+.container {
+    width: 100%;
+    padding: 16px;
+    padding-left: 88px;
+    padding-right: 87px;
+    margin-top: 100px;
+}
+
+.advice {
+    padding-top: 20px;
+}
+
+@media (max-width: 767px) {
+    .container {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}

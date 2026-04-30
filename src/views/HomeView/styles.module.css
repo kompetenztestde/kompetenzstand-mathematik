@@ -1,0 +1,193 @@
+.page {
+    padding: 20px;
+    text-align: center;
+}
+
+.startBtn {
+    display: inline-flex;
+    height: 52px;
+    padding: 12px 30px 10px 30px;
+    align-items: center;
+    gap: 5px;
+    border-radius: 100px;
+    background: var(--color-navigation-blue);
+    color: var(--color-white);
+
+    text-align: center;
+    font-family: 'League Spartan';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0.9px;
+}
+
+
+.greeting h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #2c3e50;
+}
+
+.infoBtn {
+    background: transparent;
+    color: #94a3b8;
+    border: 1.5px solid #cbd5e1;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    font-style: italic;
+    font-family: serif;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.infoBtn:hover {
+    color: #64748b;
+    border-color: #64748b;
+    background-color: #f8fafc;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+.mobileIllustration {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .mobileIllustration {
+        display: block;
+        width: 100%;
+        max-width: 390px;
+        aspect-ratio: 78 / 73;
+        height: auto;
+        margin-top: 441px;
+        margin-bottom: 45px;
+        object-fit: contain;
+    }
+
+    .greeting {
+        position: absolute;
+        top: 148px;
+        margin-left: 38px;
+        margin-right: 38px;
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .mobileIllustrationBig {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1000px) {
+    .greeting {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        text-align: center;
+    }
+    .mobileIllustrationBig {
+        display: none;
+    }
+}
+
+@media (min-width: 1000px) {
+    .greeting {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .image1 {
+        position: absolute;
+        top: 385px;
+        right: 107px;
+        width: 265.96px;
+        height: 224.607px;
+        aspect-ratio: 45/38;
+    }
+
+    .image2 {
+        position: absolute;
+        margin-top: 43px;
+        left: 22px;
+        width: 183px;
+        height: 177px;
+        aspect-ratio: 61/59;
+    }
+    .image4 {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 324px;
+        height: 307px;
+        aspect-ratio: 324/307;
+    }
+    .image6 {
+        position: absolute;
+        top: 296px;
+        left: 0;
+        width: 400px;
+        height: 400px;
+        aspect-ratio: 103/87;
+    }
+    .image7 {
+        position: absolute;
+        top: 497px;
+        right: 0px;
+        width: 520px;
+        height: 420px;
+        aspect-ratio: 26/21;
+    }
+}
+
+.userSelection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 20px 0;
+}
+.customSelect {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--color-navigation-blue);
+    font-size: 16px;
+    min-width: 250px;
+}
+.startBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: gray;
+}

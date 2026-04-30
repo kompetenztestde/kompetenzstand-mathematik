@@ -1,32 +1,22 @@
-import { computed, ref } from 'vue'
-import { useQuery } from '@tanstack/vue-query'
-import { GroupsApi } from '@tba3/api-resources'
-import { apiConfiguration } from '@/queries/utils'
+import { computed, ref, type ComputedRef } from 'vue'
 import { GUIDE_MAP, type GuideKey } from '@/types'
 import guidingIdeaTexts from '../assets/competence_guidingideas_texts.json'
+import { useUserItems } from './useUserItems'
 
 const activeSubStep = ref(0)
 
-export function useGuidingIdeas(id: string, types: string) {
-    const { data: data } = useQuery({
-        queryKey: ['items'],
-        queryFn: async () => {
-            const config = await apiConfiguration()
-            const api = new GroupsApi(config)
-            const response = await api.getGroupItems({ id: id, type: types })
-            const finalItems = response[0]?.items ?? []
-            return finalItems
-        },
-    })
+export function useGuidingIdeas(userName: ComputedRef<string | undefined>) {
+    const { data: data } = useUserItems(userName)
 
     const guidingIdeaStats = computed(() => {
-        const stats: Record<string, { label: string; text: string; description: string; hits: number; total: number; percentage: number }> = {}
+        const stats: Record<string, { label: string; text: string; description: string; hits: number; total: number; percentage: number }> =
+            {}
 
         ;(Object.keys(GUIDE_MAP) as GuideKey[]).forEach((key) => {
             stats[key] = {
                 label: GUIDE_MAP[key],
                 text: guidingIdeaTexts.guiding_ideas_texts[key].text.excellent,
-                description:guidingIdeaTexts.guiding_ideas_texts[key].description,
+                description: guidingIdeaTexts.guiding_ideas_texts[key].description,
                 hits: 0,
                 total: 0,
                 percentage: 0,
@@ -56,27 +46,42 @@ export function useGuidingIdeas(id: string, types: string) {
 
     const topPerformers = computed(() => {
         if (!guidingIdeaStats.value) return []
-        return Object.values(guidingIdeaStats.value).filter((s) => s.percentage > 80)
+        return Object.values(guidingIdeaStats.value).filter((s) => s.percentage >= 80)
     })
 
-    // const badPerformers = computed(()=>{
-    //     if (!guidingIdeaStats.value) return []
-    //     return Object.values(guidingIdeaStats.value).filter((s) => s.percentage < 40)
-    // })
     const badPerformers = computed(() => {
         if (!data.value || data.value.length === 0) return []
-        return Object.values(guidingIdeaStats.value).filter((s) => s.percentage < 60)
+        return Object.values(guidingIdeaStats.value).filter((s) => s.percentage <= 60)
     })
 
     const extraStepsCount = computed(() => {
         return topPerformers.value.length > 0 ? topPerformers.value.length - 1 : 0
     })
 
+    const areas: number[][] = guidingIdeaTexts.areas.middleCertitficate
+
+    const calculatedAreas = computed(() => {
+        const rawAreas = guidingIdeaTexts.areas.middleCertitficate
+
+        if (!rawAreas || rawAreas.length === 0) {
+            return [33, 66, 100]
+        }
+
+        const lastElement = rawAreas[rawAreas.length - 1]
+        const maxVal = (lastElement && lastElement[1]) ?? 100
+
+        return rawAreas.map((range) => {
+            const val = range[1] ?? 0
+
+            return maxVal > 0 ? Math.round((val / maxVal) * 100) : 0
+        })
+    })
     return {
         topPerformers,
         badPerformers,
         extraStepsCount,
         activeSubStep,
         guidingIdeaStats,
+        calculatedAreas,
     }
 }

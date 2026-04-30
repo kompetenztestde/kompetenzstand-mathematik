@@ -1,0 +1,6 @@
+.page {
+    padding: 40px 20px;
+    text-align: center;
+    text-align: center;
+    min-height: calc(100dvh - 10dvh - 40px);
+}

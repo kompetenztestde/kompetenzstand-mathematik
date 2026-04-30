@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
-import AnimationView from '@/views/AnimationView.vue'
-import SpecialView from '@/views/SpecialView.vue'
-import GuidingIdeaView from '@/views/GuidingIdeaView.vue'
-import CompetenceView from '@/views/CompetenceView.vue'
-import BadResultsView from '@/views/BadResultsView.vue'
-import FinalView from '@/views/FinalView.vue'
+import HomeView from '@/views/HomeView/HomeView.vue'
+import AnimationView from '@/views/AnimationView/AnimationView.vue'
+import SpecialView from '@/views/SpecialView/SpecialView.vue'
+import GuidingIdeaView from '@/views/GuidingIdeaView/GuidingIdeaView.vue'
+import CompetenceView from '@/views/CompetenceView/CompetenceView.vue'
+import BadResultsView from '@/views/BadResultsView/BadResultsView.vue'
+import FinalView from '@/views/FinalView/FinalView.vue'
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [

@@ -2,18 +2,30 @@
 import { computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useNavigation } from './composables/useNavigation'
-import { useCompetences } from './composables/useCompetences' // Importiere deine Datenquelle
-import { useGuidingIdeas } from './composables/useGuidingIdeas'
+import './themes/fonts.css'
+import './assets/styles/variables.css'
+import './assets/styles/base.css'
+import { useI18n } from 'vue-i18n'
+import SideModal from './components/SideModal/SideModal.vue'
+import { useGuidingIdeasNew } from './composables/useGuidingIdeasNew'
+import { useCompetencesNew } from './composables/useCompetencesNew'
+import styles from './styles.module.css'
+import IconPageLeft from '@/assets/svgs/page_left.svg?component'
+import IconPageRight from '@/assets/svgs/page_right.svg?component'
+import InfoIcon from '@/themes/icons/info.svg?component'
+import competenceTexts from '@/assets/competence_guidingideas_texts.json'
+import { useModalStore } from './stores/modalStore'
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 
-const groupId = '8b-mathe'
-const type = 'students'
-const { topPerformers: guidingIdeaTopPerformers } = useGuidingIdeas(groupId, type)
-const { topPerformers: competencesTopPerformers } = useCompetences(groupId, type)
+const currentUserCode = computed(() => route.query.user as string)
 
-const { allSteps } = useNavigation(competencesTopPerformers, guidingIdeaTopPerformers, groupId, type)
+const { topPerformers: guidingIdeaTopPerformers, badPerformers, calculatedAreas, isLoading } = useGuidingIdeasNew(currentUserCode)
+const { topPerformers: competencesTopPerformers } = useCompetencesNew(currentUserCode)
+
+const { allSteps } = useNavigation(competencesTopPerformers, guidingIdeaTopPerformers, badPerformers)
 
 const currentIndex = computed(() => {
     const pathSegments = route.path.split('/').filter(Boolean)
@@ -39,7 +51,10 @@ const goNext = () => {
     const next = allSteps.value[currentIndex.value + 1]
     if (next) {
         const targetPath = next.sub !== null ? `${next.path}/${next.sub}` : next.path
-        router.push(targetPath)
+        router.push({
+            path: targetPath,
+            query: { user: route.query.user },
+        })
     }
 }
 
@@ -47,7 +62,10 @@ const goBack = () => {
     const prev = allSteps.value[currentIndex.value - 1]
     if (prev) {
         const targetPath = prev.sub !== null ? `${prev.path}/${prev.sub}` : prev.path
-        router.push(targetPath)
+        router.push({
+            path: targetPath,
+            query: { user: route.query.user },
+        })
     }
 }
 
@@ -56,172 +74,117 @@ const goTo = (newIndex: number) => {
     if (!newPath) return
     const targetPath = newPath.sub !== null ? `${newPath.path}/${newPath.sub}` : newPath.path
 
-    router.push(targetPath)
+    router.push({
+        path: targetPath,
+        query: { user: route.query.user },
+    })
 }
-const isFirstPage = computed(() => currentIndex.value <= 0)
 
-watch(
-    () => route.fullPath,
-    (newPath) => {
-        console.log('Pfad:', newPath, 'Index:', currentIndex.value)
-    },
-)
+const isHome = computed(() => route.path === '/step-1' || route.path === '/')
+const isSecond = computed(() => route.path === '/step-2')
 
-watch(
-    allSteps,
-    (newList) => {
-        console.log('Navigations-Liste aktualisiert. Einträge:', newList.length)
-    },
-    { immediate: true },
-)
+const appBackground = computed(() => {
+    if (isHome.value || isSecond.value) {
+        return { background: 'linear-gradient(180deg, #87F9F5 0%, #FFF 90.2%)' }
+    }
+    return { backgroundColor: 'var(--color-turquise)' }
+})
+const modalStore = useModalStore()
+
+const title = competenceTexts.start.title
+const infoText = competenceTexts.start.info.text
+const importantText = competenceTexts.start.info.important
+
+const showDetails = () => {
+    const formattedBody = infoText.replace(/\.($|\s+)/g, '.<br><br>').trim()
+    const combinedContent = importantText ? `${formattedBody}<br><br><strong>${importantText}</strong>` : formattedBody
+
+    modalStore.openModal(title, combinedContent)
+}
 </script>
 
 <template>
-    <div class="appWrapper">
-        <main class="content">
+    <div :class="styles.appWrapper" :style="appBackground">
+        <!-- <main class="content" :class="(styles.content, { 'no-padding': isHome || isSecond })">
+            <RouterView :key="route.fullPath" />
+        </main> -->
+        <main :class="[styles.content, { 'no-padding': isHome || isSecond }]">
             <RouterView :key="route.fullPath" />
         </main>
 
-        <footer class="navigationBar">
-            <button :disabled="currentIndex <= 0" @click="goBack" class="navBtn">Zurück</button>
+        <SideModal />
 
-            <div class="pageIndicator">
+        <!-- <footer v-if="!isHome" :class="styles.navigationBar">
+            <h2 :class="styles.reportH1">{{ t('home.feedback') }}</h2>
+            <button :disabled="currentIndex <= 0" @click="goBack" :class="styles.navBtn" aria-label="Zurück">
+                <img src="@/assets/svgs/page_left.svg" alt="" :class="styles.navIcon" />
+            </button>
+            <div :class="styles.pageIndicator">
                 <div
                     v-for="(step, index) in allSteps"
                     :key="index"
-                    class="dot"
-                    :class="{ active: index === currentIndex }"
+                    :class="`${styles.dot} ${index === currentIndex ? styles.active : ''}`"
                     @click="goTo(index)"
                 ></div>
             </div>
-
-            <button :disabled="currentIndex >= allSteps.length - 1 || currentIndex === -1" @click="goNext" class="navBtn next">
-                Weiter
+            <button
+                :disabled="currentIndex >= allSteps.length - 1 || currentIndex === -1"
+                @click="goNext"
+                :class="[styles.navBtn, styles.next]"
+                aria-label="Weiter"
+            >
+                <img src="@/assets/svgs/page_right.svg" alt="" :class="styles.navIcon" />
             </button>
+        </footer> -->
+
+        <footer v-if="!isHome" role="contentinfo">
+            <nav :aria-label="t('accessibility.pagination')" :class="styles.navigationBar">
+                <div :class="styles.reportDiv">
+                    <h2 :class="styles.reportH1">{{ t('home.feedback') }}</h2>
+                    <button
+                        type="button"
+                        @click="showDetails"
+                        :class="styles.infoButton"
+                        :aria-label="t('competence.show_details_label')"
+                        title="Details anzeigen"
+                    >
+                        <!-- <img src="@/themes/icons/info.svg" :class="styles.infoIcon" alt="" aria-hidden="true" /> -->
+                        <InfoIcon :class="styles.infoIcon" aria-hidden="true" />
+                    </button>
+                </div>
+
+                <button :disabled="currentIndex <= 0" @click="goBack" :class="styles.navBtn" :aria-label="t('accessibility.prev_page')">
+                    <!-- <img src="@/assets/svgs/page_left.svg" alt="" aria-hidden="true" :class="styles.navIcon" /> -->
+                    <IconPageLeft :class="styles.navIcon" aria-hidden="true" />
+                </button>
+
+                <ul :class="styles.pageIndicator" role="list">
+                    <li v-for="(step, index) in allSteps" :key="index">
+                        <button
+                            :class="`${styles.dot} ${index === currentIndex ? styles.active : ''}`"
+                            :aria-current="index === currentIndex ? 'page' : undefined"
+                            :aria-label="t('accessibility.go_to_page', { num: index + 1 })"
+                            @click="goTo(index)"
+                        ></button>
+                    </li>
+                </ul>
+
+                <button
+                    :disabled="currentIndex >= allSteps.length - 1 || currentIndex === -1"
+                    @click="goNext"
+                    :class="[styles.navBtn, styles.next]"
+                    :aria-label="t('accessibility.next_page')"
+                >
+                    <!-- <img src="@/assets/svgs/page_right.svg" alt="" aria-hidden="true" :class="styles.navIcon" /> -->
+                    <IconPageRight :class="styles.navIcon" aria-hidden="true" />
+                </button>
+            </nav>
         </footer>
     </div>
 </template>
-<style scoped>
-.greeting {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    text-align: center;
-}
-.appWrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.content {
-    flex: 1;
-    padding-bottom: 80px;
-}
-
-.navigationBar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 70px;
-    background: white;
-    border-top: 1px solid #ddd;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.navBtn {
-    padding: 10px 25px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background: white;
-    cursor: pointer;
-}
-
-.navBtn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-}
-
-.navBtn.next {
-    background: #42b883;
-    color: white;
-    border: none;
-}
-
-.startBtn {
-    padding: 18px 45px;
-    font-size: 1.4rem;
-    font-weight: bold;
-    background-color: #42b883;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    box-shadow: 0 10px 20px rgba(66, 184, 131, 0.2);
-    transition: all 0.3s ease;
-}
-
-.startBtn:hover {
-    background-color: #3aa876;
-    box-shadow: 0 15px 25px rgba(66, 184, 131, 0.3);
-}
-
-.startBtn:active {
-    transform: translate(-50%, -48%);
-}
-
-@media (min-width: 768px) {
-    .navBtn {
-        padding: 15px 40px;
-        font-size: 1.1rem;
-    }
-}
-
-.pageIndicator {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.dot {
-    width: 10px;
-    height: 10px;
-    background-color: #ddd;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.dot.active {
-    background-color: #42b883;
-    transform: scale(1.2);
-}
-
-.dot.active::after {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    border: 2px solid #42b883;
-    border-radius: 50%;
-    opacity: 0.5;
-}
-
-.dot:hover {
-    background-color: #bbb; 
-    transform: scale(1.1);
+<style>
+.appWrapper .content.no-padding {
+    padding-bottom: 0 !important;
+    min-height: calc(100dvh - 15dvh - 40px);
 }
 </style>

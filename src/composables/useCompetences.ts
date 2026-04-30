@@ -1,31 +1,22 @@
-import { computed, ref } from 'vue'
-import { useQuery } from '@tanstack/vue-query'
-import { GroupsApi } from '@tba3/api-resources'
-import { apiConfiguration } from '@/queries/utils'
+import { computed, ref, type ComputedRef } from 'vue'
 import { COMPETENCE_MAP, type CompetenceKey } from '@/types'
 import competenceTexts from '../assets/competence_guidingideas_texts.json'
+import { useUserItems } from './useUserItems'
 
 const activeSubStep = ref(0)
 
-export function useCompetences(id: string, types: string) {
-    const { data: data } = useQuery({
-        queryKey: ['items'],
-        queryFn: async () => {
-            const config = await apiConfiguration()
-            const api = new GroupsApi(config)
-            const response = await api.getGroupItems({ id: id, type: types })
-            const finalItems = response[0]?.items ?? []
-            return finalItems
-        },
-    })
-
+export function useCompetences(userName: ComputedRef<string | undefined>) {
+    const { data: data } = useUserItems(userName)
     const competenceStats = computed(() => {
-        const stats: Record<string, { label: string; text:string; hits: number; total: number; percentage: number }> = {}
+        if (!data.value) return {}
+        const stats: Record<string, { label: string; text: string; hits: number; total: number; percentage: number; description: string }> =
+            {}
 
         ;(Object.keys(COMPETENCE_MAP) as CompetenceKey[]).forEach((key) => {
             stats[key] = {
                 label: COMPETENCE_MAP[key],
                 text: competenceTexts.competence_texts[key].text.excellent,
+                description: competenceTexts.competence_texts[key].description.text,
                 hits: 0,
                 total: 0,
                 percentage: 0,
@@ -52,11 +43,6 @@ export function useCompetences(id: string, types: string) {
         })
         return stats
     })
-
-    // const topPerformers = computed(() => {
-    //     if (!competenceStats.value) return []
-    //     return Object.values(competenceStats.value).filter((s) => s.percentage > 80)
-    // })
 
     const topPerformers = computed(() => {
         if (!competenceStats.value) return []

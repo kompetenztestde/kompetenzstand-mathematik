@@ -1,11 +1,19 @@
-export type LevelLabel = 'unterer Mindeststandard' | 'Mindeststandard' | 'Regelstandard' | 'Regelstandard Plus' | 'Optimalstandard'
+export type LevelLabel = 'unterer Mindeststandard' | 'Mindeststandard' | 'Regelstandard' | 'Regelstandard plus' | 'Optimalstandard'
 
 export const LEVEL_MAP: Record<LevelLabel, number> = {
     'unterer Mindeststandard': 1,
     Mindeststandard: 2,
     Regelstandard: 3,
-    'Regelstandard Plus': 4,
+    'Regelstandard plus': 4,
     Optimalstandard: 5,
+}
+
+export const ROMAN_TO_LABEL: Record<string, LevelLabel> = {
+    'I': 'unterer Mindeststandard',
+    'II': 'Mindeststandard',
+    'III': 'Regelstandard',
+    'IV': 'Regelstandard plus',
+    'V': 'Optimalstandard',
 }
 
 export type GuideKey = 'L1' | 'L2' | 'L3' | 'L4' | 'L5'

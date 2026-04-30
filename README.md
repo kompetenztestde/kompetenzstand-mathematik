@@ -5,31 +5,31 @@
 ### Starten
 
 ```sh
-npm install
+pnpm install
 ```
 
 ### Compile und Hot-Reload für Entwicklung
 
 ```sh
-npm run dev
+pnpm run dev
 ```
 
 ### Type-Check, Compile und Minify für Production
 
 ```sh
-npm run build
+pnpm run build
 ```
 
 ### Unit Tests mit [Vitest](https://vitest.dev/)
 
 ```sh
-npm run test:unit
+pnpm run test:unit
 ```
 
 ### Lint [ESLint](https://eslint.org/)
 
 ```sh
-npm run lint
+pnpm run lint
 ```
 
 ## 🛠️ Technologien & Bibliotheken

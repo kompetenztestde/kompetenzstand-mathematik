@@ -1,5 +1,4 @@
 import { computed, type ComputedRef } from 'vue'
-import { useCompetences } from './useCompetences'
 
 interface Performer {
     label: string
@@ -11,8 +10,7 @@ interface Performer {
 export function useNavigation(
     competenceTopPerformers: ComputedRef<Performer[]>,
     guidingIdeaTopPerformers: ComputedRef<Performer[]>,
-    groupId: string,
-    type: string,
+    badPerformers: ComputedRef<Performer[]>,
 ) {
     const allSteps = computed(() => {
         const steps = []
@@ -33,14 +31,15 @@ export function useNavigation(
             guidingIdeaTopPerformers.value.forEach((_, index) => {
                 steps.push({ path: '/step-5', sub: index })
             })
-        } else {
-            steps.push({ path: '/step-5', sub: null })
-        }
+        } 
+        // else {
+        //     steps.push({ path: '/step-5', sub: null })
+        // }
 
-        steps.push({ path: '/step-6', sub: null })
+        if (badPerformers.value && badPerformers.value.length > 0) {
+            steps.push({ path: '/step-6', sub: null })
+        }
         steps.push({ path: '/step-7', sub: null })
-        // steps.push({ path: '/step-8', sub: null })
-        // steps.push({ path: '/step-9', sub: null })
 
         return steps
     })

@@ -1,0 +1,48 @@
+:root {
+    --color-berry: #b00fbf;
+    --color-navigation-blue: #001dab;
+    --color-turquise: #87f9f5;
+    --color-turquise-light: #deffff;
+    --color-white: #ffffff;
+    --color-pink: #ff00d4;
+    --color-waterblue: #4866ed;
+    --color-waterblue_2: #5c7cfd;
+    --color-waterblue_3: #7f9dff;
+    --color-waterblue_4: #7cb9ff;
+    --color-waterblue_5: #a1c5ff;
+    --color-waterblue_6: #b3d3ff;
+
+    --font-weight-headings: 700;
+
+    /* tablet */
+    --font-size-h1: 36px;
+    --line-height-h1: 42px;
+    --font-size-h2: 24px;
+    --line-height-h2: 26px;
+    --font-size-body-big: 24px;
+    --line-height-body-big: 30px;
+    --font-size-body: 16px;
+    --line-height-body: 21px;
+    --font-size-label: 18px;
+    --line-height-label: 19px;
+
+    --text-h1: 700 var(--font-size-h1)/var(--line-height-h1) ;
+    --text-h2: 700 var(--font-size-h2)/var(--line-height-h2) ;
+    --text-body-big: 400 var(--font-size-body-big)/var(--line-height-body-big) ;
+    --text-body-big-bold: 700 var(--font-size-body-big)/var(--line-height-body-big) ;
+    --text-body: 400 var(--font-size-body)/var(--line-height-body) ;
+    --text-label: 600 var(--font-size-label)/var(--line-height-label) ;
+
+    /* phone */
+    --font-size-h1-phone: 32px;
+    --line-height-h1-phone: 34px;
+    --font-size-body-big-phone: 20px;
+    --line-height-body-big-phone: 24px;
+    --font-size-label-phone: 16px;
+    --line-height-label-phone: 18px;
+
+    --text-h1-phone: 700 var(--font-size-h1-phone)/var(--line-height-h1-phone) ;
+    --text-body-big-phone: 400 var(--font-size-body-big-phone)/var(--line-height-body-big-phone) ;
+    --text-body-big-bold-phone: 700 var(--font-size-body-big-phone)/var(--line-height-body-big-phone) ;
+    --text-label-phone: 400 var(--font-size-label-phone)/var(--line-height-label-phone) ;
+}
