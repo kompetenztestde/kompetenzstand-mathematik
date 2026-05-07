@@ -4,34 +4,26 @@ import { nextTick } from 'vue'
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Speaker from './icons/speaker.svg?component'
+import Stop from './icons/stopIcon.svg?component'
+import Stop2 from './icons/stopIcon2.svg?component'
+import Start from './icons/startIcon.svg?component'
+import styles from './styles.module.css'
 const { t } = useI18n()
 const modalStore = useModalStore()
 
 const closeBtnRef = ref<HTMLButtonElement | null>(null)
 let lastFocusedElement: HTMLElement | null = null
-// const speak = () => {
-//     if ('speechSynthesis' in window) {
-//         window.speechSynthesis.cancel()
-
-//         const plainText = modalStore.content.replace(/<[^>]*>/g, '')
-//         const fullText = `${modalStore.title}. ${plainText}`
-//         const utterance = new SpeechSynthesisUtterance(fullText)
-
-//         utterance.lang = 'de-DE'
-//         utterance.pitch = 1
-//         utterance.rate = 0.8
-
-//         window.speechSynthesis.speak(utterance)
-//     }
-// }
+const isSpeaking = ref(false)
 
 const speak = () => {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel()
+        isSpeaking.value = false
 
         const elements = document.querySelectorAll('[data-tts], .text-body p, .text-body li, .text-body h3')
 
-        elements.forEach((el) => {
+        const totalElements = elements.length
+        elements.forEach((el, index) => {
             const node = el as HTMLElement
             const text = node.innerText.trim()
 
@@ -45,20 +37,49 @@ const speak = () => {
                 if (node.tagName.startsWith('H')) {
                     utterance.pitch = 1.1
                 }
+                utterance.onstart = () => {
+                    isSpeaking.value = true
+                }
+
+                utterance.onend = () => {
+                    if (index === totalElements - 1) {
+                        isSpeaking.value = false
+                    }
+                }
+
+                utterance.onerror = () => {
+                    isSpeaking.value = false
+                }
 
                 window.speechSynthesis.speak(utterance)
             }
         })
+        window.speechSynthesis.resume();
     }
 }
-// watch(
-//     () => modalStore.isOpen,
-//     (newVal) => {
-//         if (!newVal) {
-//             window.speechSynthesis.cancel()
-//         }
-//     },
-// )
+
+const test =  () =>{
+    console.log("PAUSE");
+}
+
+const resumeSpeaking = () => {
+    if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume()
+    } else if (!window.speechSynthesis.speaking) {
+        speak()
+    }
+}
+
+const pauseSpeaking = () => {
+    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause()
+    }
+}
+
+const stopSpeaking = () => {
+    window.speechSynthesis.cancel()
+    isSpeaking.value = false
+}
 
 watch(
     () => modalStore.isOpen,
@@ -100,18 +121,28 @@ const handleKeyDown = (e: KeyboardEvent) => {
 <template>
     <Teleport to="body">
         <Transition name="slide">
-            <div v-if="modalStore.isOpen" class="modalOverlay" @click.self="modalStore.closeModal">
-                <div class="modalContainer" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-                    <button ref="closeBtnRef" class="closeBtn" @click="modalStore.closeModal">
+            <div v-if="modalStore.isOpen" :class="styles.modalOverlay" @click.self="modalStore.closeModal">
+                <div :class="styles.modalContainer" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+                    <button ref="closeBtnRef" :class="styles.closeBtn" @click="modalStore.closeModal">
                         <img src="./icons/closeIcon.svg" alt="" aria-hidden="true" />
                     </button>
-                    <div class="modalContent">
-                        <button class="speakerBtn" @click="speak">
-                            <!-- <img src="./icons/speaker.svg" alt="" aria-hidden="true" /> -->
-                            <Speaker aria-hidden="true" />
-
-                            <span class="text-label">{{ t('sideModal.speaker') }}</span>
-                        </button>
+                    <div :class="styles.modalContent">
+                        <div :class="styles.btnRow">
+                            <button :class="styles.speakerBtn" 
+                            @click="speak">
+                                <Speaker aria-hidden="true" />
+                                <span class="text-label">{{ t('sideModal.speaker') }}</span>
+                            </button>
+                            <button v-if="!isSpeaking" :class="styles.actionButton" @click="resumeSpeaking">
+                                <Start aria-hidden="true" />
+                            </button>
+                            <!-- <button :class="styles.actionButton" @click="pauseSpeaking">
+                                <Stop aria-hidden="true" />
+                            </button> -->
+                            <button v-else :class="styles.actionButton" @click="stopSpeaking">
+                                <Stop2 aria-hidden="true" />
+                            </button>
+                        </div>
                         <h2 data-tts>{{ modalStore.title }}</h2>
 
                         <div data-tts class="text-body" v-html="modalStore.content" role="document"></div>
@@ -123,75 +154,6 @@ const handleKeyDown = (e: KeyboardEvent) => {
 </template>
 
 <style scoped>
-.modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 1000;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.modalContainer {
-    background-color: var(--color-turquise);
-    position: relative;
-    padding: 20px 25px 0px 25px;
-    box-shadow: 0 0 30px 0 rgba(0, 29, 171, 0.42);
-}
-
-.speakerBtn {
-    margin-top: 10px;
-    margin-bottom: 25px;
-    display: flex;
-    height: 52px;
-    padding: 12px 30px 10px 30px;
-    align-items: center;
-    gap: 5px;
-    border-radius: 100px;
-    background: var(--color-white);
-    color: var(--color-navigation-blue);
-    border: none;
-}
-
-.text-label {
-    color: var(--color-white);
-}
-
-@media (min-width: 769px) {
-    .modalContainer {
-        width: 400px;
-        height: 100vh;
-    }
-}
-
-@media (max-width: 768px) {
-    .modalContainer {
-        width: 100vw;
-        height: 100vh;
-    }
-
-    .modalContent {
-        margin-top: 60px;
-        min-width: 320px;
-    }
-
-    h2 {
-        text-align: left;
-    }
-}
-
-.closeBtn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-}
-
 .slide-enter-active,
 .slide-leave-active {
     transition: transform 0.3s ease;
@@ -199,12 +161,6 @@ const handleKeyDown = (e: KeyboardEvent) => {
 .slide-enter-from,
 .slide-leave-to {
     transform: translateX(100%);
-}
-
-.speakerBtn:focus-visible,
-.closeBtn:focus-visible {
-    outline: 3px solid var(--color-navigation-blue);
-    outline-offset: 4px;
 }
 
 .text-label {
