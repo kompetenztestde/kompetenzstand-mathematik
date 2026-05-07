@@ -65,3 +65,46 @@ export const calculateUserStats = (items: any[] | undefined) => {
     return { correct, total, percentage }
 }
 
+export function useSchoolForm(code: ComputedRef<string | undefined>) {
+    return useQuery({
+        queryKey: ['school-form', code.value],
+        queryFn: async () => {
+            if (!code.value) return null;
+            
+            const config = await inioApiConfiguration();
+            const api = new ReportDataTba3Api(config);
+            const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdItemsGet({
+                tgId: 270,
+                groupId: 1001,
+                testId: 9524,
+                type: 'students',
+                studentCode: code.value,
+            });
+
+            return response.data?.groupData?.schoolForm ?? null;
+        },
+        enabled: computed(() => !!code.value),
+        staleTime: 1000 * 60 * 60,
+    });
+}
+
+export function useTestData(code: ComputedRef<string | undefined>) {
+    return useQuery({
+        queryKey: ['testId', code.value],
+        queryFn: async () => {
+            if (!code.value) return null;
+            
+            const config = await inioApiConfiguration();
+            const api = new ReportDataTba3Api(config);
+            const response = await api.testGroupsTgIdTestsGet({
+                tgId: 270,
+                testIds: "9524"
+            });
+
+            return response.data ?? null;
+        },
+        enabled: computed(() => !!code.value),
+        staleTime: 1000 * 60 * 60,
+    });
+}
+

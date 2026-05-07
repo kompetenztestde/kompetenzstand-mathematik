@@ -1,7 +1,7 @@
 import { computed, ref, type ComputedRef } from 'vue'
 import { GUIDE_MAP, type GuideKey } from '@/types'
 import guidingIdeaTexts from '../assets/competence_guidingideas_texts.json'
-import { useUserItemsNew } from './useUserItems'
+import { useSchoolForm, useTestData, useUserItemsNew } from './useUserItems'
 
 const activeSubStep = ref(0)
 
@@ -24,6 +24,8 @@ interface CutOffs {
 
 export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
     const { data: items, isLoading } = useUserItemsNew(code)
+    const { data: schoolForm } = useSchoolForm(code)
+    const { data: testInfo } = useTestData(code)
 
     const guidingIdeaStats = computed(() => {
         const stats: Record<
@@ -70,11 +72,22 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
             }
         })
 
+        const testSubject = guidingIdeaTexts.testInfo.subject
+        const currentTest = testInfo.value?.filter((test) => testSubject.includes(test.subject ?? ''))
+        const currentBooklet = currentTest?.[0]?.booklet
+        const isGymnasium = schoolForm.value === 'Gymnasium'
+        const isGymByBooklet = currentBooklet ? guidingIdeaTexts.testInfo.booklet.gym.includes(currentBooklet) : false
+
+        const useGymSpecs = isGymnasium || isGymByBooklet
+
         Object.entries(stats).forEach(([k, s]) => {
             const key = k as keyof typeof guidingIdeaTexts.guiding_ideas_texts
             s.percentage = s.total > 0 ? Math.round((s.hits / s.total) * 100) : 0
             if (s.total > 0 && s.cutOffs?.gym) {
-                const gym = s.cutOffs.gym
+                // const gym = isGymnasium ? s.cutOffs.gym : s.cutOffs.nonGym
+                //const gym = s.cutOffs.gym
+
+                const gym = useGymSpecs ? s.cutOffs.gym : s.cutOffs.nonGym
 
                 const reference = s.total > 0 ? s.total : 1
 
@@ -90,12 +103,19 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
 
                 const percentage = (s.hits / s.total) * 100
                 const middleOfMiddle = (middleMax + lowerMax) / 2
-                if ((s.areas[1] ?? 66) >= percentage && percentage >= (s.areas[0] ?? 33)) {
-                    if (percentage >= middleOfMiddle) {
-                        s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.good
-                    } else {
-                        s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.normal
-                    }
+                if (percentage >= (s.areas[1] ?? 66)) {
+                    s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.good
+                }
+                if ((s.areas[1] ?? 66) > percentage && percentage > (s.areas[0] ?? 33)) {
+                    // if (percentage >= middleOfMiddle) {
+                    //     s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.good
+                    // } else {
+                    //     s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.normal
+                    // }
+                    s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.normal
+                }
+                if (percentage <= (s.areas[0] ?? 33)) {
+                    s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.bad
                 }
             } else {
                 s.areas = [33, 66, 100]
@@ -114,6 +134,16 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
 
             return s.hits >= upperThreshold
         })
+        const sortedTopPerformers = qualified.sort((a, b) => b.percentage - a.percentage)
+        if (sortedTopPerformers.length > 0 && sortedTopPerformers[0]) {
+            const bestPerformer = sortedTopPerformers[0]
+
+            const guideKey = (Object.keys(GUIDE_MAP) as GuideKey[]).find((key) => GUIDE_MAP[key] === bestPerformer.label)
+
+            if (guideKey) {
+                bestPerformer.text = guidingIdeaTexts.guiding_ideas_texts[guideKey].text.excellent
+            }
+        }
         return qualified.sort((a, b) => b.percentage - a.percentage)
     })
 
@@ -143,6 +173,10 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
             return maxVal > 0 ? Math.round((val / maxVal) * 100) : 0
         })
     })
+
+    console.log('Topperformer', topPerformers.value)
+    console.log('badPerformers', badPerformers.value)
+    console.log('AllGuides', Object.values(guidingIdeaStats.value))
 
     return {
         topPerformers,
