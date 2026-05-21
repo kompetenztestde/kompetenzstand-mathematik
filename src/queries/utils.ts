@@ -8,6 +8,7 @@ type CustomWindow = Window & {
             baseUrl?: string
             inioApiUrl?: string
             inioAuthApiUrl?: string
+            xApiKeySchool?: string
         }
         defaultPageSize?: number
     }
@@ -20,7 +21,11 @@ export async function apiConfiguration(): Promise<Configuration> {
 }
 
 export async function inioApiConfiguration(): Promise<Configuration2> {
-    const apiKeyVal = import.meta.env.VITE_X_API_KEY_SCHOOL || 'TEST'
+    // const apiKeyVal = import.meta.env.VITE_X_API_KEY_SCHOOL || 'TEST'
+    const apiKeyVal = 
+        (window as CustomWindow).appConfig?.api?.xApiKeySchool || 
+        import.meta.env.VITE_X_API_KEY_SCHOOL || 
+        'TEST'
 
     const configFromWindow = (window as CustomWindow).appConfig?.api?.inioApiUrl || ''
     const config = new Configuration2({
