@@ -44,7 +44,7 @@ const isMultiBad = computed(() => {
         <div class="page" v-if="!isMultiBad">
             <GuidingIdeaComponent :data="badPerformers" type="negative"/>            
         </div>
-        <div v-else>
+        <div :class="styles.page" v-else>
             <h1>{{ t('badResults.title') }}</h1>
             <span class="text-body-big">{{ t('badResults.text') }}</span>
             <img :class="styles.contemplative" :src="Contemplative" alt="Contemptive Icon" />
@@ -104,5 +104,6 @@ const isMultiBad = computed(() => {
     text-align: center;
     text-align: center;
     min-height: calc(100dvh - 10dvh - 40px);
+    background-color: white;
 }
 </style>

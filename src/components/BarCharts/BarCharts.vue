@@ -49,124 +49,6 @@ const dynamicMask = computed(() => {
     )`
 })
 
-// const chartOption = computed(() => {
-//     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-
-//     const area1End = props.areas[0] ?? 33
-//     const area2End = props.areas[1] ?? 66
-
-//     const splitAreaColors = Array.from({ length: 100 }, (_, i) => {
-//         if (i < area1End) return { image: darkWavesIcon, repeat: 'repeat' }
-//         if (i < area2End) return { image: wavesIcon, repeat: 'repeat' }
-//         return { image: lightWavesIcon, repeat: 'repeat' }
-//     })
-
-//     return {
-//         renderer: 'svg',
-//         grid: {
-//             left: isMobile ? '0%' : '5%',
-//             right: '10%',
-//             bottom: isMobile ? '20%' : '15%',
-//             top: '5%',
-//             containLabel: true,
-//         },
-
-//         xAxis: {
-//             type: 'value',
-//             max: 100,
-//             interval: 1,
-//             splitLine: { show: false },
-//             axisTick: { show: false },
-//             axisLine: { show: false },
-//             axisLabel: {
-//                 hideOverlap: false,
-//                 margin: 12,
-//                 rotate: isMobile ? 45 : 0,
-//                 formatter: (value: number) => {
-//                     if (value === 0) return t('areas.first')
-//                     if (value === 50) return t('areas.middle')
-//                     if (value === 100) return t('areas.last')
-//                     return ''
-//                 },
-//                 color: 'var(--color-navigation-blue)',
-//                 fontSize: 16,
-//             },
-//             // splitArea: {
-//             //     show: true,
-//             //     areaStyle: {
-//             //         // color: {
-//             //         //     image: wavesIcon,
-//             //         //     repeat: 'repeat',
-//             //         // },
-//             //         color: [
-//             //             {
-//             //                 image: darkWavesIcon,
-//             //                 repeat: 'repeat',
-//             //             },
-//             //             {
-//             //                 image: wavesIcon,
-//             //                 repeat: 'repeat',
-//             //             },
-//             //             {
-//             //                 image: lightWavesIcon,
-//             //                 repeat: 'repeat',
-//             //             },
-//             //         ],
-//             //         //opacity: 0.3,
-//             //     },
-//             // },
-//             // splitArea: {
-//             //     show: true,
-//             //     areaStyle: {
-//             //         color: splitAreaColors,
-//             //     },
-//             // },
-//             splitArea: {show:false}
-//         },
-//         yAxis: {
-//             type: 'category',
-//             triggerEvent: true,
-//             data: props.badPerformers.map((item) => item.label),
-//             splitLine: { show: false },
-//             axisTick: { show: false },
-//             axisLine: { show: false },
-//             axisLabel: {
-//                 formatter: (value: string) => `${value} {infoIcon|?}  `,
-//                 rich: {
-//                     infoIcon: {
-//                         color: 'var(--color-navigation-blue)',
-//                         backgroundColor: 'var(--color-white)',
-//                         borderRadius: 10,
-//                         width: 16,
-//                         height: 16,
-//                         align: 'center',
-//                         shadowColor: 'rgba(0, 32, 137, 0.25)',
-//                         padding: [1, 1, 1, 1],
-//                         shadowBlur: 6,
-//                         shadowOffsetX: 0,
-//                         shadowOffsetY: 0,
-//                     },
-//                 },
-//                 color: 'var(--color-navigation-blue)',
-//                 fontSize: 18,
-//             },
-//         },
-//         series: [
-//             {
-//                 type: 'bar',
-//                 data: props.badPerformers.map((item) => ({
-//                     value: item.percentage,
-//                     itemStyle: {
-//                         color: 'var(--color-berry)',
-//                     },
-//                 })),
-//                 barWidth: 40,
-//                 // showBackground: true,
-//             },
-//         ],
-//     }
-// })
-
 const handleChartClick = (params: any) => {
     let index = -1
 
@@ -199,17 +81,6 @@ const chartOption = computed(() => {
             type: 'value',
             max: 100,
             boundaryGap: false,
-            // axisLabel: {
-            //     show: true,
-            //     margin: 15,
-            //     formatter: (value: number) => {
-            //         if (value === 0) return t('areas.first')
-            //         if (value === 50) return t('areas.middle')
-            //         if (value === 100) return t('areas.last')
-            //         return ''
-            //     },
-            //     color: 'var(--color-navigation-blue)',
-            // },
             axisLabel: { show: false },
             splitLine: { show: false },
             axisLine: { show: false },
@@ -236,22 +107,10 @@ const openModal = (item: any) => {
     modalStore.openModal(item.label, item.description || item.text)
 }
 </script>
-<!-- <template>
-    <div :class="styles.page">
-        <div class="chart-wrapper">
-            <VChart class="chart" :option="chartOption" :init-options="{ renderer: 'svg' }" @click="handleChartClick" autoresize />
-        </div>
-    </div>
-</template> -->
 
 <template>
     <div :class="styles.page">
-        <div class="main-layout">
-            <!-- <div class="labels-column">
-                <div v-for="item in badPerformers" :key="item.label" class="y-axis-label" @click="openModal(item)">
-                    {{ item.label }} <span class="info-circle">?</span>
-                </div>
-            </div> -->
+        <div class="main-layout" :style="{ '--item-count': badPerformers.length }">
             <div class="labels-column">
                 <div v-for="item in badPerformers" :key="item.label" class="y-axis-label" @click="openModal(item)">
                     <span class="label-text">{{ item.label }}</span>
@@ -288,9 +147,7 @@ const openModal = (item: any) => {
                     <span
                         class="scaleLabel"
                         :style="
-                            isMobile
-                                ? { right: ((areas[2] ?? 100) - (areas[1] ?? 66))  + '%' }
-                                : { left: ((areas[1] ?? 66) + 100) / 2 + '%' }
+                            isMobile ? { right: (areas[2] ?? 100) - (areas[1] ?? 66) + '%' } : { left: ((areas[1] ?? 66) + 100) / 2 + '%' }
                         "
                     >
                         {{ t('areas.last') }}
@@ -302,41 +159,30 @@ const openModal = (item: any) => {
 </template>
 
 <style scoped>
-/* .chart-wrapper {
-    width: 100%;
-    height: 400px;
-}
-.chart {
-    width: 100%;
-    height: 100%;
-} */
-
 .main-layout {
     display: flex;
     width: 100%;
-    /* align-items: flex-start; */
 }
 
 .labels-column {
     display: flex;
     flex-direction: column;
-    padding-top: 30px;
+    height: calc(var(--item-count) * 70px);
+    padding-top: 20px;
     margin-right: 20px;
     max-width: 238px;
     align-items: flex-start;
 }
 
 .y-axis-label {
+    flex: 1 0 0;
     height: 70px;
     display: flex;
-    /* align-items: center;
-    justify-content: flex-end; */
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
     text-align: left;
     color: var(--color-navigation-blue);
     cursor: pointer;
-    /* white-space: nowrap; */
 }
 
 .info-circle {
@@ -364,7 +210,7 @@ const openModal = (item: any) => {
 .chart-container {
     position: relative;
     flex-grow: 1;
-    height: 400px;
+    height: calc((var(--item-count) * 70px) + 20px + 40px);
 }
 
 .chart-background-wrapper {
