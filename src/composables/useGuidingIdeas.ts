@@ -58,10 +58,10 @@ export function useGuidingIdeas(userName: ComputedRef<string | undefined>) {
         return topPerformers.value.length > 0 ? topPerformers.value.length - 1 : 0
     })
 
-    const areas: number[][] = guidingIdeaTexts.areas.middleCertitficate
+    const areas: number[][] = guidingIdeaTexts.areas.middleCertificate
 
     const calculatedAreas = computed(() => {
-        const rawAreas = guidingIdeaTexts.areas.middleCertitficate
+        const rawAreas = guidingIdeaTexts.areas.middleCertificate
 
         if (!rawAreas || rawAreas.length === 0) {
             return [33, 66, 100]
@@ -70,7 +70,7 @@ export function useGuidingIdeas(userName: ComputedRef<string | undefined>) {
         const lastElement = rawAreas[rawAreas.length - 1]
         const maxVal = (lastElement && lastElement[1]) ?? 100
 
-        return rawAreas.map((range) => {
+        return rawAreas.map((range: number[]) => {
             const val = range[1] ?? 0
 
             return maxVal > 0 ? Math.round((val / maxVal) * 100) : 0

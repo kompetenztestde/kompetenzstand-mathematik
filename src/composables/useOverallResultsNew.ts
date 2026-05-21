@@ -39,7 +39,8 @@ export function useOverallResultsNew(code: ComputedRef<string | undefined>) {
 
 function useUserAggregations(code: ComputedRef<string | undefined>) {
     return useQuery({
-        queryKey: ['user-aggregations-base', code.value],
+        // queryKey: ['user-aggregations-base', code.value],
+        queryKey: computed(() => ['user-aggregations-base', code.value]),
         queryFn: async () => {
             if (!code.value) return []
             const config = await inioApiConfiguration()

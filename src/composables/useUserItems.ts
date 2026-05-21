@@ -23,7 +23,8 @@ export function useUserItems(userName: ComputedRef<string | undefined>) {
 
 export function useUserItemsNew(code: ComputedRef<string | undefined>) {
     const query = useQuery({
-        queryKey: ['user-items-base', code.value],
+        // queryKey: ['user-items-base', code.value],
+        queryKey: computed(() => ['user-items-base', code.value]),
         queryFn: async () => {
             if (!code.value) return []
             const config = await inioApiConfiguration()
@@ -67,7 +68,8 @@ export const calculateUserStats = (items: any[] | undefined) => {
 
 export function useSchoolForm(code: ComputedRef<string | undefined>) {
     return useQuery({
-        queryKey: ['school-form', code.value],
+        // queryKey: ['school-form', code.value],
+        queryKey: computed(() => ['school-form', code.value]),
         queryFn: async () => {
             if (!code.value) return null;
             
@@ -90,7 +92,8 @@ export function useSchoolForm(code: ComputedRef<string | undefined>) {
 
 export function useTestData(code: ComputedRef<string | undefined>) {
     return useQuery({
-        queryKey: ['testId', code.value],
+        // queryKey: ['testId', code.value],
+        queryKey: computed(() => ['testId', code.value]),
         queryFn: async () => {
             if (!code.value) return null;
             

@@ -89,7 +89,8 @@ export function useSpecialCasesNew(code: ComputedRef<string | undefined>) {
 
 function useUserAggregations(code: ComputedRef<string | undefined>) {
     return useQuery({
-        queryKey: ['user-aggregations-base', code.value],
+        // queryKey: ['user-aggregations-base', code.value],
+        queryKey: computed(() => ['user-aggregations-base', code.value]),
         queryFn: async () => {
             if (!code.value) return []
             const config = await inioApiConfiguration()
@@ -115,7 +116,8 @@ function useUserAggregations(code: ComputedRef<string | undefined>) {
 
 export function useUserProperties(code: ComputedRef<string | undefined>) {
     const query = useQuery({
-        queryKey: ['user-properties-base', code.value],
+        // queryKey: ['user-properties-base', code.value],
+        queryKey: computed(() => ['user-properties-base', code.value]),
         queryFn: async () => {
             if (!code.value) return null
             const config = await inioApiConfiguration()
