@@ -1,7 +1,8 @@
 import { computed, ref, type ComputedRef } from 'vue'
 import { GUIDE_MAP, type GuideKey } from '@/types'
-import guidingIdeaTexts from '../assets/competence_guidingideas_texts.json'
+// import guidingIdeaTexts from '../assets/competence_guidingideas_texts.json'
 import { useSchoolForm, useTestData, useUserItemsNew } from './useUserItems'
+import { configJson } from '@/services/configService'
 
 const activeSubStep = ref(0)
 
@@ -23,6 +24,7 @@ interface CutOffs {
 }
 
 export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
+    const guidingIdeaTexts = configJson
     const { data: items, isLoading } = useUserItemsNew(code)
     const { data: schoolForm } = useSchoolForm(code)
     const { data: testInfo } = useTestData(code)

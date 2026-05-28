@@ -1,7 +1,7 @@
 import { computed, ref, type ComputedRef } from 'vue'
 import { COMPETENCE_MAP, type CompetenceKey } from '@/types'
-import competenceTexts from '../assets/competence_guidingideas_texts.json'
 import { useUserItemsNew } from './useUserItems'
+import { configJson } from '@/services/configService'
 
 const activeSubStep = ref(0)
 
@@ -12,6 +12,7 @@ interface CompetenceObject {
 }
 
 export function useCompetencesNew(code: ComputedRef<string | undefined>) {
+    const competenceTexts = configJson
     const { data: data } = useUserItemsNew(code)
     const competenceStats = computed(() => {
         const stats: Record<

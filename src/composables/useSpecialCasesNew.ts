@@ -1,12 +1,13 @@
 import { computed, type ComputedRef } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { inioApiConfiguration } from '@/queries/utils'
-import competenceTexts from '../assets/competence_guidingideas_texts.json'
 import { ReportDataTba3Api } from '@tba3/api-new'
 import dayjs from 'dayjs'
 import { useUserItemsNew } from './useUserItems'
+import { configJson } from '@/services/configService'
 
 export function useSpecialCasesNew(code: ComputedRef<string | undefined>) {
+    const competenceTexts = configJson
     const { properties } = useUserProperties(code)
     const { data: aggregations } = useUserAggregations(code)
     const { data: items } = useUserItemsNew(code)

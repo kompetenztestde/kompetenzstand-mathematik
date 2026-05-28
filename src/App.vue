@@ -13,12 +13,13 @@ import styles from './styles.module.css'
 import IconPageLeft from '@/assets/svgs/page_left.svg?component'
 import IconPageRight from '@/assets/svgs/page_right.svg?component'
 import InfoIcon from '@/themes/icons/info.svg?component'
-import competenceTexts from '@/assets/competence_guidingideas_texts.json'
 import { useModalStore } from './stores/modalStore'
+import { configJson } from './services/configService.ts'
 
 const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
+const competenceTexts = configJson
 
 const currentUserCode = computed(() => route.query.user as string)
 

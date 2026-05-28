@@ -22,7 +22,6 @@
     letter-spacing: 0.9px;
 }
 
-
 .greeting h2 {
     margin: 0;
     font-size: 1.8rem;
@@ -70,7 +69,7 @@
     display: none;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 735px) {
     .mobileIllustration {
         display: block;
         width: 100%;
@@ -100,10 +99,10 @@
     }
 }
 
-@media (min-width: 768px) and (max-width: 1000px) {
+@media (min-width: 735px) and (max-width: 1080px) {
     .greeting {
         position: absolute;
-        top: 50%;
+        top: 40%;
         left: 50%;
         transform: translate(-50%, -50%);
         display: flex;
@@ -111,13 +110,66 @@
         align-items: center;
         gap: 15px;
         text-align: center;
+        width: 495px;
     }
-    .mobileIllustrationBig {
+    /* .mobileIllustrationBig {
         display: none;
+    } */
+
+    .image1 {
+        position: absolute;
+        top: 516px;
+        right: 107px;
+        width: 303px;
+        height: 255px;
+        aspect-ratio: 101/85;
+    }
+
+    .image2 {
+        position: absolute;
+        margin-top: 43px;
+        left: 22px;
+
+        width: 203px;
+        height: 177px;
+        aspect-ratio: 164/143;
+    }
+    .image4 {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 308px;
+        height: 250px;
+        aspect-ratio: 154/125;
+    }
+    .image6 {
+        position: absolute;
+        bottom: 118px;
+        left: 0;
+        width: 495px;
+        height: 358px;
+        aspect-ratio: 112/81;
+    }
+    .image7 {
+        position: absolute;
+        bottom: 0;
+        right: 0px;
+
+        width: 516px;
+        height: 419px;
+        aspect-ratio: 117/95;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 58px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 60px; 
     }
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 1080px) {
     .greeting {
         position: absolute;
         top: 50%;
@@ -177,7 +229,6 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin: 20px 0;
 }
 .customSelect {
     padding: 10px;

@@ -4,13 +4,29 @@ import { VueQueryPlugin } from '@tanstack/vue-query'
 
 import App from './App.vue'
 import router from './router'
-import i18n from './i18n';
+import i18n from './i18n'
+import { loadConfig } from '@/services/configService'
 
-const app = createApp(App)
+// const app = createApp(App)
 
-app.use(createPinia())
-app.use(router)
-app.use(VueQueryPlugin)
-app.use(i18n);
+// app.use(createPinia())
+// app.use(router)
+// app.use(VueQueryPlugin)
+// app.use(i18n);
 
-app.mount('#app')
+// app.mount('#app')
+
+async function init() {
+    await loadConfig()
+
+    const app = createApp(App)
+
+    app.use(createPinia())
+    app.use(router)
+    app.use(VueQueryPlugin)
+    app.use(i18n)
+
+    app.mount('#app')
+}
+
+init()

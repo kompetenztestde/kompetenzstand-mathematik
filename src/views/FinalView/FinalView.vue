@@ -2,9 +2,9 @@
 import { useI18n } from 'vue-i18n'
 import styles from './styles.module.css'
 import { ref } from 'vue'
-import competenceTexts from '@/assets/competence_guidingideas_texts.json'
+import { configJson } from '@/services/configService'
 const { t } = useI18n()
-
+const competenceTexts = configJson
 const openEnvelopeIndex = ref<number | null>(null)
 
 const toggleEnvelope = (index: number) => {
@@ -52,7 +52,7 @@ const links = competenceTexts.exerciseLinks || []
                                     :tabindex="openEnvelopeIndex === index ? 0 : -1"
                                     @click.stop
                                 >
-                                    Zur Übung {{ index + 1 }}
+                                    Zur Übung
                                     <span :class="styles.visuallyHidden">
                                         (öffnet in neuem Fenster)
                                     </span>

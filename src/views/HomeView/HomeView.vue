@@ -2,7 +2,6 @@
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import '@/assets/styles/variables.css'
-import competenceTexts from '@/assets/competence_guidingideas_texts.json'
 import { useQuery } from '@tanstack/vue-query'
 import { inioApiConfiguration } from '@/queries/utils'
 import { useI18n } from 'vue-i18n'
@@ -10,9 +9,10 @@ import { useModalStore } from '@/stores/modalStore'
 import { ReportDataTba3Api } from '@tba3/api-new'
 import styles from './styles.module.css'
 import Speaker from './icons/speaker.svg?component'
+import { configJson } from '@/services/configService'
 
 const modalStore = useModalStore()
-
+const competenceTexts = configJson
 const { t } = useI18n()
 const router = useRouter()
 

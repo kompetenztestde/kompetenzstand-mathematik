@@ -1,10 +1,11 @@
 import { computed, type ComputedRef } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { inioApiConfiguration } from '@/queries/utils'
-import competenceTexts from '../assets/competence_guidingideas_texts.json'
 import { ReportDataTba3Api } from '@tba3/api-new'
+import { configJson } from '@/services/configService'
 
 export function useOverallResultsNew(code: ComputedRef<string | undefined>) {
+    const competenceTexts = configJson
     const { data: aggregations } = useUserAggregations(code)
     const overallResult = computed(() => {
         if (!aggregations.value || aggregations.value.length === 0) return null
