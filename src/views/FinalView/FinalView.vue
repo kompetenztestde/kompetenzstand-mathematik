@@ -3,6 +3,10 @@ import { useI18n } from 'vue-i18n'
 import styles from './styles.module.css'
 import { ref } from 'vue'
 import { configJson } from '@/services/configService'
+import MorphIcon1 from './icons/morphIcon1.svg?component'
+import MorphIcon2 from './icons/morphIcon2.svg?component'
+import MorphIcon3 from './icons/morphIcon3.svg?component'
+import MorphCard from '../../components/MorphCard/MorphCard.vue'
 const { t } = useI18n()
 const competenceTexts = configJson
 const openEnvelopeIndex = ref<number | null>(null)
@@ -15,20 +19,16 @@ const toggleEnvelope = (index: number) => {
     }
 }
 const links = competenceTexts.exerciseLinks || []
+const morphIconList = [MorphIcon1, MorphIcon2, MorphIcon3]
 </script>
-
 
 <template>
     <div :class="styles.page">
         <h1>{{ t('finalView.title') }}</h1>
-        <p :id="styles.viewDescription">{{ t('finalView.text') }}</p>
+        <span class="text-body-big" :class="styles.viewDescription">{{ t('finalView.text') }}</span>
 
         <ul :class="styles.quadratContainer" role="list">
-            <li
-                v-for="(letter, index) in 3"
-                :key="index"
-                :class="styles.envelopeItem"
-            >
+            <li v-for="(letter, index) in 3" :key="index" :class="styles.envelopeItem">
                 <button
                     type="button"
                     :class="[styles.envelopeForm, openEnvelopeIndex === index ? styles.isOpen : '']"
@@ -36,14 +36,11 @@ const links = competenceTexts.exerciseLinks || []
                     :aria-label="`Brief ${index + 1} ${openEnvelopeIndex === index ? 'schließen' : 'öffnen'}`"
                     @click="toggleEnvelope(index)"
                 >
-                    <div :class="styles.envWrap">
-                        <div 
-                            :class="styles.envFormWrap"
-                            :aria-hidden="openEnvelopeIndex !== index"
-                        >
-                            <h2 :class="styles.letterTitle">Aufgabe {{ index + 1 }}</h2>                          
+                    <!-- <div :class="styles.envWrap">
+                        <div :class="styles.envFormWrap" :aria-hidden="openEnvelopeIndex !== index">
+                            <h2 :class="styles.letterTitle">Aufgabe {{ index + 1 }}</h2>
                             <div :class="styles.linkContainer">
-                                <a                                
+                                <a
                                     v-if="links[index]"
                                     :href="links[index]"
                                     target="_blank"
@@ -53,9 +50,7 @@ const links = competenceTexts.exerciseLinks || []
                                     @click.stop
                                 >
                                     Zur Übung
-                                    <span :class="styles.visuallyHidden">
-                                        (öffnet in neuem Fenster)
-                                    </span>
+                                    <span :class="styles.visuallyHidden"> (öffnet in neuem Fenster) </span>
                                 </a>
                             </div>
                         </div>
@@ -64,7 +59,21 @@ const links = competenceTexts.exerciseLinks || []
                         <div :class="styles.envBottomWrap" aria-hidden="true">
                             <div :class="styles.envBottom"></div>
                         </div>
-                    </div>
+                    </div> -->
+                    <MorphCard :icon="morphIconList[index]" />
+                    <h2 :class="styles.letterTitle">Aufgabe {{ index + 1 }}</h2>
+
+                    <a
+                        v-if="links[index]"
+                        :href="links[index]"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        :tabindex="openEnvelopeIndex === index ? 0 : -1"
+                        @click.stop
+                    >
+                        Zur Übung
+                        <span :class="styles.visuallyHidden"> (öffnet in neuem Fenster) </span>
+                    </a>
                 </button>
             </li>
         </ul>
