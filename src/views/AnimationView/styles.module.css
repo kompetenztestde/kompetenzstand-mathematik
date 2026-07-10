@@ -1,10 +1,14 @@
 .page {
-    display: flex;
-    flex-direction: column;
-    /* min-height: calc(100vh - 10dvh); */
-        /* height: calc(100vh - 10dvh); */
-        height: 100%;
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    grid-template-rows: auto 1fr;
+    overflow-x: hidden;
+}
 
+.resultTitle {
+    text-align: left;
+    font-size: 32px;
 }
 
 .resultHeader {
@@ -14,39 +18,36 @@
     background-color: var(--color-white);
     border-radius: 0 0 40px 40px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    /* margin-bottom: 20px; */
+    grid-column: 4 / 10;
     display: flex;
     flex-direction: column;
-    align-items: center;
-}
-
-.headerTopRow {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+    align-items: flex-start;
 }
 
 .feedbackText {
     display: none;
 }
 
-.resultText {
-    /* margin-top: 10px; */
-    padding: 0px 25px 10px 25px;
-    text-align: left;
+.headerTopRow {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* .animationContainer{
-    margin-bottom: 10dvh;
-} */
+.resultText {
+    padding: 0;
+    text-align: left;
+}
 
 .feedbackTriggerAnimation {
     display: none;
 }
 
-
 .animationContainer {
-    margin-top: auto;
+    grid-column: 1 / -1;
+    align-self: end;
+    overflow: hidden;
 }
 
 @keyframes slideInFromTop {
@@ -57,8 +58,6 @@
         transform: translateY(0);
     }
 }
-
-
 
 @keyframes slideInFromBottom {
     from {
@@ -94,23 +93,24 @@
     outline-offset: 4px;
 }
 
-
-
-
+.buttonRefreshRow {
+    display: none;
+}
 
 @media (max-width: 768px) {
     .page {
         flex-direction: column-reverse !important;
         justify-content: flex-end;
         margin-bottom: 0;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: hidden;
     }
 
     .resultHeader {
         position: relative;
         top: auto;
         border-radius: 0px;
-        margin-top: auto;
+        /* margin-top: auto; */
         margin-bottom: 0;
         padding: 20px;
         margin-left: 0px;
@@ -120,18 +120,16 @@
         transform: translateY(120%);
         animation: slideInFromBottom 0.8s ease-out 18s forwards;
 
-        max-height: 240x;
         overflow: scroll;
+
+        grid-column: 1 / -1;
+        grid-row: 2;
     }
 
     .headerTopRow {
         display: flex;
         align-items: center;
         margin-bottom: 0px;
-    }
-
-    .resultTitle {
-        text-align: left;
     }
 
     .feedbackTrigger {
@@ -142,15 +140,17 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 20px;
+        padding: 0px 20px;
         gap: 8px;
         cursor: pointer;
+        min-height: 100px;
     }
 
     .feedbackText {
         display: inline;
-        max-width: 200px;
+        max-width: 250px;
         color: var(--color-navigation-blue);
+        animation: fadeInQuick 0.5s ease-out forwards;
     }
 
     .edgeIcon {
@@ -164,18 +164,39 @@
         padding: 0;
         text-align: left;
         margin-top: 5px;
-        /* max-height: 240x;
-        overflow: scroll; */
     }
     .animationContainer {
-        /* margin-top: auto; */
-        margin-top: 0; /* In column-reverse ist margin-top auto kontraproduktiv */
-        margin-bottom: 0;
+        grid-row: 1;
+        align-self: start;
     }
 
     .edgeIcon:focus-visible {
         outline: 3px solid var(--color-navigation-blue);
         outline-offset: 4px;
+    }
+
+    .buttonRefreshRow {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        gap: 6px;
+    }
+
+    .refreshButtonText {
+        display: block;
+    }
+
+   
+}
+
+@keyframes fadeInQuick {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -186,13 +207,15 @@
 
         transform: translateY(-120%);
     }
+
+    .headerTopRow:first-child {
+        justify-content: center;
+        padding-bottom: 10px;
+    }
 }
 
 @media (min-width: 1100px) {
     .resultHeader {
-        /* margin-left: 300px;
-        margin-right: 300px; */
-        /* left: 300px; */
         max-width: 800px;
 
         margin-left: auto;
@@ -200,3 +223,107 @@
     }
 }
 
+@media (min-width: 786px) and (max-width: 1024px) {
+    .page {
+        flex-direction: column-reverse !important;
+        justify-content: flex-end;
+        margin-bottom: 0;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+    .resultHeader {
+        position: relative;
+        top: auto;
+        border-radius: 0px;
+        margin-bottom: 0;
+        padding: 30px;
+        margin-left: 0px;
+        margin-right: 0px;
+
+        grid-column: 1 / -1;
+        grid-row: 2;
+
+        transform: translateY(120%);
+        animation: slideInFromBottom 0.8s ease-out 18s forwards;
+        overflow-y: auto;
+    }
+
+    .headerTopRow {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0px;
+    }
+
+    .feedbackTrigger {
+        display: none;
+    }
+
+    .feedbackTriggerAnimation {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0px 20px;
+        gap: 8px;
+        cursor: pointer;
+        min-height: 80px;
+    }
+
+    .feedbackText {
+        display: inline;
+        max-width: 100%;
+        color: var(--color-navigation-blue);
+        animation: fadeInQuick 0.5s ease-out forwards;
+
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 1.06; /* 106.25% */
+
+        padding-top: 43px;
+        padding-left: 33px;
+    }
+
+    .edgeIcon {
+        position: static;
+        transform: none;
+        background: none;
+        border: none;
+    }
+
+    .resultText {
+        padding: 0;
+        text-align: left;
+        margin-top: 10px;
+        padding: 0px 80px;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1.33; /* 133.333% */
+    }
+
+    .animationContainer {
+        grid-row: 1;
+        align-self: start;
+        width: 100%;
+    }
+
+    .buttonRefreshRow {
+        display: flex;
+        align-items: center;
+        padding: 15px 100px;
+        gap: 8px;
+    }
+
+    .refreshButtonText {
+        display: block;
+    }
+    .headerTopRow:first-child {
+        justify-content: flex-start;
+        padding-bottom: 10px;
+    }
+
+    .resultTitle {
+        padding: 0px 80px;
+    }
+}

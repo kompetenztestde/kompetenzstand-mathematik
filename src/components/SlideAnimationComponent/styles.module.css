@@ -3,7 +3,6 @@
 .introContainer {
     width: 100%;
     height: 400px;
-    /* overflow: hidden; */
     overflow: visible;
     position: relative;
     display: flex;
@@ -51,35 +50,6 @@
     transform: translateX(-25vw);
 }
 
-@media (max-width: 768px) {
-    .scene1Style {
-        height: 400px;
-        width: 500px;
-    }
-
-    .introMovable {
-        bottom: 25px;
-    }
-    .introContainer {
-        /* height: 300px; */
-        height: 250px;
-    }
-    .label {
-        hyphens: auto;
-        text-wrap: wrap;
-        text-align: left;
-        word-break: break-word;
-        max-width: 12vw;
-        display: inline-block;
-    }
-}
-
-@media (max-width: 700px) {
-    .label {
-        max-width: 20vw;
-    }
-}
-
 /* second animation part */
 
 .sliderWrapper {
@@ -91,7 +61,6 @@
 .scaleLabels {
     display: flex;
     justify-content: space-between;
-    /* font-size: 12px; */
     height: 50px;
     padding: 0 10px;
 }
@@ -120,20 +89,8 @@
     height: 650px;
     width: 800px;
     image-rendering: -webkit-optimize-contrast;
-    /* image-rendering: crisp-edges; */
-    /* image-rendering: pixelated; */
     transform: translateZ(0);
     backface-visibility: hidden;
-}
-
-@media (min-width: 786px) {
-    .scene3Style {
-        width: 1600px;
-        height: 1300px;
-    }
-    .movableContainer {
-        top: 45%;
-    }
 }
 
 .label {
@@ -185,5 +142,63 @@
     to {
         opacity: 1;
         transform: translateX(-50%) translateY(0);
+    }
+}
+
+@media (min-width: 786px) {
+    .scene3Style {
+        width: 1600px;
+        height: 1300px;
+    }
+    .movableContainer {
+        top: 45%;
+    }
+}
+
+@media (max-width: 768px) {
+    .scene1Style {
+        height: 400px;
+        width: 500px;
+    }
+
+    .introMovable {
+        bottom: -125px;
+    }
+    .introContainer {
+        height: 100px;
+    }
+    .label {
+        hyphens: auto;
+        text-wrap: wrap;
+        text-align: left;
+        word-break: break-word;
+        max-width: 12vw;
+        display: inline-block;
+    }
+
+    .scene3Style {
+        transform: translateZ(0) scale(0.5); /* Verkleinerungsfaktor */
+    }
+    .triangleBottom::after {
+        background: none;
+    }
+
+    .fixedIntroWaves {
+        height: 100px;
+    }
+}
+
+@media (max-width: 700px) {
+    .label {
+        max-width: 20vw;
+    }
+}
+
+@media (min-width: 786px) and (max-width: 1024px) {
+    .label {
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1.31; /* 131.25% */
     }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
-import { type LevelLabel, LEVEL_MAP } from '@/types'
+import { type LevelLabel } from '@/types'
 import styles from './styles.module.css'
 import { useI18n } from 'vue-i18n'
 import scene2Moving from '@/assets/animations/Scene_2_V2_moving.json'
@@ -24,6 +24,10 @@ const props = defineProps<{
 const step = ref(1)
 const isSliding = ref(false)
 
+const emit = defineEmits<{
+    (e: 'animation-finished'): void
+}>()
+
 const dynamicMask = computed(() => {
     const a1 = props.areas?.[0] ?? 33
     const a2 = props.areas?.[1] ?? 66
@@ -38,20 +42,19 @@ const dynamicMask = computed(() => {
     )`
 })
 
-const currentScore = computed(() => {
-    if (!props.level) {
-        return 1
-    }
-    return LEVEL_MAP[props.level]
-})
-
-watch(props, (newVal) => {
-    if (newVal) {
-        console.log('Value:', props.areas)
-    }
-})
-
 const isIntroSliding = ref(false)
+
+const isAnimating = computed(() => {
+    return step.value === 1 || step.value === 2 || isSliding.value
+})
+
+const preventSwipe = (event: TouchEvent) => {
+    if (isAnimating.value) {
+        if (event.cancelable) {
+            event.preventDefault()
+        }
+    }
+}
 
 const calculatedPercentage = computed(() => {
     const total = 43
@@ -107,6 +110,10 @@ const dynamicLeftPosition = computed(() => {
 onMounted(() => {
     updateBreakpoint()
     window.addEventListener('resize', updateBreakpoint)
+
+    window.addEventListener('touchstart', preventSwipe, { passive: false })
+    window.addEventListener('touchmove', preventSwipe, { passive: false })
+
     setTimeout(() => {
         isIntroSliding.value = true
     }, 12000)
@@ -120,12 +127,15 @@ onMounted(() => {
 
             setTimeout(() => {
                 step.value = 3
-            }, 2100)
+                emit('animation-finished')
+            }, 1800)
         }, 800)
-    }, 15000)
+    }, 13500)
 })
 onUnmounted(() => {
     window.removeEventListener('resize', updateBreakpoint)
+    window.removeEventListener('touchstart', preventSwipe)
+    window.removeEventListener('touchmove', preventSwipe)
 })
 </script>
 
@@ -176,15 +186,19 @@ onUnmounted(() => {
                     <div :class="styles.triangleBottom" :style="{ left: dynamicLeftPosition }"></div>
                 </div>
                 <div :class="styles.scaleLabels" class="labels">
-                    <span :class="styles.label" :style="{ left: (props.areas?.[0] ?? 33) / 2 + '%' }">
+                    <span :class="styles.label" class="text-label" :style="{ left: (props.areas?.[0] ?? 33) / 2 + '%' }">
                         {{ isMobile ? t('areas.mobileFirst') : t('areas.first') }}
                     </span>
 
-                    <span :class="styles.label" :style="{ left: ((props.areas?.[0] ?? 33) + (props.areas?.[1] ?? 66)) / 2 + '%' }">
+                    <span
+                        :class="styles.label"
+                        class="text-label"
+                        :style="{ left: ((props.areas?.[0] ?? 33) + (props.areas?.[1] ?? 66)) / 2 + '%' }"
+                    >
                         {{ isMobile ? t('areas.mobileMiddle') : t('areas.middle') }}
                     </span>
 
-                    <span :class="styles.label" :style="{ left: ((props.areas?.[1] ?? 66) + 100) / 2 + '%' }">
+                    <span :class="styles.label" class="text-label" :style="{ left: ((props.areas?.[1] ?? 66) + 100) / 2 + '%' }">
                         {{ isMobile ? t('areas.mobileLast') : t('areas.last') }}
                     </span>
                 </div>
@@ -195,39 +209,14 @@ onUnmounted(() => {
 
 <style scoped>
 .sliderTrack {
-    height: 300px;
+    height: 400px;
     width: 100%;
     position: relative;
     overflow: hidden;
-}
 
-/* .sliderTrack::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url('@/themes/icons/dark_waves.svg');
-    background-repeat: repeat-x;
-    background-position: 0% 75%;
-    background-size: auto 250px;
-    -webkit-mask-image: var(--mask);
-    mask-image: var(--mask);
-    z-index: 1;
-} */
-/* .sliderTrack::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0; 
-    width: 100%;
-    height: 250px; 
-    background-image: url('@/themes/icons/dark_waves.svg');
-    background-repeat: repeat-x;
-    background-position: bottom; 
-    background-size: auto 250px;
-    -webkit-mask-image: var(--mask);
-    mask-image: var(--mask);
-    z-index: 1;
-} */
+    padding-top: 60px;
+    /*margin-top: -60px; */
+}
 
 .sliderTrack::before {
     content: '';
@@ -235,7 +224,7 @@ onUnmounted(() => {
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 250px;
+    height: 400px;
     background-image: url('@/themes/icons/dark_waves.svg');
     background-repeat: repeat-x;
     background-position: bottom left;
@@ -251,7 +240,7 @@ onUnmounted(() => {
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 250px;
+    height: 400px;
     background-image: url('@/themes/icons/dark_waves.svg');
     background-repeat: repeat-x;
     background-position: bottom left;
@@ -293,7 +282,10 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
     .sliderTrack {
-        height: 250px;
+        padding-top: 0px;
+        height: 100px;
     }
+
+    
 }
 </style>
