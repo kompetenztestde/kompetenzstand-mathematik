@@ -30,25 +30,23 @@ const showDetails = () => {
     <div :class="styles.page">
         <div v-if="currentItem" :class="styles.contentWrapper">
             <div v-if="currentItem" :class="layout.baseCard">
-                <Confetti/>
+                <Confetti />
                 <div :class="[layout.baseIllustration, styles.illustrationHeader]">
                     <div @click="showDetails" :class="styles.titleRow">
                         <h1>{{ currentItem.label }}</h1>
-                        <!-- <img @click="showDetails" :class="[styles.mobileHint, styles.info]" src="@/themes/icons/info.svg" /> -->
                         <button
-                            type="button"                            
+                            type="button"
                             :class="styles.infoButton"
                             :aria-label="t('competence.show_details_label')"
                             title="Details anzeigen"
                         >
-                            <!-- <img src="@/themes/icons/info.svg" :class="styles.infoIcon" alt="" aria-hidden="true" /> -->
                             <InfoIcon :class="styles.infoIcon" aria-hidden="true" />
                         </button>
                     </div>
                     <img :src="Trophy" :class="styles.trophyImg" alt="Illustration" />
                 </div>
                 <div :class="layout.baseContentArea">
-                    <h1>{{ t('competence.result') }}</h1>
+                    <h1 :class="styles.header">{{ t('competence.result') }}</h1>
                     <span class="text-body-big">{{ currentItem.text }}</span>
                 </div>
             </div>

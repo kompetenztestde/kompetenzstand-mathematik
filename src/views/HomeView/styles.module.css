@@ -1,8 +1,3 @@
-.page {
-    padding: 20px;
-    text-align: center;
-}
-
 .startBtn {
     display: inline-flex;
     height: 52px;
@@ -12,9 +7,8 @@
     border-radius: 100px;
     background: var(--color-navigation-blue);
     color: var(--color-white);
-
+    border: none;
     text-align: center;
-    font-family: 'League Spartan';
     font-size: 18px;
     font-style: normal;
     font-weight: 700;
@@ -22,10 +16,24 @@
     letter-spacing: 0.9px;
 }
 
-.greeting h2 {
-    margin: 0;
-    font-size: 1.8rem;
-    color: #2c3e50;
+.greeting {
+    grid-column: 4 / 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    text-align: center;
+    z-index: 2;
+    padding: 40px 0;
+}
+
+.greeting h1 {
+    text-align: center;
+    font-size: 58px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.03; /* 103.448% */
 }
 
 .infoBtn {
@@ -69,6 +77,12 @@
     display: none;
 }
 
+.mobileIllustrationBig {
+    grid-column: 1 / -1;
+    position: relative;
+    pointer-events: none;
+}
+
 @media (max-width: 735px) {
     .mobileIllustration {
         display: block;
@@ -76,26 +90,47 @@
         max-width: 390px;
         aspect-ratio: 78 / 73;
         height: auto;
-        margin-top: 441px;
         margin-bottom: 45px;
         object-fit: contain;
     }
 
     .greeting {
-        position: absolute;
-        top: 148px;
-        margin-left: 38px;
-        margin-right: 38px;
-        width: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
+        grid-column: 1 / -1;
+        padding: 20px 10px;
+        z-index: 5;
+    }
+
+    .greeting h1 {
         text-align: center;
+
+        /* phone/H1 */
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 1.06; /* 106.25% */
+    }
+
+    .mobileIllustration {
+        display: block;
+        grid-column: 1 / 6;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+    .mobileIllustration img {
+        width: 374px;
+        height: 315px;
+        aspect-ratio: 374/315;
+        display: block;
+        object-fit: contain;
     }
 
     .mobileIllustrationBig {
         display: none;
+    }
+
+    .startBtn{
+        margin-top: 70px;
     }
 }
 
@@ -112,14 +147,11 @@
         text-align: center;
         width: 495px;
     }
-    /* .mobileIllustrationBig {
-        display: none;
-    } */
 
     .image1 {
         position: absolute;
         top: 516px;
-        right: 107px;
+        right: 17px;
         width: 303px;
         height: 255px;
         aspect-ratio: 101/85;
@@ -127,7 +159,7 @@
 
     .image2 {
         position: absolute;
-        margin-top: 43px;
+        margin-top: 20px;
         left: 22px;
 
         width: 203px;
@@ -153,8 +185,7 @@
     .image7 {
         position: absolute;
         bottom: 0;
-        right: 0px;
-
+        right: 0;
         width: 516px;
         height: 419px;
         aspect-ratio: 117/95;
@@ -165,7 +196,11 @@
         font-size: 58px;
         font-style: normal;
         font-weight: 700;
-        line-height: 60px; 
+        line-height: 60px;
+    }
+
+     .startBtn{
+        margin-top: 70px;
     }
 }
 

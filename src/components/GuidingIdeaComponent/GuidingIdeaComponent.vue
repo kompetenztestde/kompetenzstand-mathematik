@@ -39,11 +39,11 @@ interface ImageConfig {
 }
 
 const props = defineProps<{
-    data: Performer[],
+    data: Performer[]
     type?: 'positive' | 'negative'
 }>()
 
-const statusIcon = computed(() => props.type === 'negative' ? Contemplative : Celebrate)
+const statusIcon = computed(() => (props.type === 'negative' ? Contemplative : Celebrate))
 
 const modalStore = useModalStore()
 const route = useRoute()
@@ -59,9 +59,9 @@ const { topPerformers } = useGuidingIdeasNew(currentUserCode)
 // const currentItem = computed(() => topPerformers.value[activeSubStep.value])
 // const currentItem = computed(() => props.data[activeSubStep.value])
 const currentItem = computed(() => {
-    if (!props.data || props.data.length === 0) return null;
-    const index = Math.min(activeSubStep.value, props.data.length - 1);
-    return props.data[index];
+    if (!props.data || props.data.length === 0) return null
+    const index = Math.min(activeSubStep.value, props.data.length - 1)
+    return props.data[index]
 })
 const { t } = useI18n()
 
@@ -156,7 +156,7 @@ watch(topPerformers, (newVal) => {
         <div :class="layout.baseCard">
             <div :class="[layout.baseIllustration, styles.illustrationHeader]">
                 <div @click="showDetails" :class="styles.titleRow">
-                    <h1>{{ currentItem.label }}</h1>
+                        <h1>{{ currentItem.label }}</h1>
                     <button
                         type="button"
                         :class="styles.infoButton"
@@ -191,7 +191,7 @@ watch(topPerformers, (newVal) => {
 
                 <SingleBarChart :areas="currentItem.areas" :percentage="currentItem.percentage" />
 
-                <span class="text-body">
+                <span class="text-body-big" :class="styles.descriptionText">
                     {{ currentItem.text }}
                 </span>
             </div>

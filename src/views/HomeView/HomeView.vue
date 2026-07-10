@@ -59,34 +59,34 @@ const showDetails = () => {
 }
 </script>
 <template>
-    <div>
-        <div :class="styles.greeting">
-            <h1>{{ t('home.feedback') }}</h1>
-            <div :class="styles.userSelection">
-                <label for="user-select">{{ t('home.chooseUser') }}</label>
-                <select id="user-select" v-model="selectedUserCode" :class="styles.customSelect">
-                    <option value="" disabled>{{ t('home.placeHolder') }}</option>
-                    <option v-for="user in newUserData" :key="user.code" :value="user.code">
-                        {{ user.code }}
-                    </option>
-                </select>
-            </div>
-            <button :class="styles.startBtn" @click="startAppWithCode" :disabled="!selectedUserCode">
-                <Speaker />
-                <span>{{ t('home.start') }}</span>
-            </button>
-            <button :class="styles.infoBtn" @click="showDetails" title="Mehr Informationen">
-                {{ t('home.info') }}
-            </button>
+    <div :class="styles.greeting">
+        <h1>{{ t('home.feedback') }}</h1>
+        <div :class="styles.userSelection">
+            <label for="user-select">{{ t('home.chooseUser') }}</label>
+            <select id="user-select" v-model="selectedUserCode" :class="styles.customSelect">
+                <option value="" disabled>{{ t('home.placeHolder') }}</option>
+                <option v-for="user in newUserData" :key="user.code" :value="user.code">
+                    {{ user.code }}
+                </option>
+            </select>
         </div>
-        <img src="@/themes/icons/Bocetos1.png" alt="Illustration" :class="styles.mobileIllustration" />
+        <button :class="styles.startBtn" @click="startAppWithCode" :disabled="!selectedUserCode">
+            <Speaker />
+            <span>{{ t('home.start') }}</span>
+        </button>
+        <button :class="styles.infoBtn" @click="showDetails" title="Mehr Informationen">
+            {{ t('home.info') }}
+        </button>
+    </div>
+    <div :class="styles.mobileIllustration">
+        <img src="@/themes/icons/Bocetos1.png" alt="Illustration" />
+    </div>
 
-        <div :class="styles.mobileIllustrationBig">
-            <img src="@/themes/icons/Bocetos1_full.png" alt="Illustration" :class="styles.image1" />
-            <img src="@/themes/icons/Bocetos2.png" alt="Illustration" :class="styles.image2" />
-            <img src="@/themes/icons/Bocetos4.png" alt="Illustration" :class="styles.image4" />
-            <img src="@/themes/icons/Bocetos6.png" alt="Illustration" :class="styles.image6" />
-            <img src="@/themes/icons/Bocetos7.png" alt="Illustration" :class="styles.image7" />
-        </div>
+    <div :class="styles.mobileIllustrationBig" class="noPaddingPage">
+        <img src="@/themes/icons/Bocetos1_full.png" alt="Illustration" :class="styles.image1" />
+        <img src="@/themes/icons/Bocetos2.png" alt="Illustration" :class="styles.image2" />
+        <img src="@/themes/icons/Bocetos4.png" alt="Illustration" :class="styles.image4" />
+        <img src="@/themes/icons/Bocetos6.png" alt="Illustration" :class="styles.image6" />
+        <img src="@/themes/icons/Bocetos7.png" alt="Illustration" :class="styles.image7" />
     </div>
 </template>
