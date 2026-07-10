@@ -46,10 +46,54 @@
 }
 
 
-.header {
-    text-align: left;
+.chart {
+    height: 100px;
     width: 100%;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
-    color: #666;
+    position: relative;
+    z-index: 3;
+}
+
+@media (max-width: 756px) {
+    .chart {
+        height: 52px;
+    }
+}
+.chartContainer {
+    width: 100%;
+    padding: 12px 0px;
+}
+
+.areaBorder {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: white;
+    z-index: 2;
+    pointer-events: none;
+}
+
+
+.chartBackgroundWrapper {
+    position: relative;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+}
+
+
+
+.chartBackgroundWrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    background-image: url('@/themes/icons/waves.svg');
+    background-repeat: repeat-x;
+    background-position: bottom;
+    background-size: cover;
+
+    -webkit-mask-image: var(--mask);
+    mask-image: var(--mask);
+    z-index: 0;
 }

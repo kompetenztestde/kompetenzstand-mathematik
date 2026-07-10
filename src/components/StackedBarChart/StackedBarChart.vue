@@ -1,15 +1,28 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { use } from 'echarts/core'
-import { SVGRenderer } from 'echarts/renderers'
-import { BarChart } from 'echarts/charts'
-import { GridComponent } from 'echarts/components'
-import VChart from 'vue-echarts'
+import { computed, defineAsyncComponent } from 'vue'
 import styles from './styles.module.css'
 import '../../assets/styles/variables.css'
 import { useI18n } from 'vue-i18n'
 
-use([SVGRenderer, BarChart, GridComponent])
+const VChart = defineAsyncComponent(async () => {
+    const [
+        { use },
+        { SVGRenderer },
+        { BarChart },
+        { GridComponent },
+        { default: VueECharts }
+    ] = await Promise.all([
+        import('echarts/core'),
+        import('echarts/renderers'),
+        import('echarts/charts'),
+        import('echarts/components'),
+        import('vue-echarts')
+    ])
+
+    use([SVGRenderer, BarChart, GridComponent])
+
+    return VueECharts
+})
 
 const { t } = useI18n()
 
@@ -68,13 +81,13 @@ const chartOption = computed(() => {
 <template>
     <div :class="styles.chartWrapper">
         <div :class="styles.floatingLabels">
-            <div v-if="correctAnswers > 0" :class="[styles.fLabel, 'text-body']" :style="{ width: (correctAnswers / total) * 100 + '%' }">
+            <div v-if="correctAnswers > 0" :class="styles.fLabel" class="text-label" :style="{ width: (correctAnswers / total) * 100 + '%' }">
                 <span>{{ t('specialView.correct') }}</span>
             </div>
-            <div v-if="falseAnswers > 0" :class="[styles.fLabel, 'text-body']" :style="{ width: (falseAnswers / total) * 100 + '%' }">
+            <div v-if="falseAnswers > 0" :class="styles.fLabel" class="text-label" :style="{ width: (falseAnswers / total) * 100 + '%' }">
                 <span>{{ t('specialView.false') }}</span>
             </div>
-            <div v-if="notWorkedOn > 0" :class="[styles.fLabel, 'text-body']" :style="{ width: (notWorkedOn / total) * 100 + '%' }">
+            <div v-if="notWorkedOn > 0" :class="styles.fLabel" class="text-label" :style="{ width: (notWorkedOn / total) * 100 + '%' }">
                 <span>{{ t('specialView.notWorkedOn') }}</span>
             </div>
         </div>
@@ -83,13 +96,13 @@ const chartOption = computed(() => {
             <VChart :option="chartOption" autoresize :init-options="{ renderer: 'svg' }" />
         </div>
         <div :class="styles.bottomValues">
-            <div v-if="correctAnswers > 0" :class="[styles.vLabel, 'text-label']" :style="{ width: (correctAnswers / total) * 100 + '%' }">
+            <div v-if="correctAnswers > 0" :class="styles.vLabel" class="text-label-bold" :style="{ width: (correctAnswers / total) * 100 + '%' }">
                 {{ ((correctAnswers / total) * 100).toFixed(0) }}%
             </div>
-            <div v-if="falseAnswers > 0" :class="[styles.vLabel, 'text-label']" :style="{ width: (falseAnswers / total) * 100 + '%' }">
+            <div v-if="falseAnswers > 0" :class="styles.vLabel" class="text-label-bold" :style="{ width: (falseAnswers / total) * 100 + '%' }">
                 {{ ((falseAnswers / total) * 100).toFixed(0) }}%
             </div>
-            <div v-if="notWorkedOn > 0" :class="[styles.vLabel, 'text-label']" :style="{ width: (notWorkedOn / total) * 100 + '%' }">
+            <div v-if="notWorkedOn > 0" :class="styles.vLabel" class="text-label-bold" :style="{ width: (notWorkedOn / total) * 100 + '%' }">
                 {{ ((notWorkedOn / total) * 100).toFixed(0) }}%
             </div>
         </div>

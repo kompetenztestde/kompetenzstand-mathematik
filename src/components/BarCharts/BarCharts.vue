@@ -1,21 +1,32 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { use } from 'echarts/core'
-import { SVGRenderer } from 'echarts/renderers'
-import { BarChart } from 'echarts/charts'
-import VChart from 'vue-echarts'
-import { GraphicComponent, GridComponent, TooltipComponent } from 'echarts/components'
 import styles from './styles.module.css'
 import '../../assets/styles/variables.css'
 import { useI18n } from 'vue-i18n'
 import { useModalStore } from '@/stores/modalStore'
-import darkWavesIcon from '@/themes/icons/dark_waves.svg'
-import wavesIcon from '@/themes/icons/waves.svg'
-import lightWavesIcon from '@/themes/icons/light_waves.svg'
+import { defineAsyncComponent } from 'vue'
 
-import { watch } from 'vue'
 
-use([SVGRenderer, BarChart, GridComponent, TooltipComponent, GraphicComponent])
+const VChart = defineAsyncComponent(async () => {
+    const [
+        { use },
+        { SVGRenderer },
+        { BarChart },
+        { GraphicComponent, GridComponent, TooltipComponent },
+        { default: VueECharts }
+    ] = await Promise.all([
+        import('echarts/core'),
+        import('echarts/renderers'),
+        import('echarts/charts'),
+        import('echarts/components'),
+        import('vue-echarts') 
+    ])
+
+    use([SVGRenderer, BarChart, GridComponent, TooltipComponent, GraphicComponent])
+
+    return VueECharts
+})
+
 interface Performer {
     label: string
     text: string
@@ -110,31 +121,31 @@ const openModal = (item: any) => {
 
 <template>
     <div :class="styles.page">
-        <div class="main-layout" :style="{ '--item-count': badPerformers.length }">
-            <div class="labels-column">
-                <div v-for="item in badPerformers" :key="item.label" class="y-axis-label" @click="openModal(item)">
-                    <span class="label-text">{{ item.label }}</span>
-                    <span class="info-circle">?</span>
+        <div :class="styles.mainLayout" :style="{ '--item-count': badPerformers.length }">
+            <div :class="styles.labelsColumn">
+                <div v-for="item in badPerformers" :key="item.label" :class="styles.yAxisLabel" @click="openModal(item)">
+                    <span :class="styles.labelText">{{ item.label }}</span>
+                    <span :class="styles.infoCircle">?</span>
                 </div>
             </div>
 
-            <div class="chart-container">
-                <div class="chart-background-wrapper" :style="{ '--mask': dynamicMask }">
-                    <div class="area-border" :style="{ left: areas[0] + '%' }"></div>
-                    <div class="area-border" :style="{ left: areas[1] + '%' }"></div>
+            <div :class="styles.chartContainer">
+                <div :class="styles.chartBackgroundWrapper" :style="{ '--mask': dynamicMask }">
+                    <div :class="styles.areaBorder" :style="{ left: areas[0] + '%' }"></div>
+                    <div :class="styles.areaBorder" :style="{ left: areas[1] + '%' }"></div>
                 </div>
 
-                <VChart class="chart" :option="chartOption" :init-options="{ renderer: 'svg' }" @click="handleChartClick" autoresize />
-                <div class="scaleLabelsRow">
+                <VChart :class="styles.chart" :option="chartOption" :init-options="{ renderer: 'svg' }" @click="handleChartClick" autoresize />
+                <div :class="styles.scaleLabelsRow">
                     <span
-                        class="scaleLabel"
+                        :class="styles.scaleLabel"
                         :style="isMobile ? { right: 100 - (props.areas[0] ?? 33) + '%' } : { left: (props.areas[0] ?? 33) / 2 + '%' }"
                     >
                         {{ t('areas.first') }}
                     </span>
 
                     <span
-                        class="scaleLabel"
+                        :class="styles.scaleLabel"
                         :style="
                             isMobile
                                 ? { right: 100 - ((areas[0] ?? 33) + (areas[1] ?? 66)) + '%' }
@@ -145,7 +156,7 @@ const openModal = (item: any) => {
                     </span>
 
                     <span
-                        class="scaleLabel"
+                        :class="styles.scaleLabel"
                         :style="
                             isMobile ? { right: (areas[2] ?? 100) - (areas[1] ?? 66) + '%' } : { left: ((areas[1] ?? 66) + 100) / 2 + '%' }
                         "
@@ -157,120 +168,3 @@ const openModal = (item: any) => {
         </div>
     </div>
 </template>
-
-<style scoped>
-.main-layout {
-    display: flex;
-    width: 100%;
-}
-
-.labels-column {
-    display: flex;
-    flex-direction: column;
-    height: calc(var(--item-count) * 70px);
-    padding-top: 20px;
-    margin-right: 20px;
-    max-width: 238px;
-    align-items: flex-start;
-}
-
-.y-axis-label {
-    flex: 1 0 0;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    text-align: left;
-    color: var(--color-navigation-blue);
-    cursor: pointer;
-}
-
-.info-circle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-    min-width: 18px;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-left: 8px;
-    margin-top: 1px;
-    flex-shrink: 0;
-}
-
-.label-text {
-    color: var(--color-navigation-blue);
-    text-align: left;
-    flex: 1;
-    word-break: break-word;
-}
-
-.chart-container {
-    position: relative;
-    flex-grow: 1;
-    height: calc((var(--item-count) * 70px) + 20px + 40px);
-}
-
-.chart-background-wrapper {
-    position: absolute;
-    top: 20px;
-    bottom: 40px;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.02);
-    z-index: 0;
-}
-
-.chart-background-wrapper::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url('@/themes/icons/waves.svg');
-    background-repeat: repeat-x;
-    background-position: bottom;
-    background-size: cover;
-    -webkit-mask-image: var(--mask);
-    mask-image: var(--mask);
-}
-
-.chart {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    z-index: 2;
-}
-
-.area-border {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background-color: white;
-    z-index: 1;
-}
-
-.scaleLabelsRow {
-    position: relative;
-    height: 30px;
-    margin-top: 8px;
-    width: 100%;
-}
-
-.scaleLabel {
-    position: absolute;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    color: var(--color-navigation-blue);
-    text-align: center;
-}
-
-@media (max-width: 1000px) {
-    .scaleLabel {
-        font-size: 12px;
-        line-height: 18px;
-        transform: rotate(-45deg);
-    }
-}
-</style>
