@@ -9,3 +9,9 @@ onlyBuiltDependencies:
 
 ignoredBuiltDependencies:
   - '@nestjs/core'
+
+allowBuilds:
+  '@nestjs/core': false
+  '@openapitools/openapi-generator-cli': false
+  esbuild: false
+  vue-demi: false
