@@ -3,7 +3,8 @@ import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useNavigation } from './composables/useNavigation'
 import './themes/fonts.css'
-import './assets/styles/variables.css'
+// import './assets/styles/variables.css'
+import './themes/default.css'
 import './assets/styles/base.css'
 import { useI18n } from 'vue-i18n'
 import SideModal from './components/SideModal/SideModal.vue'
@@ -105,8 +106,10 @@ const showDetails = () => {
 </script>
 
 <template>
-    <div :class="styles.appWrapper" :style="appBackground">
-        <main :class="[styles.content, { 'no-padding': isHome || isSecond }]">
+    <!-- <div :class="styles.appWrapper" :style="appBackground"> -->
+    <div :class="styles.grid" :style="appBackground">
+        <!-- <main :class="[styles.content, { 'no-padding': isHome || isSecond }]"> -->
+        <main :class="[styles.mainBody, styles.gridContent, { 'no-padding': isHome || isSecond }]">
             <RouterView :key="route.fullPath" />
         </main>
 

@@ -1,9 +1,11 @@
 .baseCard {
     display: grid;
-    grid-template-columns: 350px 1fr;
-    min-height: calc(100dvh - 10dvh - 40px);
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    column-gap: var(--page-gutter);
+    height: 100%;
     width: 100%;
-    max-width: 1030px;
+    max-width: 100%;
     border-radius: 20px;
     background: var(--white, #fff);
     box-shadow: 0 0 20px 0 rgba(34, 92, 115, 0.1);
@@ -11,27 +13,27 @@
 }
 
 .baseIllustration {
-    /* border-radius: 20px 0 0 20px; */
+    grid-column: 1 / 5;
     background: var(--turquise-light, #deffff);
     box-shadow: 0 0 20px 0 rgba(34, 92, 115, 0.1);
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
+    justify-content: start;
+    padding: 70px 20px 70px 20px;
 }
 
 .baseContentArea {
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: left;
-    gap: 20px;
+    grid-column: 6 / 12;
+
+    padding: 70px 0px 70px 0px;
+    align-content: start;
+    overflow-y: auto;
+    height: 100%;
+    box-sizing: border-box;
 }
 
+
 .baseText {
-    color: var(--Navigation-Blue, #001dab);
-    font-family: 'League Spartan';
     font-size: 24px;
     font-style: normal;
     font-weight: 400;
@@ -40,19 +42,61 @@
 
 @media (max-width: 768px) {
     .baseCard {
-        grid-template-columns: 1fr;
         min-height: auto;
     }
     .baseIllustration {
+        grid-column: 1 / -1;
         height: auto;
         min-height: 80px;
         padding: 15px;
-        /* border-radius: 20px 20px 0 0; */
     }
 
     .baseContentArea {
+        grid-column: 1 / -1;
         padding: 20px;
         gap: 15px;
+    }
+
+    .baseText {
+        font-size: 18px;
+        line-height: 24px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .baseCard {
+        min-height: auto;
+    }
+
+    .baseIllustration {
+        grid-column: 1 / -1;
+        height: auto;
+        min-height: 80px;
+        padding: 30px 20px; 
+    }
+
+    .baseContentArea {
+        grid-column: 1 / -1; 
+        padding: 30px 20px;
+        gap: 15px;
+    }
+
+    .icon {
+        width: var(--w-mob);
+        height: var(--h-mob);
+        aspect-ratio: var(--ar-mob);
+        margin-top: 20px;
+    }
+
+    .celebrate {
+        width: 60px;
+        height: 56px;
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+    .result {
+        justify-content: space-between; 
     }
 
     .baseText {
