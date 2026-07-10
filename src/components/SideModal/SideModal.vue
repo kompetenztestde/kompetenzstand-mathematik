@@ -54,12 +54,12 @@ const speak = () => {
                 window.speechSynthesis.speak(utterance)
             }
         })
-        window.speechSynthesis.resume();
+        window.speechSynthesis.resume()
     }
 }
 
-const test =  () =>{
-    console.log("PAUSE");
+const test = () => {
+    console.log('PAUSE')
 }
 
 const resumeSpeaking = () => {
@@ -123,29 +123,30 @@ const handleKeyDown = (e: KeyboardEvent) => {
         <Transition name="slide">
             <div v-if="modalStore.isOpen" :class="styles.modalOverlay" @click.self="modalStore.closeModal">
                 <div :class="styles.modalContainer" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-                    <button ref="closeBtnRef" :class="styles.closeBtn" @click="modalStore.closeModal">
-                        <img src="./icons/closeIcon.svg" alt="" aria-hidden="true" />
-                    </button>
-                    <div :class="styles.modalContent">
-                        <div :class="styles.btnRow">
-                            <button :class="styles.speakerBtn" 
-                            @click="speak">
-                                <Speaker aria-hidden="true" />
-                                <span class="text-label">{{ t('sideModal.speaker') }}</span>
-                            </button>
-                            <button v-if="!isSpeaking" :class="styles.actionButton" @click="resumeSpeaking">
-                                <Start aria-hidden="true" />
-                            </button>
-                            <!-- <button :class="styles.actionButton" @click="pauseSpeaking">
+                    <div :class="styles.modalColumn">
+                        <button ref="closeBtnRef" :class="styles.closeBtn" @click="modalStore.closeModal">
+                            <img src="./icons/closeIcon.svg" alt="" aria-hidden="true" />
+                        </button>
+                        <div :class="styles.modalContent">
+                            <div :class="styles.btnRow">
+                                <button :class="styles.speakerBtn" @click="speak">
+                                    <Speaker aria-hidden="true" />
+                                    <span class="text-label">{{ t('sideModal.speaker') }}</span>
+                                </button>
+                                <button v-if="!isSpeaking" :class="styles.actionButton" @click="resumeSpeaking">
+                                    <Start aria-hidden="true" />
+                                </button>
+                                <!-- <button :class="styles.actionButton" @click="pauseSpeaking">
                                 <Stop aria-hidden="true" />
                             </button> -->
-                            <button v-else :class="styles.actionButton" @click="stopSpeaking">
-                                <Stop2 aria-hidden="true" />
-                            </button>
-                        </div>
-                        <h2 data-tts>{{ modalStore.title }}</h2>
+                                <button v-else :class="styles.actionButton" @click="stopSpeaking">
+                                    <Stop2 aria-hidden="true" />
+                                </button>
+                            </div>
+                            <h2 data-tts>{{ modalStore.title }}</h2>
 
-                        <div data-tts class="text-body" v-html="modalStore.content" role="document"></div>
+                            <div data-tts class="text-body" v-html="modalStore.content" role="document"></div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -52,9 +52,10 @@
 }
 
 .closeBtn {
-    position: absolute;
+    /* position: absolute;
     top: 20px;
-    right: 20px;
+    right: 20px; */
+    margin-left: auto;
     background: none;
     border: none;
     font-size: 24px;
@@ -72,26 +73,26 @@
 
 .actionButton {
     display: flex;
-    justify-content: center; 
-    align-items: center;     
+    justify-content: center;
+    align-items: center;
     color: var(--color-navigation-blue);
     width: 54px;
     height: 52px;
-    padding: 0; 
-    
+    padding: 0;
+
     border-radius: 100px;
     background: var(--color-white);
-    border: none; 
+    border: none;
     cursor: pointer;
     flex-shrink: 0;
 }
 
-.btnRow{
+.btnRow {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 10px;
-    margin-bottom: 25px;
+    padding-top: 20px;
+    padding-bottom: 30px;
 }
 
 .speakerBtn:focus-visible,
@@ -103,4 +104,9 @@
 .actionButton:focus-visible {
     outline: 3px solid var(--color-navigation-blue);
     outline-offset: 4px;
+}
+
+.modalColumn {
+    display: flex;
+    flex-direction: column;
 }
