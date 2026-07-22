@@ -1,7 +1,7 @@
 import { computed, ref, type ComputedRef } from 'vue'
 import { COMPETENCE_MAP, type CompetenceKey } from '@/types'
-import competenceTexts from '../assets/competence_guidingideas_texts.json'
 import { useUserItemsNew } from './useUserItems'
+import { configJson } from '@/services/configService'
 
 const activeSubStep = ref(0)
 
@@ -12,6 +12,7 @@ interface CompetenceObject {
 }
 
 export function useCompetencesNew(code: ComputedRef<string | undefined>) {
+    const competenceTexts = configJson
     const { data: data } = useUserItemsNew(code)
     const competenceStats = computed(() => {
         const stats: Record<
@@ -105,15 +106,16 @@ export function useCompetencesNew(code: ComputedRef<string | undefined>) {
         if (!data.value || data.value.length === 0) return []
 
         const allStats = Object.values(competenceStats.value)
-        // const uniqueStats = allStats.filter((item, index, self) => index === self.findIndex((t) => t.label === item.label))
         const qualifiedStats = allStats.filter((s) => s.total >= 5)
 
-        console.log('Item-Lösungshäufigkeit', qualifiedStats)
-
-        const filteredBySolutionFreq = qualifiedStats.sort((a, b) => b.finalSolutionFreqGym - a.finalSolutionFreqGym)
-
-        // const sorted = qualifiedStats.sort((a, b) => b.percentage - a.percentage)
-        // const firstPerformer = sorted[0]
+        const filteredBySolutionFreq = qualifiedStats.sort((a, b) => {
+            const diff = b.finalSolutionFreqGym - a.finalSolutionFreqGym
+            if (Math.abs(diff) > 0.00001) {
+                // Schutz vor minimalen Floating-Point-Ungenauigkeiten
+                return diff
+            }
+            return a.finalSolutionFreqGym - b.finalSolutionFreqGym
+        })
 
         const firstPerformer = filteredBySolutionFreq[0]
 

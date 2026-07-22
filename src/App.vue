@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useNavigation } from './composables/useNavigation'
 import './themes/fonts.css'
-import './assets/styles/variables.css'
+import './themes/default.css'
 import './assets/styles/base.css'
 import { useI18n } from 'vue-i18n'
 import SideModal from './components/SideModal/SideModal.vue'
@@ -13,12 +13,13 @@ import styles from './styles.module.css'
 import IconPageLeft from '@/assets/svgs/page_left.svg?component'
 import IconPageRight from '@/assets/svgs/page_right.svg?component'
 import InfoIcon from '@/themes/icons/info.svg?component'
-import competenceTexts from '@/assets/competence_guidingideas_texts.json'
 import { useModalStore } from './stores/modalStore'
+import { configJson } from './services/configService.ts'
 
 const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
+const competenceTexts = configJson
 
 const currentUserCode = computed(() => route.query.user as string)
 
@@ -104,39 +105,14 @@ const showDetails = () => {
 </script>
 
 <template>
-    <div :class="styles.appWrapper" :style="appBackground">
-        <!-- <main class="content" :class="(styles.content, { 'no-padding': isHome || isSecond })">
-            <RouterView :key="route.fullPath" />
-        </main> -->
-        <main :class="[styles.content, { 'no-padding': isHome || isSecond }]">
+    <!-- <div :class="styles.appWrapper" :style="appBackground"> -->
+    <div :class="styles.grid" :style="appBackground">
+        <!-- <main :class="[styles.content, { 'no-padding': isHome || isSecond }]"> -->
+        <main :class="[styles.mainBody, styles.gridContent, { 'no-padding': isHome || isSecond }]">
             <RouterView :key="route.fullPath" />
         </main>
 
         <SideModal />
-
-        <!-- <footer v-if="!isHome" :class="styles.navigationBar">
-            <h2 :class="styles.reportH1">{{ t('home.feedback') }}</h2>
-            <button :disabled="currentIndex <= 0" @click="goBack" :class="styles.navBtn" aria-label="Zurück">
-                <img src="@/assets/svgs/page_left.svg" alt="" :class="styles.navIcon" />
-            </button>
-            <div :class="styles.pageIndicator">
-                <div
-                    v-for="(step, index) in allSteps"
-                    :key="index"
-                    :class="`${styles.dot} ${index === currentIndex ? styles.active : ''}`"
-                    @click="goTo(index)"
-                ></div>
-            </div>
-            <button
-                :disabled="currentIndex >= allSteps.length - 1 || currentIndex === -1"
-                @click="goNext"
-                :class="[styles.navBtn, styles.next]"
-                aria-label="Weiter"
-            >
-                <img src="@/assets/svgs/page_right.svg" alt="" :class="styles.navIcon" />
-            </button>
-        </footer> -->
-
         <footer v-if="!isHome" role="contentinfo">
             <nav :aria-label="t('accessibility.pagination')" :class="styles.navigationBar">
                 <div :class="styles.reportDiv">
@@ -148,13 +124,11 @@ const showDetails = () => {
                         :aria-label="t('competence.show_details_label')"
                         title="Details anzeigen"
                     >
-                        <!-- <img src="@/themes/icons/info.svg" :class="styles.infoIcon" alt="" aria-hidden="true" /> -->
                         <InfoIcon :class="styles.infoIcon" aria-hidden="true" />
                     </button>
                 </div>
 
                 <button :disabled="currentIndex <= 0" @click="goBack" :class="styles.navBtn" :aria-label="t('accessibility.prev_page')">
-                    <!-- <img src="@/assets/svgs/page_left.svg" alt="" aria-hidden="true" :class="styles.navIcon" /> -->
                     <IconPageLeft :class="styles.navIcon" aria-hidden="true" />
                 </button>
 
@@ -175,7 +149,6 @@ const showDetails = () => {
                     :class="[styles.navBtn, styles.next]"
                     :aria-label="t('accessibility.next_page')"
                 >
-                    <!-- <img src="@/assets/svgs/page_right.svg" alt="" aria-hidden="true" :class="styles.navIcon" /> -->
                     <IconPageRight :class="styles.navIcon" aria-hidden="true" />
                 </button>
             </nav>

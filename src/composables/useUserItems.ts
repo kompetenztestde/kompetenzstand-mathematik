@@ -23,7 +23,7 @@ export function useUserItems(userName: ComputedRef<string | undefined>) {
 
 export function useUserItemsNew(code: ComputedRef<string | undefined>) {
     const query = useQuery({
-        queryKey: ['user-items-base', code.value],
+        queryKey: computed(() => ['user-items-base', code.value]),
         queryFn: async () => {
             if (!code.value) return []
             const config = await inioApiConfiguration()
@@ -63,5 +63,48 @@ export const calculateUserStats = (items: any[] | undefined) => {
     const percentage = (correct / total) * 100
 
     return { correct, total, percentage }
+}
+
+export function useSchoolForm(code: ComputedRef<string | undefined>) {
+    return useQuery({
+        queryKey: computed(() => ['school-form', code.value]),
+        queryFn: async () => {
+            if (!code.value) return null;
+            
+            const config = await inioApiConfiguration();
+            const api = new ReportDataTba3Api(config);
+            const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdItemsGet({
+                tgId: 270,
+                groupId: 1001,
+                testId: 9524,
+                type: 'students',
+                studentCode: code.value,
+            });
+
+            return response.data?.groupData?.schoolForm ?? null;
+        },
+        enabled: computed(() => !!code.value),
+        staleTime: 1000 * 60 * 60,
+    });
+}
+
+export function useTestData(code: ComputedRef<string | undefined>) {
+    return useQuery({
+        queryKey: computed(() => ['testId', code.value]),
+        queryFn: async () => {
+            if (!code.value) return null;
+            
+            const config = await inioApiConfiguration();
+            const api = new ReportDataTba3Api(config);
+            const response = await api.testGroupsTgIdTestsGet({
+                tgId: 270,
+                testIds: "9524"
+            });
+
+            return response.data ?? null;
+        },
+        enabled: computed(() => !!code.value),
+        staleTime: 1000 * 60 * 60,
+    });
 }
 

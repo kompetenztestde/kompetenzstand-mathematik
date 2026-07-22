@@ -2,6 +2,7 @@
 import '@/assets/styles/variables.css'
 import { useI18n } from 'vue-i18n'
 import BarCharts from '@/components/BarCharts/BarCharts.vue'
+import GuidingIdeaComponent from '@/components/GuidingIdeaComponent/GuidingIdeaComponent.vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useGuidingIdeasNew } from '@/composables/useGuidingIdeasNew'
@@ -9,7 +10,7 @@ import { useModalStore } from '@/stores/modalStore'
 import InfoIcon from '@/themes/icons/info.svg?component'
 import SingleBarCharts from '@/components/SingleBarChart/SingleBarChart.vue'
 import styles from './styles.module.css'
-import Contemplative from './icons/contemplative.png';
+import Contemplative from './icons/contemplative.png'
 const route = useRoute()
 const currentUserCode = computed(() => route.query.user as string)
 
@@ -33,36 +34,33 @@ onUnmounted(() => {
 const openInfo = (item: any) => {
     modalStore.openModal(item.label, item.description || item.text)
 }
+
+const isMultiBad = computed(() => {
+    return badPerformers.value.length > 2
+})
 </script>
 <template>
-    <div :class="styles.page">
-        <h1>{{ t('badResults.title') }}</h1>
-        <span class="text-body-big">{{ t('badResults.text') }}</span>
-        <img :class="styles.contemplative" :src="Contemplative" alt="Contemptive Icon" />
+    <!-- <div> -->
+    <div :class="styles.page" v-if="!isMultiBad">
+        <GuidingIdeaComponent :data="badPerformers" type="negative" />
+    </div>
+    <div :class="styles.page" v-else>
+        <div :class="styles.headerWrapper">
+            <h1>{{ t('badResults.title') }}</h1>
+            <img :class="styles.contemplative" :src="Contemplative" alt="Contemptive Icon" />
+        </div>
+        <span class="text-body-big" :class="styles.introText">
+            {{ t('badResults.text') }}
+        </span>
         <BarCharts v-if="!isMobile" :badPerformers="badPerformers" :areas="calculatedAreas" />
         <div v-else :class="styles.mobileList">
             <div v-for="item in badPerformers" :key="item.label" :class="styles.mobileCard">
                 <div :class="styles.mobileCardHeader" @click="openInfo(item)">
-                    <h3>{{ item.label }}</h3>
-                    <!-- <img :src="infoIcon" :class="styles.infoTrigger" alt="info" /> -->
+                    <span class="text-label-bold">{{ item.label }}</span>
                     <InfoIcon aria-hidden="true" />
                 </div>
-                <!-- <SingleBarCharts :percentage="item.percentage" :areas="calculatedAreas" /> -->
                 <SingleBarCharts :percentage="item.percentage" :areas="item.areas" />
             </div>
-            <!-- <div :class="styles.scaleLabelsRow">
-                    <span :class="styles.scaleLabel" :style="{ left: (calculatedAreas[0] ?? 33) / 2 + '%' }">
-                        {{ t('areas.first') }}
-                    </span>
-
-                    <span :class="styles.scaleLabel"  :style="{ left: ((calculatedAreas[0] ?? 33) + (calculatedAreas[1]??66)) / 2 + '%' }">
-                        {{ t('areas.middle') }}
-                    </span>
-
-                    <span :class="styles.scaleLabel"  :style="{ left: ((calculatedAreas[1] ?? 66) + 100) / 2 + '%' }">
-                        {{ t('areas.last') }}
-                    </span>
-                </div> -->
 
             <div :class="styles.scaleLabelsRow">
                 <span
@@ -98,4 +96,16 @@ const openInfo = (item: any) => {
             </div>
         </div>
     </div>
+    <!-- </div> -->
 </template>
+
+<style scoped>
+.page {
+    text-align: center;
+    background-color: white;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    border-radius: 20px;
+}
+</style>

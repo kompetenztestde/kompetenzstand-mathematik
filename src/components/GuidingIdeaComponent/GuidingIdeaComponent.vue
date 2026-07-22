@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { useGuidingIdeas } from '@/composables/useGuidingIdeas'
 import styles from './styles.module.css'
 import layout from '@/assets/styles/component-layout.module.css'
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import SingleBarChart from '../SingleBarChart/SingleBarChart.vue'
 import '@/assets/styles/base.css'
 import { useModalStore } from '@/stores/modalStore'
-import { useGuidingIdeasNew } from '@/composables/useGuidingIdeasNew'
 import RaumUndForm from './icons/raum_und_form.png'
 import GroessenUndMessen from './icons/groessen_messen.png'
 import Strukturen from './icons/strukturen.png'
@@ -16,34 +14,15 @@ import DatenUndZufall from './icons/Daten_und_Zufall.png'
 import { useI18n } from 'vue-i18n'
 import InfoIcon from '@/themes/icons/info.svg?component'
 import Celebrate from './icons/celebrate.png'
+import Contemplative from './icons/contemplative.png'
 
-const modalStore = useModalStore()
-
-const route = useRoute()
-const activeSubStep = computed(() => {
-    const sId = route.params.subId
-    return sId !== undefined ? Number(sId) : 0
-})
-const currentUserName = computed(() => route.query.user as string)
-const currentUserCode = computed(() => route.query.user as string)
-
-// const { topPerformers } = useGuidingIdeas(currentUserName)
-const { topPerformers, calculatedAreas } = useGuidingIdeasNew(currentUserCode)
-
-const currentItem = computed(() => topPerformers.value[activeSubStep.value])
-const { t } = useI18n()
-
-const showDetails = () => {
-    if (currentItem.value) {
-        modalStore.openModal(currentItem.value.label, currentItem.value.description)
-    }
+interface Performer {
+    label: string
+    description: string
+    percentage: number
+    text: string
+    areas: any
 }
-
-watch(topPerformers, (newVal) => {
-    if (newVal) {
-        console.log('Die Tops sind da:', newVal)
-    }
-})
 
 interface SizeConfig {
     width: string
@@ -55,6 +34,34 @@ interface ImageConfig {
     src: string
     mobile: SizeConfig
     desktop: SizeConfig
+}
+
+const props = defineProps<{
+    data: Performer[]
+    type?: 'positive' | 'negative'
+}>()
+
+const statusIcon = computed(() => (props.type === 'negative' ? Contemplative : Celebrate))
+
+const modalStore = useModalStore()
+const route = useRoute()
+
+const activeSubStep = computed(() => {
+    const sId = route.params.subId
+    return sId !== undefined ? Number(sId) : 0
+})
+
+const currentItem = computed(() => {
+    if (!props.data || props.data.length === 0) return null
+    const index = Math.min(activeSubStep.value, props.data.length - 1)
+    return props.data[index]
+})
+const { t } = useI18n()
+
+const showDetails = () => {
+    if (currentItem.value) {
+        modalStore.openModal(currentItem.value.label, currentItem.value.description)
+    }
 }
 
 const imageMap: Record<string, ImageConfig> = {
@@ -129,6 +136,7 @@ const currentIllustration = computed(() => {
     if (!currentItem.value) return null
     return imageMap[currentItem.value.label] || null
 })
+
 </script>
 
 <template>
@@ -136,46 +144,41 @@ const currentIllustration = computed(() => {
         <div :class="layout.baseCard">
             <div :class="[layout.baseIllustration, styles.illustrationHeader]">
                 <div @click="showDetails" :class="styles.titleRow">
-                    <h1>{{ currentItem.label }}</h1>
-                    <!-- <img @click="showDetails" :class="styles.info" src="@/themes/icons/info.svg" /> -->
+                        <h1>{{ currentItem.label }}</h1>
                     <button
                         type="button"
                         :class="styles.infoButton"
                         :aria-label="t('competence.show_details_label')"
                         title="Details anzeigen"
                     >
-                        <!-- <img src="@/themes/icons/info.svg" :class="styles.infoIcon" alt="" aria-hidden="true" /> -->
                         <InfoIcon :class="styles.infoIcon" aria-hidden="true" />
                     </button>
                 </div>
-                <!-- <img @click="showDetails" :class="styles.info" src="./icons/strukturen.png"/> -->
-                <!-- <img v-if="currentIllustration" :class="styles.icon" :src="currentIllustration" alt="Illustration" /> -->
-                 <img 
-    v-if="currentIllustration" 
-    :src="currentIllustration.src" 
-    :style="{
-        '--w-mob': currentIllustration.mobile.width,
-        '--h-mob': currentIllustration.mobile.height,
-        '--ar-mob': currentIllustration.mobile.aspectRatio,
-        '--w-desk': currentIllustration.desktop.width,
-        '--h-desk': currentIllustration.desktop.height,
-        '--ar-desk': currentIllustration.desktop.aspectRatio
-    }"
-    :class="styles.icon" 
-    alt="Illustration" 
-/>
-                <!-- <InfoIcon v-if="currentIllustration" :class="styles.infoIcon" aria-hidden="true" /> -->
+
+                <img
+                    v-if="currentIllustration"
+                    :src="currentIllustration.src"
+                    :style="{
+                        '--w-mob': currentIllustration.mobile.width,
+                        '--h-mob': currentIllustration.mobile.height,
+                        '--ar-mob': currentIllustration.mobile.aspectRatio,
+                        '--w-desk': currentIllustration.desktop.width,
+                        '--h-desk': currentIllustration.desktop.height,
+                        '--ar-desk': currentIllustration.desktop.aspectRatio,
+                    }"
+                    :class="styles.icon"
+                    alt="Illustration"
+                />
             </div>
             <div :class="layout.baseContentArea">
                 <div :class="styles.result">
                     <h2>{{ t('common.result') }}</h2>
-                    <img :class="styles.celebrate" :src="Celebrate" alt="Contemptive Icon" />
+                    <img :class="styles.celebrate" :src="statusIcon" alt="Status Icon" />
                 </div>
 
-                <!--<SingleBarChart :areas="calculatedAreas" :percentage="currentItem.percentage" />-->
                 <SingleBarChart :areas="currentItem.areas" :percentage="currentItem.percentage" />
 
-                <span class="text-body">
+                <span class="text-body-big" :class="styles.descriptionText">
                     {{ currentItem.text }}
                 </span>
             </div>

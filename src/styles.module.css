@@ -1,13 +1,6 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 .appWrapper {
     display: flex;
     flex-direction: column;
-    /* min-height: 100vh; */
     background-color: var(--color-turquise);
     transition: background 0.5s ease;
 
@@ -17,19 +10,16 @@
 
 .content {
     flex: 1;
-    /* min-height: calc(100dvh - 10dvh - 40px); */
     overflow-y: auto;
     height: calc(100dvh - 10dvh - 40px);
 }
 
 .navigationBar {
-    /* position: fixed; */
     position: relative;
     flex-shrink: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    /* min-height: 10dvh; */
     height: 10dvh;
 
     background: var(--color-turquise);
@@ -52,15 +42,12 @@
     cursor: not-allowed;
 }
 
-.reportDiv{
+.reportDiv {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
 }
 
 @media (min-width: 768px) {
-    .navBtn {
-        padding: 15px 40px;
-    }
     .navigationBar {
         padding: 0px 20px 0px 20px;
     }
@@ -78,20 +65,13 @@
 
 .pageIndicator {
     display: flex;
-    gap: 12px;
+    gap: 15px;
     align-items: center;
 
     list-style: none;
 }
 
 .dot {
-    /* width: 10px;
-    height: 10px;
-    background-color: var(--color-navigation-blue);
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    position: relative; */
-
     display: block;
     cursor: pointer;
     background-color: var(--color-navigation-blue);
@@ -108,7 +88,6 @@
 
 .dot.active {
     background-color: var(--color-navigation-blue);
-    /* transform: scale(1.2); */
     transform: scale(1);
 }
 
@@ -122,7 +101,6 @@
     background-color: var(--color-navigation-blue);
     border-radius: 50%;
     border: 1px solid var(--color-navigation-blue);
-    /* opacity: 0.5; */
 }
 
 .appWrapper .content.no-padding {
@@ -132,12 +110,10 @@
 .dot.active::before {
     content: '';
     position: absolute;
-    /* Zentrieren des Rings hinter dem Dot */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
-    /* Größe des Hintergrund-Rings (größer als die 10px des Dots) */
     width: 20px;
     height: 20px;
 
@@ -145,7 +121,6 @@
     border: 1px solid var(--color-navigation-blue);
     border-radius: 50%;
 
-    /* Z-Index -1, damit es hinter dem blauen Dot liegt */
     z-index: -1;
 }
 
@@ -173,4 +148,85 @@
 .infoButton:focus-visible {
     outline: 2px solid var(--color-navigation-blue);
     outline-offset: 2px;
+}
+
+.reportH1 {
+    margin: unset;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns:
+        minmax(var(--page-gutter), 1fr)
+        minmax(0, var(--page-max-width))
+        minmax(var(--page-gutter), 1fr);
+    height: 100dvh;
+    grid-template-rows: 1fr auto;
+    overflow: hidden;
+}
+
+.head {
+    background-color: var(--color-lightgrey);
+    border-bottom: 1px solid var(--color-grey);
+}
+
+.gridSubgrid {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: span 3;
+    align-self: start;
+}
+
+.gridContent {
+    grid-column: 1 / 12;
+    grid-row: 1 / 2;
+    height: 100%;
+}
+
+.mainBody {
+    justify-content: start;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 1fr;
+    column-gap: var(--page-gutter);
+    row-gap: 24px;
+
+    padding: 25px 25px 0 25px;
+    overflow-y: auto;
+    height: calc(100% - 25px);
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.grid footer {
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+    z-index: 10;
+}
+
+.mainBody:has(:global(.noPaddingPage)) {
+    padding: 0 !important;
+    height: 100% !important;
+}
+
+.mainBody:has(:global(.noOverflowPage)) {
+    overflow-y: hidden;
+}
+
+@media (max-width: 767px) {
+    .mainBody {
+        grid-template-columns: repeat(6, 1fr);
+
+        padding: 10px 10px 0 10px;
+        height: calc(100% - 10px);
+    }
+
+    .mainBody:has(:global(.noPaddingPage)) {
+        padding: 0 !important;
+        height: 100% !important;
+    }
+
+    .pageIndicator {
+        gap: 12px;
+    }
 }

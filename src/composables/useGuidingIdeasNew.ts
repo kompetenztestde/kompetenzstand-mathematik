@@ -1,7 +1,7 @@
 import { computed, ref, type ComputedRef } from 'vue'
 import { GUIDE_MAP, type GuideKey } from '@/types'
-import guidingIdeaTexts from '../assets/competence_guidingideas_texts.json'
-import { useUserItemsNew } from './useUserItems'
+import { useSchoolForm, useTestData, useUserItemsNew } from './useUserItems'
+import { configJson } from '@/services/configService'
 
 const activeSubStep = ref(0)
 
@@ -23,7 +23,24 @@ interface CutOffs {
 }
 
 export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
+    const guidingIdeaTexts = configJson
     const { data: items, isLoading } = useUserItemsNew(code)
+    const { data: schoolForm } = useSchoolForm(code)
+    const { data: testInfo } = useTestData(code)
+
+    const isGymMode = computed(() => {
+        const testSubject = guidingIdeaTexts.testInfo.subject
+        const currentTest = testInfo.value?.filter((test) => testSubject.includes(test.subject ?? ''))
+        const currentBooklet = currentTest?.[0]?.booklet
+
+        const isGymBooklet = currentBooklet ? guidingIdeaTexts.testInfo.booklet.gym.includes(currentBooklet) : null
+        const isNonGymBooklet = currentBooklet ? guidingIdeaTexts.testInfo.booklet.nonGym?.includes(currentBooklet) : null
+
+        if (isGymBooklet) return true
+        if (isNonGymBooklet) return false
+
+        return schoolForm.value === 'Gymnasium'
+    })
 
     const guidingIdeaStats = computed(() => {
         const stats: Record<
@@ -70,11 +87,13 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
             }
         })
 
+        const useGymSpecs = isGymMode.value
+
         Object.entries(stats).forEach(([k, s]) => {
             const key = k as keyof typeof guidingIdeaTexts.guiding_ideas_texts
             s.percentage = s.total > 0 ? Math.round((s.hits / s.total) * 100) : 0
             if (s.total > 0 && s.cutOffs?.gym) {
-                const gym = s.cutOffs.gym
+                const gym = useGymSpecs ? s.cutOffs.gym : s.cutOffs.nonGym
 
                 const reference = s.total > 0 ? s.total : 1
 
@@ -89,13 +108,14 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
                 ]
 
                 const percentage = (s.hits / s.total) * 100
-                const middleOfMiddle = (middleMax + lowerMax) / 2
-                if ((s.areas[1] ?? 66) >= percentage && percentage >= (s.areas[0] ?? 33)) {
-                    if (percentage >= middleOfMiddle) {
-                        s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.good
-                    } else {
-                        s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.normal
-                    }
+                if (percentage >= (s.areas[1] ?? 66)) {
+                    s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.good
+                }
+                if ((s.areas[1] ?? 66) > percentage && percentage > (s.areas[0] ?? 33)) {
+                    s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.normal
+                }
+                if (percentage <= (s.areas[0] ?? 33)) {
+                    s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.bad
                 }
             } else {
                 s.areas = [33, 66, 100]
@@ -114,6 +134,16 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
 
             return s.hits >= upperThreshold
         })
+        const sortedTopPerformers = qualified.sort((a, b) => b.percentage - a.percentage)
+        if (sortedTopPerformers.length > 0 && sortedTopPerformers[0]) {
+            const bestPerformer = sortedTopPerformers[0]
+
+            const guideKey = (Object.keys(GUIDE_MAP) as GuideKey[]).find((key) => GUIDE_MAP[key] === bestPerformer.label)
+
+            if (guideKey) {
+                bestPerformer.text = guidingIdeaTexts.guiding_ideas_texts[guideKey].text.excellent
+            }
+        }
         return qualified.sort((a, b) => b.percentage - a.percentage)
     })
 
@@ -130,7 +160,9 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
     })
 
     const calculatedAreas = computed(() => {
-        const rawAreas = guidingIdeaTexts?.areas?.defaultCertificate
+        const useGymSpecs = isGymMode.value
+        const rawAreas = useGymSpecs ? guidingIdeaTexts?.areas?.middleCertificate : guidingIdeaTexts?.areas?.defaultCertificate
+
         if (!Array.isArray(rawAreas) || rawAreas.length === 0) {
             return [33, 66, 100]
         }
@@ -138,7 +170,7 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
         const lastElement = rawAreas[rawAreas.length - 1]
         const maxVal = (lastElement && lastElement[1]) ?? 100
 
-        return rawAreas.map((range) => {
+        return rawAreas.map((range: number[]) => {
             const val = range[1] ?? 0
             return maxVal > 0 ? Math.round((val / maxVal) * 100) : 0
         })

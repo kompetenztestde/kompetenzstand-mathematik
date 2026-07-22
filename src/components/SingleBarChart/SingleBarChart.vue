@@ -1,15 +1,28 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
-import { use } from 'echarts/core'
-import { SVGRenderer } from 'echarts/renderers'
-import { BarChart } from 'echarts/charts'
-import { GridComponent, MarkLineComponent } from 'echarts/components'
-import VChart from 'vue-echarts'
+import { computed, defineAsyncComponent, watch } from 'vue'
 import '@/assets/styles/base.css'
 import { useI18n } from 'vue-i18n'
+import styles from './styles.module.css'
 
-use([SVGRenderer, BarChart, GridComponent, MarkLineComponent])
+const VChart = defineAsyncComponent(async () => {
+    const [
+        { use },
+        { SVGRenderer },
+        { BarChart },
+        { GridComponent, MarkLineComponent },
+        { default: VueECharts }
+    ] = await Promise.all([
+        import('echarts/core'),
+        import('echarts/renderers'),
+        import('echarts/charts'),
+        import('echarts/components'),
+        import('vue-echarts')
+    ])
 
+    use([SVGRenderer, BarChart, GridComponent, MarkLineComponent])
+
+    return VueECharts
+})
 const { t } = useI18n()
 const props = defineProps<{
     percentage: number
@@ -87,19 +100,6 @@ const chartOption = computed(() => {
                         ],
                     },
                 },
-                // label: {
-                //     show: true,
-                //     position: 'insideRight',
-                //     formatter: '{c}%',
-                //     color: '#fff',
-                //     fontWeight: 'bold',
-                //     distance: 10,
-                // },
-                // showBackground: true,
-                // backgroundStyle: {
-                //     color: 'rgba(0, 0, 0, 0.05)',
-                //     borderRadius: 6,
-                // },
             },
         ],
     }
@@ -115,62 +115,11 @@ watch(
 </script>
 
 <template>
-    <div class="chart-container">
-        <div class="chart-background-wrapper" :style="{ '--mask': dynamicMask }">
-            <div class="area-border" :style="{ left: (areas?.[0] ?? 33) + '%' }"></div>
-            <div class="area-border" :style="{ left: (areas?.[1] ?? 66) + '%' }"></div>
-            <VChart class="chart" :option="chartOption" :init-options="{ renderer: 'svg' }" />
+    <div :class="styles.chartContainer">
+        <div :class="styles.chartBackgroundWrapper" :style="{ '--mask': dynamicMask }">
+            <div :class="styles.areaBorder" :style="{ left: (areas?.[0] ?? 33) + '%' }"></div>
+            <div :class="styles.areaBorder" :style="{ left: (areas?.[1] ?? 66) + '%' }"></div>
+            <VChart :class="styles.chart" :option="chartOption" :init-options="{ renderer: 'svg' }" />
         </div>
     </div>
 </template>
-
-<style scoped>
-.chart-container {
-    width: 100%;
-}
-
-.chart-background-wrapper {
-    position: relative;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.02);
-    overflow: hidden;
-}
-
-.area-border {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background-color: white;
-    z-index: 2;
-    pointer-events: none;
-}
-
-.chart-background-wrapper::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-
-    background-image: url('@/themes/icons/waves.svg');
-    background-repeat: repeat-x;
-    background-position: bottom;
-    background-size: cover;
-
-    -webkit-mask-image: var(--mask);
-    mask-image: var(--mask);
-    z-index: 0;
-}
-
-.chart {
-    height: 100px;
-    width: 100%;
-    position: relative;
-    z-index: 3;
-}
-.header {
-    text-align: left;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
-    color: #666;
-}
-</style>

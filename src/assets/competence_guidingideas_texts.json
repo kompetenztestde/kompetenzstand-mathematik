@@ -265,5 +265,18 @@
         "3": [22, 28],
         "4": [29, 34],
         "5": [35, 43]
-    }
+    },
+    "testInfo": {
+        "booklet": {
+            "nonGym": ["A", "B"],
+            "gym": ["C"]
+        },
+        "subject":["Mathematik"],
+        "grade":["8"]
+    },
+    "exerciseLinks": [
+        "https://www.geogebra.org/m/jqfpacu3",
+        "https://www.geogebra.org/m/nsruaach",
+        "https://www.geogebra.org/m/pbunegyy"
+    ]
 }

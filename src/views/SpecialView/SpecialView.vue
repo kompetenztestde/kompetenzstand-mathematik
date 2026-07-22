@@ -44,22 +44,21 @@ watch(data, (newVal) => {
         console.log('Anzahl der Items:', total.value)
     }
 })
-
 </script>
 
 <template>
     <div :class="styles.page">
-        <h1>{{ t('specialView.title') }}</h1>
+        <h1 :class="styles.header">{{ t('specialView.title') }}</h1>
         <div :class="styles.container">
-            <StackedBarChart
-                label="Aufgabenverteilung"
-                :correctAnswers="correct"
-                :falseAnswers="failed"
-                :notWorkedOn="notWorkedOn"
-                :total="total"
-            />
-            <div class="text-body-big-bold">{{ specialCaseResult.resultAndAdvice.result }}</div>
-            <div class="text-body-big advice">{{ specialCaseResult.resultAndAdvice.advice }}</div>
+                <StackedBarChart
+                    label="Aufgabenverteilung"
+                    :correctAnswers="correct"
+                    :falseAnswers="failed"
+                    :notWorkedOn="notWorkedOn"
+                    :total="total"
+                />
+            <div :class="['text-body-big-bold', styles.resultText]">{{ specialCaseResult.resultAndAdvice.result }}</div>
+            <div :class="['text-body-big', styles.adviceText]">{{ specialCaseResult.resultAndAdvice.advice }}</div>
         </div>
     </div>
 </template>

@@ -18,7 +18,7 @@ const router = createRouter({
         { path: '/step-3', name: 'step3', component: SpecialView },
         { path: '/step-4/:subId?', name: 'step4', component: CompetenceView },
         { path: '/step-5/:subId?', name: 'step5', component: GuidingIdeaView },
-        { path: '/step-6', name: 'step6', component: BadResultsView },
+        { path: '/step-6/:subId?', name: 'step6', component: BadResultsView },
         { path: '/step-7', name: 'step7', component: FinalView },
     ],
 })

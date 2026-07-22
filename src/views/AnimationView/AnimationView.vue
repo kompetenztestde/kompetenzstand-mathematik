@@ -2,7 +2,7 @@
 import { useQuery } from '@tanstack/vue-query'
 import { inioApiConfiguration } from '@/queries/utils'
 import SlideAnimationComponent from '@/components/SlideAnimationComponent/SlideAnimationComponent.vue'
-import { computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ReportDataTba3Api } from '@tba3/api-new'
@@ -75,6 +75,12 @@ const levelNumber = computed(() => {
 })
 const { stats } = useUserItemsNew(currentUserCode)
 
+const showMobileFeedback = ref(false)
+
+const handleAnimationFinished = () => {
+    showMobileFeedback.value = true
+}
+
 watch(
     data,
     (newVal) => {
@@ -95,34 +101,41 @@ const handleRefresh = () => {
 </script>
 
 <template>
-    <div :class="styles.page">
+    <div :class="styles.page" class="noPaddingPage noOverflowPage">
         <div v-if="overallResult" :class="styles.resultHeader">
             <div :class="styles.headerTopRow">
-                <h2 :class="styles.resultTitle">{{ t('common.result') }}</h2>
+                <h1 :class="styles.resultTitle">{{ t('common.result') }}</h1>
 
                 <div :class="styles.feedbackTrigger">
                     <span :class="styles.feedbackText">{{ t('home.feedback') }}</span>
                     <button type="button" @click="handleRefresh" :class="styles.iconButtonOnly" :aria-label="t('home.feedback')">
-                        <!-- <img src="@/assets/svgs/refreshStarIcon.svg" :class="styles.edgeIcon" alt="" aria-hidden="true" /> -->
-                        <RefreshIcon :class="styles.edgeIcon" aria-hidden="true"/>
+                        <RefreshIcon :class="styles.edgeIcon" aria-hidden="true" />
                     </button>
                 </div>
             </div>
 
-            <div class="text-body-big" :class="styles.resultText">
+            <div class="text-body" :class="styles.resultText">
                 {{ overallResult.text }}
             </div>
         </div>
 
         <div :class="styles.animationContainer">
-            <div :class="styles.feedbackTriggerAnimation" >
-                <h2 :class="styles.feedbackText">{{ t('home.feedback') }}</h2>
-                <button type="button" @click="handleRefresh" :class="styles.edgeIcon" :aria-label="t('home.feedback')">
-                    <!-- <img src="@/assets/svgs/refreshStarIcon.svg" alt="" aria-hidden="true" /> -->
-                     <RefreshIcon aria-hidden="true"/>
-                </button>
+            <div :class="styles.feedbackTriggerAnimation">
+                <h2 v-if="showMobileFeedback" :class="styles.feedbackText">{{ t('home.feedback') }}</h2>
             </div>
-            <SlideAnimationComponent :areas="calculatedAreas" :level="levelLabel" :score="levelNumber" :correctScore="stats.correct" />
+            <SlideAnimationComponent
+                :areas="calculatedAreas"
+                :level="levelLabel"
+                :score="levelNumber"
+                :correctScore="stats.correct"
+                @animation-finished="handleAnimationFinished"
+            />
+            <div v-if="showMobileFeedback" :class="styles.buttonRefreshRow">
+                <button type="button" @click="handleRefresh" :class="styles.edgeIcon" :aria-label="t('home.feedback')">
+                    <RefreshIcon aria-hidden="true" />
+                </button>
+                <span :class="styles.refreshButtonText">nochmal abspielen</span>
+            </div>
         </div>
     </div>
 </template>
