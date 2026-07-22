@@ -64,10 +64,6 @@
 }
 
 @media (max-width: 768px) {
-    /* .chartWrapper {
-        margin-top: 4rem;
-    } */
-
     .floatingLabels {
         height: 0;
         position: relative;

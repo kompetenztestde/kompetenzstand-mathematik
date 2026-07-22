@@ -24,7 +24,6 @@
 }
 
 .quadratContainer {
-    /* display: flex; */
     grid-column: 2 / 12;
     gap: 16px;
     justify-content: center;
@@ -34,13 +33,6 @@
     display: flex;
     flex-direction: row;
 }
-
-/* .envelopeForm {
-    width: 320px;
-    cursor: pointer;
-    perspective: 1000px;
-    position: relative;
-} */
 
 .envWrap {
     position: relative;

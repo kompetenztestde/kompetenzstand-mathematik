@@ -48,14 +48,6 @@ export function useSpecialCasesNew(code: ComputedRef<string | undefined>) {
         const notWorkedOnRatio = totalItemsCount > 0 ? notWorkedOnCount / totalItemsCount : 0
         const correctRatioOfWorkedOn = workedOnCount > 0 ? correctCount / workedOnCount : 0
 
-        // let key = ''
-        // if (totalScore >= 35) key = 'K5'
-        // else if (totalScore >= 29) key = 'K4'
-        // else if (totalScore >= 22) key = 'K3'
-        // else if (totalScore >= 15) key = 'K2'
-        // else if (totalScore >= 9) key = 'K1B'
-        // else key = 'K1A'
-
         let key: keyof typeof competenceTexts.specialCases = 'K4'
         if (mean >= 90) {
             key = 'K5'
@@ -90,7 +82,6 @@ export function useSpecialCasesNew(code: ComputedRef<string | undefined>) {
 
 function useUserAggregations(code: ComputedRef<string | undefined>) {
     return useQuery({
-        // queryKey: ['user-aggregations-base', code.value],
         queryKey: computed(() => ['user-aggregations-base', code.value]),
         queryFn: async () => {
             if (!code.value) return []
@@ -117,7 +108,6 @@ function useUserAggregations(code: ComputedRef<string | undefined>) {
 
 export function useUserProperties(code: ComputedRef<string | undefined>) {
     const query = useQuery({
-        // queryKey: ['user-properties-base', code.value],
         queryKey: computed(() => ['user-properties-base', code.value]),
         queryFn: async () => {
             if (!code.value) return null

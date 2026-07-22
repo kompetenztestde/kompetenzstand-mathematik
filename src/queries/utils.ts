@@ -21,7 +21,6 @@ export async function apiConfiguration(): Promise<Configuration> {
 }
 
 export async function inioApiConfiguration(): Promise<Configuration2> {
-    // const apiKeyVal = import.meta.env.VITE_X_API_KEY_SCHOOL || 'TEST'
     const apiKeyVal = 
         (window as CustomWindow).appConfig?.api?.xApiKeySchool || 
         import.meta.env.VITE_X_API_KEY_SCHOOL || 

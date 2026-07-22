@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { useGuidingIdeas } from '@/composables/useGuidingIdeas'
 import styles from './styles.module.css'
 import layout from '@/assets/styles/component-layout.module.css'
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import SingleBarChart from '../SingleBarChart/SingleBarChart.vue'
 import '@/assets/styles/base.css'
 import { useModalStore } from '@/stores/modalStore'
-import { useGuidingIdeasNew } from '@/composables/useGuidingIdeasNew'
 import RaumUndForm from './icons/raum_und_form.png'
 import GroessenUndMessen from './icons/groessen_messen.png'
 import Strukturen from './icons/strukturen.png'
@@ -52,12 +50,7 @@ const activeSubStep = computed(() => {
     const sId = route.params.subId
     return sId !== undefined ? Number(sId) : 0
 })
-const currentUserCode = computed(() => route.query.user as string)
 
-const { topPerformers } = useGuidingIdeasNew(currentUserCode)
-
-// const currentItem = computed(() => topPerformers.value[activeSubStep.value])
-// const currentItem = computed(() => props.data[activeSubStep.value])
 const currentItem = computed(() => {
     if (!props.data || props.data.length === 0) return null
     const index = Math.min(activeSubStep.value, props.data.length - 1)
@@ -144,11 +137,6 @@ const currentIllustration = computed(() => {
     return imageMap[currentItem.value.label] || null
 })
 
-watch(topPerformers, (newVal) => {
-    if (newVal) {
-        console.log('Die Tops sind da:', newVal)
-    }
-})
 </script>
 
 <template>
@@ -185,7 +173,6 @@ watch(topPerformers, (newVal) => {
             <div :class="layout.baseContentArea">
                 <div :class="styles.result">
                     <h2>{{ t('common.result') }}</h2>
-                    <!-- <img :class="styles.celebrate" :src="Celebrate" alt="Contemptive Icon" /> -->
                     <img :class="styles.celebrate" :src="statusIcon" alt="Status Icon" />
                 </div>
 

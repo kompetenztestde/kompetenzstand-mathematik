@@ -1,6 +1,5 @@
 import { computed, ref, type ComputedRef } from 'vue'
 import { GUIDE_MAP, type GuideKey } from '@/types'
-// import guidingIdeaTexts from '../assets/competence_guidingideas_texts.json'
 import { useSchoolForm, useTestData, useUserItemsNew } from './useUserItems'
 import { configJson } from '@/services/configService'
 
@@ -176,10 +175,6 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
             return maxVal > 0 ? Math.round((val / maxVal) * 100) : 0
         })
     })
-
-    console.log('Topperformer', topPerformers.value)
-    console.log('badPerformers', badPerformers.value)
-    console.log('AllGuides', Object.values(guidingIdeaStats.value))
 
     return {
         topPerformers,
