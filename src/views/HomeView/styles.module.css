@@ -191,7 +191,7 @@
         aspect-ratio: 117/95;
     }
 
-    h1 {
+    .greeting h1 {
         text-align: center;
         font-size: 58px;
         font-style: normal;
