@@ -47,11 +47,13 @@ const isMultiBad = computed(() => {
     <div :class="styles.page" v-else>
         <div :class="styles.headerWrapper">
             <h1>{{ t('badResults.title') }}</h1>
+        </div>
+        <div :class="styles.introText">
+            <span class="text-body-big" >
+                {{ t('badResults.text') }}
+            </span>
             <img :class="styles.contemplative" :src="Contemplative" alt="Contemptive Icon" />
         </div>
-        <span class="text-body-big" :class="styles.introText">
-            {{ t('badResults.text') }}
-        </span>
         <BarCharts v-if="!isMobile" :badPerformers="badPerformers" :areas="calculatedAreas" />
         <div v-else :class="styles.mobileList">
             <div v-for="item in badPerformers" :key="item.label" :class="styles.mobileCard">

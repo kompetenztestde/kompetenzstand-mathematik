@@ -15,6 +15,8 @@ import { useI18n } from 'vue-i18n'
 import InfoIcon from '@/themes/icons/info.svg?component'
 import Celebrate from './icons/celebrate.png'
 import Contemplative from './icons/contemplative.png'
+import Neutral from './icons/neutral.png'
+import { IconStatus } from '@/types.ts'
 
 interface Performer {
     label: string
@@ -22,6 +24,7 @@ interface Performer {
     percentage: number
     text: string
     areas: any
+    type?: IconStatus
 }
 
 interface SizeConfig {
@@ -38,11 +41,15 @@ interface ImageConfig {
 
 const props = defineProps<{
     data: Performer[]
-    type?: 'positive' | 'negative'
+    type?: IconStatus | 'positive' | 'negative' | 'neutral'
 }>()
 
-const statusIcon = computed(() => (props.type === 'negative' ? Contemplative : Celebrate))
-
+const statusIcon = computed(() => {
+    const currentType = currentItem.value?.type ?? props.type
+    if (currentType === IconStatus.Negative) return Contemplative
+    if (currentType === IconStatus.Neutral) return Neutral
+    return Celebrate
+})
 const modalStore = useModalStore()
 const route = useRoute()
 

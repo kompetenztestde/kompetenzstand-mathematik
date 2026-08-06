@@ -1,5 +1,5 @@
 import { computed, ref, type ComputedRef } from 'vue'
-import { GUIDE_MAP, type GuideKey } from '@/types'
+import { GUIDE_MAP, IconStatus, type GuideKey } from '@/types'
 import { useSchoolForm, useTestData, useUserItemsNew } from './useUserItems'
 import { configJson } from '@/services/configService'
 
@@ -53,6 +53,7 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
                 total: number
                 percentage: number
                 cutOffs: CutOffs
+                type: IconStatus
                 areas: number[]
             }
         > = {}
@@ -66,6 +67,7 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
                 total: 0,
                 percentage: 0,
                 cutOffs: guidingIdeaTexts.guiding_ideas_texts[key].cutOffs,
+                type: IconStatus.Neutral,
                 areas: [33, 66, 100],
             }
         })
@@ -110,15 +112,19 @@ export function useGuidingIdeasNew(code: ComputedRef<string | undefined>) {
                 const percentage = (s.hits / s.total) * 100
                 if (percentage >= (s.areas[1] ?? 66)) {
                     s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.good
+                    s.type = IconStatus.Positive
                 }
                 if ((s.areas[1] ?? 66) > percentage && percentage > (s.areas[0] ?? 33)) {
                     s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.normal
+                    s.type = IconStatus.Neutral
                 }
                 if (percentage <= (s.areas[0] ?? 33)) {
                     s.text = guidingIdeaTexts.guiding_ideas_texts[key].text.bad
+                    s.type = IconStatus.Negative
                 }
             } else {
                 s.areas = [33, 66, 100]
+                s.type = IconStatus.Positive
             }
         })
         console.log('STATS', stats)

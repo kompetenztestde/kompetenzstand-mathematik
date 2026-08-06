@@ -9,11 +9,11 @@ export const LEVEL_MAP: Record<LevelLabel, number> = {
 }
 
 export const ROMAN_TO_LABEL: Record<string, LevelLabel> = {
-    'I': 'unterer Mindeststandard',
-    'II': 'Mindeststandard',
-    'III': 'Regelstandard',
-    'IV': 'Regelstandard plus',
-    'V': 'Optimalstandard',
+    I: 'unterer Mindeststandard',
+    II: 'Mindeststandard',
+    III: 'Regelstandard',
+    IV: 'Regelstandard plus',
+    V: 'Optimalstandard',
 }
 
 export type GuideKey = 'L1' | 'L2' | 'L3' | 'L4' | 'L5'
@@ -34,7 +34,6 @@ export const GUIDE_MAP: Record<GuideKey, GuideLabel> = {
     L5: 'Daten und Zufall',
 }
 
-
 export type CompetenceKey = 'K1' | 'K2' | 'K3' | 'K4' | 'K5' | 'K6'
 
 export type CompetenceLabel =
@@ -51,5 +50,11 @@ export const COMPETENCE_MAP: Record<CompetenceKey, CompetenceLabel> = {
     K3: 'Mathematisch modellieren',
     K4: 'Mathematisch darstellen',
     K5: 'Mit mathematischen Objekten umgehen',
-    K6: 'Mathematisch kommunizieren'
+    K6: 'Mathematisch kommunizieren',
+}
+
+export enum IconStatus {
+    Positive = 'positive',
+    Negative = 'negative',
+    Neutral = 'neutral',
 }

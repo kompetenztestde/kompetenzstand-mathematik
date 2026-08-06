@@ -4,9 +4,9 @@ import { nextTick } from 'vue'
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Speaker from './icons/speaker.svg?component'
-import Stop from './icons/stopIcon.svg?component'
 import Stop2 from './icons/stopIcon2.svg?component'
 import Start from './icons/startIcon.svg?component'
+import CloseIcon from './icons/closeIcon.svg?component'
 import styles from './styles.module.css'
 const { t } = useI18n()
 const modalStore = useModalStore()
@@ -56,10 +56,6 @@ const speak = () => {
         })
         window.speechSynthesis.resume()
     }
-}
-
-const test = () => {
-    console.log('PAUSE')
 }
 
 const resumeSpeaking = () => {
@@ -125,7 +121,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
                 <div :class="styles.modalContainer" role="dialog" aria-modal="true" aria-labelledby="modal-title">
                     <div :class="styles.modalColumn">
                         <button ref="closeBtnRef" :class="styles.closeBtn" @click="modalStore.closeModal">
-                            <img src="./icons/closeIcon.svg" alt="" aria-hidden="true" />
+                            <CloseIcon aria-hidden="true" />
                         </button>
                         <div :class="styles.modalContent">
                             <div :class="styles.btnRow">
@@ -135,10 +131,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
                                 </button>
                                 <button v-if="!isSpeaking" :class="styles.actionButton" @click="resumeSpeaking">
                                     <Start aria-hidden="true" />
-                                </button>
-                                <!-- <button :class="styles.actionButton" @click="pauseSpeaking">
-                                <Stop aria-hidden="true" />
-                            </button> -->
+                                </button>                                
                                 <button v-else :class="styles.actionButton" @click="stopSpeaking">
                                     <Stop2 aria-hidden="true" />
                                 </button>
