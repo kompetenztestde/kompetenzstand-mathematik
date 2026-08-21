@@ -1,9 +1,16 @@
 import { ref } from 'vue'
+import defaultConfig from '@/assets/competence_guidingideas_texts.json'
 
 export const configJson: any = {}
 export const isConfigLoading = ref(true)
 
 export async function loadConfig() {
+    if (import.meta.env.DEV) {
+        Object.assign(configJson, defaultConfig)
+        isConfigLoading.value = false
+        return
+    }
+
     try {
         const response = await fetch('/config.json')
         if (!response.ok) throw new Error('Fehler beim Laden der JSON-Konfiguration')

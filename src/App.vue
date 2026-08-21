@@ -15,9 +15,11 @@ import IconPageRight from '@/assets/svgs/page_right.svg?component'
 import InfoIcon from '@/themes/icons/info.svg?component'
 import { useModalStore } from './stores/modalStore'
 import { configJson } from './services/configService.ts'
+import { useAuthStore } from './stores/auth'
 
 const router = useRouter()
 const route = useRoute()
+const auth = useAuthStore()
 const { t } = useI18n()
 const competenceTexts = configJson
 
@@ -83,6 +85,7 @@ const goTo = (newIndex: number) => {
 
 const isHome = computed(() => route.path === '/step-1' || route.path === '/')
 const isSecond = computed(() => route.path === '/step-2')
+const isAuthPage = computed(() => route.name === 'login')
 
 const appBackground = computed(() => {
     if (isHome.value || isSecond.value) {
@@ -102,20 +105,25 @@ const showDetails = () => {
 
     modalStore.openModal(title, combinedContent)
 }
+
+const logout = () => {
+    auth.logout()
+    router.replace({ name: 'login' })
+}
 </script>
 
 <template>
     <!-- <div :class="styles.appWrapper" :style="appBackground"> -->
-    <div :class="styles.grid" :style="appBackground">
+    <div :class="isAuthPage ? '' : styles.grid" :style="isAuthPage ? {} : appBackground">
         <!-- <main :class="[styles.content, { 'no-padding': isHome || isSecond }]"> -->
-        <main :class="[styles.mainBody, styles.gridContent, { 'no-padding': isHome || isSecond }]">
+        <main :class="isAuthPage ? '' : [styles.mainBody, styles.gridContent, { 'no-padding': isHome || isSecond }]">
             <RouterView :key="route.fullPath" />
         </main>
 
-        <SideModal />
-        <footer v-if="!isHome" role="contentinfo">
+        <SideModal v-if="!isAuthPage" />
+        <footer v-if="!isAuthPage" role="contentinfo">
             <nav :aria-label="t('accessibility.pagination')" :class="styles.navigationBar">
-                <div :class="styles.reportDiv">
+            <div v-if="!isHome" :class="styles.reportDiv">
                     <h2 :class="styles.reportH1">{{ t('home.feedback') }}</h2>
                     <button
                         type="button"
@@ -128,11 +136,11 @@ const showDetails = () => {
                     </button>
                 </div>
 
-                <button :disabled="currentIndex <= 0" @click="goBack" :class="styles.navBtn" :aria-label="t('accessibility.prev_page')">
+                <button v-if="!isHome" :disabled="currentIndex <= 0" @click="goBack" :class="styles.navBtn" :aria-label="t('accessibility.prev_page')">
                     <IconPageLeft :class="styles.navIcon" aria-hidden="true" />
                 </button>
 
-                <ul :class="styles.pageIndicator" role="list">
+                <ul v-if="!isHome" :class="styles.pageIndicator" role="list">
                     <li v-for="(step, index) in allSteps" :key="index">
                         <button
                             :class="`${styles.dot} ${index === currentIndex ? styles.active : ''}`"
@@ -144,12 +152,23 @@ const showDetails = () => {
                 </ul>
 
                 <button
+                    v-if="!isHome"
                     :disabled="currentIndex >= allSteps.length - 1 || currentIndex === -1"
                     @click="goNext"
                     :class="[styles.navBtn, styles.next]"
                     :aria-label="t('accessibility.next_page')"
                 >
                     <IconPageRight :class="styles.navIcon" aria-hidden="true" />
+                </button>
+
+                <button type="button" @click="logout" :class="styles.logoutBtn" aria-label="Abmelden" title="Abmelden">
+                    <svg :class="styles.logoutIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path
+                            fill="currentColor"
+                            d="M13 21q-.425 0-.712-.288T12 20t.288-.712T13 19h6V5h-6q-.425 0-.712-.288T12 4t.288-.712T13 3h6q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm-1.825-8H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7.175L9.3 9.125q-.275-.275-.275-.675t.275-.7t.7-.313t.725.288L14.3 11.3q.3.3.3.7t-.3.7l-3.575 3.575q-.3.3-.712.288T9.3 16.25q-.275-.3-.262-.712t.287-.688z"
+                        />
+                    </svg>
+                    <span>Abmelden</span>
                 </button>
             </nav>
         </footer>
