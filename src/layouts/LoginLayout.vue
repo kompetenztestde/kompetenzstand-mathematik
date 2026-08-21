@@ -2,6 +2,7 @@
 import { computed, reactive, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useStudentLoginMutation } from '@/queries/useAuthMutations'
 
 type FormFields = {
   studentCode: string
@@ -12,6 +13,8 @@ type FormFields = {
 const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
+const studentLogin = useStudentLoginMutation()
+const surveyId = Number(import.meta.env.VITE_SURVEY_ID || 314)
 
 const form = reactive<FormFields>({
   studentCode: '',
@@ -27,7 +30,8 @@ const errors = reactive({
   studentSchoolnumber: '',
 })
 
-const isLoading = computed(() => false)
+const isLoading = computed(() => studentLogin.isPending.value)
+const apiError = computed(() => studentLogin.error.value?.message ?? '')
 
 const redirectTarget = computed(() => {
   const redirect = route.query.redirect
@@ -47,6 +51,7 @@ watch(
   () => form.studentCode,
   () => {
     errors.studentCode = ''
+    studentLogin.reset()
   },
 )
 
@@ -54,6 +59,7 @@ watch(
   () => form.studentPassword,
   () => {
     errors.studentPassword = ''
+    studentLogin.reset()
   },
 )
 
@@ -64,10 +70,11 @@ watch(
     errors.studentSchoolnumber = ''
     form.studentSchoolnumber = enabled ? 'DEMO-TBA3-2026' : ''
     form.studentCode = enabled ? 'aaa' : ''
+    studentLogin.reset()
   },
 )
 
-function login() {
+async function login() {
   errors.studentCode = ''
   errors.studentPassword = ''
   errors.studentSchoolnumber = ''
@@ -100,8 +107,19 @@ function login() {
   const token = form.studentPassword.trim()
   const normalizedCode = form.studentCode.trim()
 
-  auth.login(token, 'student', undefined, normalizedCode)
-  router.replace(redirectTarget.value)
+  try {
+    const response = await studentLogin.mutateAsync({
+      surveyId,
+      loginPw: token,
+      loginCode: normalizedCode,
+    })
+
+    const groupId = response.data?.groupId ? Number(response.data.groupId) : undefined
+    auth.login(response.data!.token, 'student', response.data!.tokenExpiresAt, normalizedCode, groupId)
+    router.replace(redirectTarget.value)
+  } catch {
+    // The mutation error is displayed below the form.
+  }
 }
 </script>
 
@@ -190,7 +208,7 @@ function login() {
                   <input
                     id="studentPassword"
                     v-model="form.studentPassword"
-                    type="password"
+                    type="text"
                     name="studentPassword"
                     class="form-input"
                     :class="{ 'input-error': errors.studentPassword }"
@@ -205,7 +223,7 @@ function login() {
                   <input
                     id="studentCode"
                     v-model="form.studentCode"
-                    type="text"
+                    type="password"
                     name="studentCode"
                     class="form-input"
                     :class="{ 'input-error': errors.studentCode }"
@@ -214,6 +232,8 @@ function login() {
                   />
                   <p v-if="errors.studentCode" class="error-message">{{ errors.studentCode }}</p>
                 </div>
+
+                <p v-if="apiError" class="error-message" role="alert">{{ apiError }}</p>
 
                 <button
                   type="submit"
