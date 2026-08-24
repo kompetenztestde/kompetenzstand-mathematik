@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/vue-query'
 import { inioApiConfiguration } from '@/queries/utils'
 import { ReportDataTba3Api } from '@tba3/api-new'
 import { configJson } from '@/services/configService'
-import { useAuthStore } from '@/stores/auth'
+import { normalizeStudentCode, useAuthStore } from '@/stores/auth'
 
 export function useOverallResultsNew(code: ComputedRef<string | undefined>) {
     const competenceTexts = configJson
@@ -46,6 +46,7 @@ function useUserAggregations(code: ComputedRef<string | undefined>) {
         queryKey: computed(() => ['user-aggregations-base', code.value]),
         queryFn: async () => {
             if (!code.value) return []
+            const normalizedCode = normalizeStudentCode(code.value)!
             const config = await inioApiConfiguration()
             const api = new ReportDataTba3Api(config)
             const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdAggregationsGet({
@@ -54,13 +55,13 @@ function useUserAggregations(code: ComputedRef<string | undefined>) {
                 testId: auth.reportTestId!,
                 schoolId: auth.studentSchoolId ?? undefined,
                 type: 'students',
-                studentCode: code.value,
+                studentCode: normalizedCode,
                 aggregation: 'generalMathematicalCompetence',
             })
 
             const students = response.data?.studentsData ?? []
 
-            const targetUser = students.find((u) => u.code === code.value)
+            const targetUser = students.find((u) => u.code === normalizedCode)
             return targetUser?.aggregations ?? []
         },
         enabled: computed(() => !!code.value && !!auth.reportTestGroupId && !!auth.reportGroupId && !!auth.reportTestId),

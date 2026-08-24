@@ -5,7 +5,7 @@ import { ReportDataTba3Api } from '@tba3/api-new'
 import dayjs from 'dayjs'
 import { useUserItemsNew } from './useUserItems'
 import { configJson } from '@/services/configService'
-import { useAuthStore } from '@/stores/auth'
+import { normalizeStudentCode, useAuthStore } from '@/stores/auth'
 
 export function useSpecialCasesNew(code: ComputedRef<string | undefined>) {
     const competenceTexts = configJson
@@ -87,6 +87,7 @@ function useUserAggregations(code: ComputedRef<string | undefined>) {
         queryKey: computed(() => ['user-aggregations-base', code.value]),
         queryFn: async () => {
             if (!code.value) return []
+            const normalizedCode = normalizeStudentCode(code.value)!
             const config = await inioApiConfiguration()
             const api = new ReportDataTba3Api(config)
             const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdAggregationsGet({
@@ -95,13 +96,13 @@ function useUserAggregations(code: ComputedRef<string | undefined>) {
                 testId: auth.reportTestId!,
                 schoolId: auth.studentSchoolId ?? undefined,
                 type: 'students',
-                studentCode: code.value,
+                studentCode: normalizedCode,
                 aggregation: 'generalMathematicalCompetence',
             })
 
             const students = response.data?.studentsData ?? []
 
-            const targetUser = students.find((u) => u.code === code.value)
+            const targetUser = students.find((u) => u.code === normalizedCode)
             return targetUser?.aggregations ?? []
         },
         enabled: computed(() => !!code.value && !!auth.reportTestGroupId && !!auth.reportGroupId && !!auth.reportTestId),
@@ -115,6 +116,7 @@ export function useUserProperties(code: ComputedRef<string | undefined>) {
         queryKey: computed(() => ['user-properties-base', code.value]),
         queryFn: async () => {
             if (!code.value) return null
+            const normalizedCode = normalizeStudentCode(code.value)!
             const config = await inioApiConfiguration()
             const api = new ReportDataTba3Api(config)
             const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdItemsGet({
@@ -123,10 +125,10 @@ export function useUserProperties(code: ComputedRef<string | undefined>) {
                 testId: auth.reportTestId!,
                 schoolId: auth.studentSchoolId ?? undefined,
                 type: 'students',
-                studentCode: code.value,
+                studentCode: normalizedCode,
             })
             const students = response.data?.studentsData ?? []
-            return students.find((u) => u.code === code.value) || null
+            return students.find((u) => u.code === normalizedCode) || null
         },
         enabled: computed(() => !!code.value && !!auth.reportTestGroupId && !!auth.reportGroupId && !!auth.reportTestId),
         staleTime: 1000 * 60 * 60,

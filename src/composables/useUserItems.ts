@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/vue-query'
 import { GroupsApi } from '@tba3/api-resources'
 import { ReportDataTba3Api } from '@tba3/api-new'
 import { computed, type ComputedRef } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { normalizeStudentCode, useAuthStore } from '@/stores/auth'
 
 export function useUserItems(userName: ComputedRef<string | undefined>) {
     return useQuery({
@@ -28,6 +28,7 @@ export function useUserItemsNew(code: ComputedRef<string | undefined>) {
         queryKey: computed(() => ['user-items-base', code.value]),
         queryFn: async () => {
             if (!code.value) return []
+            const normalizedCode = normalizeStudentCode(code.value)!
             const config = await inioApiConfiguration()
             const api = new ReportDataTba3Api(config)
             const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdItemsGet({
@@ -36,11 +37,11 @@ export function useUserItemsNew(code: ComputedRef<string | undefined>) {
                 testId: auth.reportTestId!,
                 schoolId: auth.studentSchoolId ?? undefined,
                 type: 'students',
-                studentCode: code.value,
+                studentCode: normalizedCode,
             })
             const students = response.data?.studentsData ?? []
 
-            const targetUser = students.find((u) => u.code === code.value)
+            const targetUser = students.find((u) => u.code === normalizedCode)
             return targetUser?.items ?? []
         },
         enabled: computed(() => !!code.value && !!auth.reportTestGroupId && !!auth.reportGroupId && !!auth.reportTestId),
@@ -74,6 +75,7 @@ export function useSchoolForm(code: ComputedRef<string | undefined>) {
         queryKey: computed(() => ['school-form', code.value]),
         queryFn: async () => {
             if (!code.value) return null;
+            const normalizedCode = normalizeStudentCode(code.value)!
             
             const config = await inioApiConfiguration();
             const api = new ReportDataTba3Api(config);
@@ -83,7 +85,7 @@ export function useSchoolForm(code: ComputedRef<string | undefined>) {
                 testId: auth.reportTestId!,
                 schoolId: auth.studentSchoolId ?? undefined,
                 type: 'students',
-                studentCode: code.value,
+                studentCode: normalizedCode,
             });
 
             return response.data?.groupData?.schoolForm ?? null;

@@ -4,7 +4,7 @@ import { inioApiConfiguration } from '@/queries/utils'
 import SlideAnimationComponent from '@/components/SlideAnimationComponent/SlideAnimationComponent.vue'
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { normalizeStudentCode, useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
 import { ReportDataTba3Api } from '@tba3/api-new'
 import { useOverallResultsNew } from '@/composables/useOverallResultsNew'
@@ -31,6 +31,7 @@ const { data: data } = useQuery({
     queryKey: ['competence-levels', currentUserCode.value],
     queryFn: async () => {
         if (!currentUserCode.value) return []
+        const normalizedCode = normalizeStudentCode(currentUserCode.value)!
 
         const config = await inioApiConfiguration()
         const api = new ReportDataTba3Api(config)
@@ -41,11 +42,11 @@ const { data: data } = useQuery({
             testId: auth.reportTestId!,
             schoolId: auth.studentSchoolId ?? undefined,
             type: 'students',
-            studentCode: currentUserCode.value as string,
+            studentCode: normalizedCode,
         })
         const students = response.data?.studentsData ?? []
 
-        const targetUser = students.find((u) => u.code === currentUserCode.value)
+        const targetUser = students.find((u) => u.code === normalizedCode)
         return targetUser?.competenceLevels ?? []
     },
     enabled: computed(() => !!currentUserCode.value && !!auth.reportTestGroupId && !!auth.reportGroupId && !!auth.reportTestId),

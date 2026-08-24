@@ -9,6 +9,11 @@ export const DEMO_TEST_GROUP_ID = 270
 export const DEMO_TEST_ID = 9524
 export const DEMO_GROUP_ID = 1001
 
+export function normalizeStudentCode(code: string | undefined): string | undefined {
+    const trimmed = code?.trim()
+    return trimmed ? trimmed.slice(0, 3) : undefined
+}
+
 export const useAuthStore = defineStore('auth', () => {
     const token = ref<string | null>(sessionStorage.getItem('token'))
     const role = ref<Role | null>((sessionStorage.getItem('role') as Role | null) ?? null)
@@ -27,7 +32,7 @@ export const useAuthStore = defineStore('auth', () => {
     const isAuthenticated = computed(() => !!token.value)
     const isSessionExpired = computed(() => !!expiresAt.value && Date.now() > expiresAt.value)
     const isDemoAccess = computed(() => role.value === 'demo' || role.value === 'demo-student')
-    const reportTestGroupId = computed(() => (isDemoAccess.value ? DEMO_TEST_GROUP_ID : null))
+    const reportTestGroupId = computed(() => (isDemoAccess.value ? DEMO_TEST_GROUP_ID : Number(import.meta.env.VITE_TEST_GROUP || 270)))
     const reportTestId = computed(() => (isDemoAccess.value ? DEMO_TEST_ID : studentTestId.value))
     const reportGroupId = computed(() => (isDemoAccess.value ? DEMO_GROUP_ID : studentGroupId.value))
 
@@ -52,8 +57,7 @@ export const useAuthStore = defineStore('auth', () => {
         role.value = newRole
         expiresAt.value = expiry
 
-        const trimmed = newStudentCode?.trim()
-        const normalizedCode = trimmed ? (trimmed.length > 3 ? trimmed.slice(0, 3) : trimmed) : null
+        const normalizedCode = normalizeStudentCode(newStudentCode) ?? null
         studentCode.value = normalizedCode
 
         sessionStorage.setItem('token', newToken)

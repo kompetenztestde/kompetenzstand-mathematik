@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/vue-query'
 import { ReportDataTba3Api } from '@tba3/api-new'
 import { inioApiConfiguration, inioAuthApiConfiguration } from '@/queries/utils'
-import { DEMO_GROUP_ID, DEMO_TEST_GROUP_ID, DEMO_TEST_ID } from '@/stores/auth'
+import { DEMO_GROUP_ID, DEMO_TEST_GROUP_ID, DEMO_TEST_ID, normalizeStudentCode } from '@/stores/auth'
 
 type StudentLoginRequest = {
   surveyId: number
@@ -37,13 +37,14 @@ async function loginStudent(request: StudentLoginRequest) {
 
   const reportConfiguration = await inioApiConfiguration()
   const reportApi = new ReportDataTba3Api(reportConfiguration)
+  const normalizedCode = normalizeStudentCode(request.loginCode)
   const reportResponse = await reportApi.testGroupsTgIdTestsTestIdGroupsGroupIdItemsGet({
     tgId: Number(import.meta.env.VITE_TEST_GROUP || 270),
     testId: Number(data.data.testId),
     groupId: Number(data.data.groupId),
     schoolId: Number(data.data.schoolId),
     type: 'students',
-    studentCode: request.loginCode,
+    studentCode: normalizedCode,
   })
 
   if ((reportResponse.data?.studentsData ?? []).length === 0) {
@@ -62,7 +63,7 @@ export async function validateDemoStudentCode(studentCode: string) {
     groupId: DEMO_GROUP_ID,
     aggregation: 'generalMathematicalCompetence',
     type: 'students',
-    studentCode,
+    studentCode: normalizeStudentCode(studentCode),
   })
 
   if ((response.data?.studentsData ?? []).length === 0) {
