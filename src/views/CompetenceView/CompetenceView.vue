@@ -4,6 +4,7 @@ import { useCompetencesNew } from '@/composables/useCompetencesNew'
 import { useModalStore } from '@/stores/modalStore'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import Trophy from './icons/trophy.png'
 import { useI18n } from 'vue-i18n'
 import styles from './styles.module.css'
@@ -12,7 +13,8 @@ import Confetti from '@/components/Confetti/Confetti.vue'
 
 const modalStore = useModalStore()
 const route = useRoute()
-const currentUserCode = computed(() => route.query.user as string)
+const auth = useAuthStore()
+const currentUserCode = computed(() => (route.query.user as string | undefined) || auth.studentCode || undefined)
 const { topPerformers } = useCompetencesNew(currentUserCode)
 const { t } = useI18n()
 

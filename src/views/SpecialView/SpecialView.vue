@@ -3,12 +3,14 @@ import '@/assets/styles/base.css'
 import StackedBarChart from '@/components/StackedBarChart/StackedBarChart.vue'
 import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import { useUserItemsNew } from '@/composables/useUserItems'
 import { useI18n } from 'vue-i18n'
 import { useSpecialCasesNew } from '@/composables/useSpecialCasesNew'
 import styles from './styles.module.css'
 const route = useRoute()
-const currentUserCode = computed(() => route.query.user)
+const auth = useAuthStore()
+const currentUserCode = computed(() => route.query.user || auth.studentCode || undefined)
 const { data: data } = useUserItemsNew(currentUserCode)
 const { t } = useI18n()
 const { specialCaseResult } = useSpecialCasesNew(currentUserCode)

@@ -5,6 +5,7 @@ import BarCharts from '@/components/BarCharts/BarCharts.vue'
 import GuidingIdeaComponent from '@/components/GuidingIdeaComponent/GuidingIdeaComponent.vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import { useGuidingIdeasNew } from '@/composables/useGuidingIdeasNew'
 import { useModalStore } from '@/stores/modalStore'
 import InfoIcon from '@/themes/icons/info.svg?component'
@@ -12,7 +13,8 @@ import SingleBarCharts from '@/components/SingleBarChart/SingleBarChart.vue'
 import styles from './styles.module.css'
 import Contemplative from './icons/contemplative.png'
 const route = useRoute()
-const currentUserCode = computed(() => route.query.user as string)
+const auth = useAuthStore()
+const currentUserCode = computed(() => (route.query.user as string | undefined) || auth.studentCode || undefined)
 
 const { t } = useI18n()
 const { badPerformers, calculatedAreas } = useGuidingIdeasNew(currentUserCode)

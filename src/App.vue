@@ -23,7 +23,7 @@ const auth = useAuthStore()
 const { t } = useI18n()
 const competenceTexts = configJson
 
-const currentUserCode = computed(() => route.query.user as string)
+const currentUserCode = computed(() => (route.query.user as string | undefined) || auth.studentCode || undefined)
 
 const { topPerformers: guidingIdeaTopPerformers, badPerformers, calculatedAreas, isLoading } = useGuidingIdeasNew(currentUserCode)
 const { topPerformers: competencesTopPerformers } = useCompetencesNew(currentUserCode)

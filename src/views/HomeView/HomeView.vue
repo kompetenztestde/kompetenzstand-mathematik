@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import '@/assets/styles/variables.css'
 import { useQuery } from '@tanstack/vue-query'
 import { inioApiConfiguration } from '@/queries/utils'
 import { useI18n } from 'vue-i18n'
 import { useModalStore } from '@/stores/modalStore'
+import { useAuthStore } from '@/stores/auth'
 import { ReportDataTba3Api } from '@tba3/api-new'
 import styles from './styles.module.css'
 import Speaker from './icons/speaker.svg?component'
@@ -15,8 +16,10 @@ const modalStore = useModalStore()
 const competenceTexts = configJson
 const { t } = useI18n()
 const router = useRouter()
+const auth = useAuthStore()
+const testGroupId = Number(import.meta.env.VITE_TEST_GROUP || 270)
 
-const selectedUserCode = ref('')
+const selectedUserCode = ref(auth.studentCode ?? '')
 const startAppWithCode = () => {
     if (selectedUserCode.value) {
         router.push({
@@ -36,13 +39,15 @@ const { data: newUserData } = useQuery({
         const config = await inioApiConfiguration()
         const api = new ReportDataTba3Api(config)
         const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdItemsGet({
-            tgId: 270,
-            groupId: 1001,
-            testId: 9524,
+            tgId: testGroupId,
+            groupId: auth.studentGroupId!,
+            testId: auth.studentTestId!,
+            schoolId: auth.studentSchoolId!,
             type: 'students',
         })
         return response.data?.studentsData ?? []
     },
+    enabled: computed(() => !!auth.studentGroupId && !!auth.studentTestId && !!auth.studentSchoolId),
 })
 
 watch(newUserData, (newVal) => {
@@ -61,7 +66,7 @@ const showDetails = () => {
 <template>
     <div :class="styles.greeting">
         <h1>{{ t('home.feedback') }}</h1>
-        <div :class="styles.userSelection">
+        <div v-if="!auth.studentCode" :class="styles.userSelection">
             <label for="user-select">{{ t('home.chooseUser') }}</label>
             <select id="user-select" v-model="selectedUserCode" :class="styles.customSelect">
                 <option value="" disabled>{{ t('home.placeHolder') }}</option>

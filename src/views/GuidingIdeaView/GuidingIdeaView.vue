@@ -3,10 +3,12 @@ import styles from './styles.module.css'
 import GuidingIdeaComponent from '@/components/GuidingIdeaComponent/GuidingIdeaComponent.vue'
 import { useGuidingIdeasNew } from '@/composables/useGuidingIdeasNew'
 import { useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import { computed } from 'vue'
 
 const route = useRoute()
-const currentUserCode = computed(() => route.query.user as string)
+const auth = useAuthStore()
+const currentUserCode = computed(() => (route.query.user as string | undefined) || auth.studentCode || undefined)
 const { topPerformers } = useGuidingIdeasNew(currentUserCode)
 </script>
 

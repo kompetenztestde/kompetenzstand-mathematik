@@ -4,6 +4,7 @@ import { inioApiConfiguration } from '@/queries/utils'
 import SlideAnimationComponent from '@/components/SlideAnimationComponent/SlideAnimationComponent.vue'
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
 import { ReportDataTba3Api } from '@tba3/api-new'
 import { useOverallResultsNew } from '@/composables/useOverallResultsNew'
@@ -13,13 +14,15 @@ import styles from './styles.module.css'
 import { useUserItemsNew } from '@/composables/useUserItems'
 import RefreshIcon from '@/assets/svgs/refreshStarIcon.svg?component'
 const route = useRoute()
+const auth = useAuthStore()
+const testGroupId = Number(import.meta.env.VITE_TEST_GROUP || 270)
 const currentUserCode = computed<string | undefined>(() => {
     const user = route.query.user
     if (Array.isArray(user)) {
         return user[0] ?? undefined
     }
 
-    return user ?? undefined
+    return user ?? auth.studentCode ?? undefined
 })
 const { t } = useI18n()
 const { overallResult } = useOverallResultsNew(currentUserCode)
@@ -34,9 +37,10 @@ const { data: data } = useQuery({
         const api = new ReportDataTba3Api(config)
 
         const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdCompetenceLevelsGet({
-            tgId: 270,
-            groupId: 1001,
-            testId: 9524,
+            tgId: testGroupId,
+            groupId: auth.studentGroupId!,
+            testId: auth.studentTestId!,
+            schoolId: auth.studentSchoolId!,
             type: 'students',
             studentCode: currentUserCode.value as string,
         })
@@ -45,7 +49,7 @@ const { data: data } = useQuery({
         const targetUser = students.find((u) => u.code === currentUserCode.value)
         return targetUser?.competenceLevels ?? []
     },
-    enabled: computed(() => !!currentUserCode.value),
+    enabled: computed(() => !!currentUserCode.value && !!auth.studentGroupId && !!auth.studentTestId && !!auth.studentSchoolId),
 })
 
 const level = computed(() => {

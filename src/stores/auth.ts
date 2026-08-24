@@ -11,11 +11,25 @@ export const useAuthStore = defineStore('auth', () => {
     const studentGroupId = ref<number | null>(
         sessionStorage.getItem('student-group-id') ? Number(sessionStorage.getItem('student-group-id')) : null,
     )
+    const studentTestId = ref<number | null>(
+        sessionStorage.getItem('student-test-id') ? Number(sessionStorage.getItem('student-test-id')) : null,
+    )
+    const studentSchoolId = ref<number | null>(
+        sessionStorage.getItem('student-school-id') ? Number(sessionStorage.getItem('student-school-id')) : null,
+    )
 
     const isAuthenticated = computed(() => !!token.value)
     const isSessionExpired = computed(() => !!expiresAt.value && Date.now() > expiresAt.value)
 
-    function login(newToken: string, newRole: Role, tokenExpiresAt?: string, newStudentCode?: string, newGroupId?: number) {
+    function login(
+        newToken: string,
+        newRole: Role,
+        tokenExpiresAt?: string,
+        newStudentCode?: string,
+        newGroupId?: number,
+        newTestId?: number,
+        newSchoolId?: number,
+    ) {
         const expiry = tokenExpiresAt
             ? new Date(tokenExpiresAt).getTime()
             : (() => {
@@ -48,6 +62,20 @@ export const useAuthStore = defineStore('auth', () => {
         } else {
             sessionStorage.removeItem('student-group-id')
         }
+
+        studentTestId.value = newTestId ?? null
+        if (newTestId) {
+            sessionStorage.setItem('student-test-id', String(newTestId))
+        } else {
+            sessionStorage.removeItem('student-test-id')
+        }
+
+        studentSchoolId.value = newSchoolId ?? null
+        if (newSchoolId) {
+            sessionStorage.setItem('student-school-id', String(newSchoolId))
+        } else {
+            sessionStorage.removeItem('student-school-id')
+        }
     }
 
     function logout() {
@@ -56,18 +84,24 @@ export const useAuthStore = defineStore('auth', () => {
         expiresAt.value = null
         studentCode.value = null
         studentGroupId.value = null
+        studentTestId.value = null
+        studentSchoolId.value = null
 
         sessionStorage.removeItem('token')
         sessionStorage.removeItem('role')
         sessionStorage.removeItem('expires-at')
         sessionStorage.removeItem('student-code')
         sessionStorage.removeItem('student-group-id')
+        sessionStorage.removeItem('student-test-id')
+        sessionStorage.removeItem('student-school-id')
 
         localStorage.removeItem('token')
         localStorage.removeItem('role')
         localStorage.removeItem('expires-at')
         localStorage.removeItem('student-code')
         localStorage.removeItem('student-group-id')
+        localStorage.removeItem('student-test-id')
+        localStorage.removeItem('student-school-id')
     }
 
     return {
@@ -75,6 +109,8 @@ export const useAuthStore = defineStore('auth', () => {
         role,
         studentCode,
         studentGroupId,
+        studentTestId,
+        studentSchoolId,
         isAuthenticated,
         isSessionExpired,
         login,

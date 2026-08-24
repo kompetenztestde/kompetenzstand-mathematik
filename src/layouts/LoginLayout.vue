@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, reactive, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useStudentLoginMutation } from '@/queries/useAuthMutations'
 
@@ -10,7 +10,6 @@ type FormFields = {
   studentSchoolnumber: string
 }
 
-const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
 const studentLogin = useStudentLoginMutation()
@@ -32,12 +31,6 @@ const errors = reactive({
 
 const isLoading = computed(() => studentLogin.isPending.value)
 const apiError = computed(() => studentLogin.error.value?.message ?? '')
-
-const redirectTarget = computed(() => {
-  const redirect = route.query.redirect
-  if (typeof redirect === 'string' && redirect.startsWith('/')) return redirect
-  return '/step-1'
-})
 
 const isFormValid = computed(() => {
   if (demoAccess.student) {
@@ -90,7 +83,7 @@ async function login() {
     }
 
     auth.login(form.studentSchoolnumber.trim(), 'demo-student', undefined, form.studentCode.trim())
-    router.replace(redirectTarget.value)
+    router.replace('/step-1')
     return
   }
 
@@ -114,9 +107,11 @@ async function login() {
       loginCode: normalizedCode,
     })
 
-    const groupId = response.data?.groupId ? Number(response.data.groupId) : undefined
-    auth.login(response.data!.token, 'student', response.data!.tokenExpiresAt, normalizedCode, groupId)
-    router.replace(redirectTarget.value)
+    const groupId = Number(response.data!.groupId)
+    const testId = Number(response.data!.testId)
+    const schoolId = Number(response.data!.schoolId)
+    auth.login(response.data!.token, 'student', response.data!.tokenExpiresAt, normalizedCode, groupId, testId, schoolId)
+    router.replace('/step-1')
   } catch {
     // The mutation error is displayed below the form.
   }

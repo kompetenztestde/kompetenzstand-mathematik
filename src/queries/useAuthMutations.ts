@@ -16,6 +16,7 @@ export type StudentLoginResponse = {
     tokenExpiresAt: string
     schoolId: string
     groupId: string
+    testId: string
   }
 }
 
