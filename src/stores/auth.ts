@@ -3,6 +3,12 @@ import { computed, ref } from 'vue'
 
 export type Role = 'teacher' | 'student' | 'demo' | 'demo-student'
 
+export const DEMO_SCHOOL_NUMBER = 'DEMO-TBA3-2026'
+export const DEMO_API_KEY_SCHOOL = 'DEMO-TBA3-2026'
+export const DEMO_TEST_GROUP_ID = 270
+export const DEMO_TEST_ID = 9524
+export const DEMO_GROUP_ID = 1001
+
 export const useAuthStore = defineStore('auth', () => {
     const token = ref<string | null>(sessionStorage.getItem('token'))
     const role = ref<Role | null>((sessionStorage.getItem('role') as Role | null) ?? null)
@@ -20,6 +26,10 @@ export const useAuthStore = defineStore('auth', () => {
 
     const isAuthenticated = computed(() => !!token.value)
     const isSessionExpired = computed(() => !!expiresAt.value && Date.now() > expiresAt.value)
+    const isDemoAccess = computed(() => role.value === 'demo' || role.value === 'demo-student')
+    const reportTestGroupId = computed(() => (isDemoAccess.value ? DEMO_TEST_GROUP_ID : null))
+    const reportTestId = computed(() => (isDemoAccess.value ? DEMO_TEST_ID : studentTestId.value))
+    const reportGroupId = computed(() => (isDemoAccess.value ? DEMO_GROUP_ID : studentGroupId.value))
 
     function login(
         newToken: string,
@@ -111,6 +121,10 @@ export const useAuthStore = defineStore('auth', () => {
         studentGroupId,
         studentTestId,
         studentSchoolId,
+        isDemoAccess,
+        reportTestGroupId,
+        reportTestId,
+        reportGroupId,
         isAuthenticated,
         isSessionExpired,
         login,

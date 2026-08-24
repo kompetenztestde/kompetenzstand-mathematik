@@ -83,9 +83,11 @@ const goTo = (newIndex: number) => {
     })
 }
 
-const isHome = computed(() => route.path === '/step-1' || route.path === '/')
+const isHome = computed(() => route.path === '/step-1' || (route.path === '/' && auth.isAuthenticated))
 const isSecond = computed(() => route.path === '/step-2')
-const isAuthPage = computed(() => route.name === 'login')
+const isAuthPage = computed(
+    () => route.name === 'login' || route.path === '/login' || (route.path === '/' && !auth.isAuthenticated),
+)
 
 const appBackground = computed(() => {
     if (isHome.value || isSecond.value) {

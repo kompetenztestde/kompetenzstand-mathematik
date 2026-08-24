@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import { useStudentLoginMutation } from '@/queries/useAuthMutations'
+import { DEMO_SCHOOL_NUMBER, useAuthStore } from '@/stores/auth'
+import { useStudentLoginMutation, validateDemoStudentCode } from '@/queries/useAuthMutations'
 
 type FormFields = {
   studentCode: string
@@ -22,6 +22,8 @@ const form = reactive<FormFields>({
 })
 
 const demoAccess = reactive({ student: false })
+const demoValidationPending = ref(false)
+const demoError = ref('')
 
 const errors = reactive({
   studentCode: '',
@@ -29,8 +31,8 @@ const errors = reactive({
   studentSchoolnumber: '',
 })
 
-const isLoading = computed(() => studentLogin.isPending.value)
-const apiError = computed(() => studentLogin.error.value?.message ?? '')
+const isLoading = computed(() => studentLogin.isPending.value || demoValidationPending.value)
+const apiError = computed(() => demoError.value || studentLogin.error.value?.message || '')
 
 const isFormValid = computed(() => {
   if (demoAccess.student) {
@@ -44,6 +46,7 @@ watch(
   () => form.studentCode,
   () => {
     errors.studentCode = ''
+    demoError.value = ''
     studentLogin.reset()
   },
 )
@@ -61,8 +64,9 @@ watch(
   (enabled) => {
     errors.studentPassword = ''
     errors.studentSchoolnumber = ''
-    form.studentSchoolnumber = enabled ? 'DEMO-TBA3-2026' : ''
+    form.studentSchoolnumber = enabled ? DEMO_SCHOOL_NUMBER : ''
     form.studentCode = enabled ? 'aaa' : ''
+    demoError.value = ''
     studentLogin.reset()
   },
 )
@@ -82,8 +86,18 @@ async function login() {
       return
     }
 
-    auth.login(form.studentSchoolnumber.trim(), 'demo-student', undefined, form.studentCode.trim())
-    router.replace('/step-1')
+    const normalizedCode = form.studentCode.trim()
+    auth.login(form.studentSchoolnumber.trim(), 'demo-student', undefined, normalizedCode)
+    demoValidationPending.value = true
+    try {
+      await validateDemoStudentCode(normalizedCode)
+      router.replace('/step-1')
+    } catch (error) {
+      auth.logout()
+      demoError.value = error instanceof Error ? error.message : 'Anmeldung fehlgeschlagen.'
+    } finally {
+      demoValidationPending.value = false
+    }
     return
   }
 

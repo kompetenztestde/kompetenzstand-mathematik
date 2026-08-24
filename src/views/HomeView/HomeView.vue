@@ -17,7 +17,6 @@ const competenceTexts = configJson
 const { t } = useI18n()
 const router = useRouter()
 const auth = useAuthStore()
-const testGroupId = Number(import.meta.env.VITE_TEST_GROUP || 270)
 
 const selectedUserCode = ref(auth.studentCode ?? '')
 const startAppWithCode = () => {
@@ -39,15 +38,15 @@ const { data: newUserData } = useQuery({
         const config = await inioApiConfiguration()
         const api = new ReportDataTba3Api(config)
         const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdItemsGet({
-            tgId: testGroupId,
-            groupId: auth.studentGroupId!,
-            testId: auth.studentTestId!,
-            schoolId: auth.studentSchoolId!,
+            tgId: auth.reportTestGroupId!,
+            groupId: auth.reportGroupId!,
+            testId: auth.reportTestId!,
+            schoolId: auth.studentSchoolId ?? undefined,
             type: 'students',
         })
         return response.data?.studentsData ?? []
     },
-    enabled: computed(() => !!auth.studentGroupId && !!auth.studentTestId && !!auth.studentSchoolId),
+    enabled: computed(() => !!auth.reportTestGroupId && !!auth.reportGroupId && !!auth.reportTestId),
 })
 
 watch(newUserData, (newVal) => {

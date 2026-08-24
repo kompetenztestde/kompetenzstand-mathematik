@@ -7,8 +7,6 @@ import { useUserItemsNew } from './useUserItems'
 import { configJson } from '@/services/configService'
 import { useAuthStore } from '@/stores/auth'
 
-const testGroupId = Number(import.meta.env.VITE_TEST_GROUP || 270)
-
 export function useSpecialCasesNew(code: ComputedRef<string | undefined>) {
     const competenceTexts = configJson
     const { properties } = useUserProperties(code)
@@ -92,10 +90,10 @@ function useUserAggregations(code: ComputedRef<string | undefined>) {
             const config = await inioApiConfiguration()
             const api = new ReportDataTba3Api(config)
             const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdAggregationsGet({
-                tgId: testGroupId,
-                groupId: auth.studentGroupId!,
-                testId: auth.studentTestId!,
-                schoolId: auth.studentSchoolId!,
+                tgId: auth.reportTestGroupId!,
+                groupId: auth.reportGroupId!,
+                testId: auth.reportTestId!,
+                schoolId: auth.studentSchoolId ?? undefined,
                 type: 'students',
                 studentCode: code.value,
                 aggregation: 'generalMathematicalCompetence',
@@ -106,7 +104,7 @@ function useUserAggregations(code: ComputedRef<string | undefined>) {
             const targetUser = students.find((u) => u.code === code.value)
             return targetUser?.aggregations ?? []
         },
-        enabled: computed(() => !!code.value && !!auth.studentGroupId && !!auth.studentTestId && !!auth.studentSchoolId),
+        enabled: computed(() => !!code.value && !!auth.reportTestGroupId && !!auth.reportGroupId && !!auth.reportTestId),
         staleTime: 1000 * 60 * 60,
     })
 }
@@ -120,17 +118,17 @@ export function useUserProperties(code: ComputedRef<string | undefined>) {
             const config = await inioApiConfiguration()
             const api = new ReportDataTba3Api(config)
             const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdItemsGet({
-                tgId: testGroupId,
-                groupId: auth.studentGroupId!,
-                testId: auth.studentTestId!,
-                schoolId: auth.studentSchoolId!,
+                tgId: auth.reportTestGroupId!,
+                groupId: auth.reportGroupId!,
+                testId: auth.reportTestId!,
+                schoolId: auth.studentSchoolId ?? undefined,
                 type: 'students',
                 studentCode: code.value,
             })
             const students = response.data?.studentsData ?? []
             return students.find((u) => u.code === code.value) || null
         },
-        enabled: computed(() => !!code.value && !!auth.studentGroupId && !!auth.studentTestId && !!auth.studentSchoolId),
+        enabled: computed(() => !!code.value && !!auth.reportTestGroupId && !!auth.reportGroupId && !!auth.reportTestId),
         staleTime: 1000 * 60 * 60,
     })
 

@@ -15,7 +15,6 @@ import { useUserItemsNew } from '@/composables/useUserItems'
 import RefreshIcon from '@/assets/svgs/refreshStarIcon.svg?component'
 const route = useRoute()
 const auth = useAuthStore()
-const testGroupId = Number(import.meta.env.VITE_TEST_GROUP || 270)
 const currentUserCode = computed<string | undefined>(() => {
     const user = route.query.user
     if (Array.isArray(user)) {
@@ -37,10 +36,10 @@ const { data: data } = useQuery({
         const api = new ReportDataTba3Api(config)
 
         const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdCompetenceLevelsGet({
-            tgId: testGroupId,
-            groupId: auth.studentGroupId!,
-            testId: auth.studentTestId!,
-            schoolId: auth.studentSchoolId!,
+            tgId: auth.reportTestGroupId!,
+            groupId: auth.reportGroupId!,
+            testId: auth.reportTestId!,
+            schoolId: auth.studentSchoolId ?? undefined,
             type: 'students',
             studentCode: currentUserCode.value as string,
         })
@@ -49,7 +48,7 @@ const { data: data } = useQuery({
         const targetUser = students.find((u) => u.code === currentUserCode.value)
         return targetUser?.competenceLevels ?? []
     },
-    enabled: computed(() => !!currentUserCode.value && !!auth.studentGroupId && !!auth.studentTestId && !!auth.studentSchoolId),
+    enabled: computed(() => !!currentUserCode.value && !!auth.reportTestGroupId && !!auth.reportGroupId && !!auth.reportTestId),
 })
 
 const level = computed(() => {

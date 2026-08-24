@@ -5,8 +5,6 @@ import { ReportDataTba3Api } from '@tba3/api-new'
 import { configJson } from '@/services/configService'
 import { useAuthStore } from '@/stores/auth'
 
-const testGroupId = Number(import.meta.env.VITE_TEST_GROUP || 270)
-
 export function useOverallResultsNew(code: ComputedRef<string | undefined>) {
     const competenceTexts = configJson
     const { data: aggregations } = useUserAggregations(code)
@@ -51,10 +49,10 @@ function useUserAggregations(code: ComputedRef<string | undefined>) {
             const config = await inioApiConfiguration()
             const api = new ReportDataTba3Api(config)
             const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdAggregationsGet({
-                tgId: testGroupId,
-                groupId: auth.studentGroupId!,
-                testId: auth.studentTestId!,
-                schoolId: auth.studentSchoolId!,
+                tgId: auth.reportTestGroupId!,
+                groupId: auth.reportGroupId!,
+                testId: auth.reportTestId!,
+                schoolId: auth.studentSchoolId ?? undefined,
                 type: 'students',
                 studentCode: code.value,
                 aggregation: 'generalMathematicalCompetence',
@@ -65,7 +63,7 @@ function useUserAggregations(code: ComputedRef<string | undefined>) {
             const targetUser = students.find((u) => u.code === code.value)
             return targetUser?.aggregations ?? []
         },
-        enabled: computed(() => !!code.value && !!auth.studentGroupId && !!auth.studentTestId && !!auth.studentSchoolId),
+        enabled: computed(() => !!code.value && !!auth.reportTestGroupId && !!auth.reportGroupId && !!auth.reportTestId),
         staleTime: 1000 * 60 * 60,
     })
 }
