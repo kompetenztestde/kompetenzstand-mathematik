@@ -22,6 +22,7 @@ const form = reactive<FormFields>({
 })
 
 const demoAccess = reactive({ student: false })
+const showStudentCode = ref(false)
 const demoValidationPending = ref(false)
 const demoError = ref('')
 
@@ -137,6 +138,7 @@ async function login() {
     <div class="login-wrapper">
       <div class="login-content-wrapper">
         <div class="login-info-section">
+          <h1 class="login-title">Kompetenzstand-Mathematik</h1>
           <p class="info-text-main">
             Prototypisches Rückmeldeportal im
             <a
@@ -221,7 +223,6 @@ async function login() {
                     name="studentPassword"
                     class="form-input"
                     :class="{ 'input-error': errors.studentPassword }"
-                    placeholder="Klassenpasswort"
                     autocomplete="current-password"
                   />
                   <p v-if="errors.studentPassword" class="error-message">{{ errors.studentPassword }}</p>
@@ -229,16 +230,51 @@ async function login() {
 
                 <div class="form-group">
                   <label for="studentCode" class="form-label">Code</label>
-                  <input
-                    id="studentCode"
-                    v-model="form.studentCode"
-                    type="password"
-                    name="studentCode"
-                    class="form-input"
-                    :class="{ 'input-error': errors.studentCode }"
-                    placeholder="Schülercode"
-                    autocomplete="username"
-                  />
+                  <div class="input-with-icon">
+                    <input
+                      id="studentCode"
+                      v-model="form.studentCode"
+                      :type="showStudentCode ? 'text' : 'password'"
+                      name="studentCode"
+                      class="form-input"
+                      :class="{ 'input-error': errors.studentCode }"
+                      autocomplete="username"
+                    />
+                    <button
+                      type="button"
+                      class="input-icon-button"
+                      :aria-label="showStudentCode ? 'Code verbergen' : 'Code anzeigen'"
+                      :title="showStudentCode ? 'Code verbergen' : 'Code anzeigen'"
+                      @click="showStudentCode = !showStudentCode"
+                    >
+                      <svg
+                        v-if="!showStudentCode"
+                        class="input-icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M12 5c-5.2 0-9.3 4.2-10.5 6.3a1.3 1.3 0 0 0 0 1.4C2.7 14.8 6.8 19 12 19s9.3-4.2 10.5-6.3a1.3 1.3 0 0 0 0-1.4C21.3 9.2 17.2 5 12 5Zm0 11.5A4.5 4.5 0 1 1 12 7a4.5 4.5 0 0 1 0 9.5Zm0-2A2.5 2.5 0 1 0 12 9a2.5 2.5 0 0 0 0 5.5Z"
+                        />
+                      </svg>
+                      <svg
+                        v-else
+                        class="input-icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="m3.3 2.6 18.1 18.1-1.4 1.4-3.1-3.1A11.5 11.5 0 0 1 12 20C6.8 20 2.7 15.8 1.5 13.7a1.3 1.3 0 0 1 0-1.4 17.5 17.5 0 0 1 4.1-4.6L1.9 4l1.4-1.4Zm5 6.4 6.7 6.7A4.5 4.5 0 0 0 8.3 9Zm-2.1-2.1A11.7 11.7 0 0 1 12 4c5.2 0 9.3 4.2 10.5 6.3a1.3 1.3 0 0 1 0 1.4 17.4 17.4 0 0 1-3 3.6l-1.4-1.4a15.4 15.4 0 0 0 2.1-2.9C19.7 9.3 16.2 6 12 6c-1.6 0-3.1.4-4.4 1.1L6.2 6.9Z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                   <p v-if="errors.studentCode" class="error-message">{{ errors.studentCode }}</p>
                 </div>
 
@@ -328,6 +364,16 @@ async function login() {
   color: var(--color-navigation-blue);
   line-height: 1.7;
   margin: 0;
+}
+
+.login-title {
+  margin: 0 0 1.25rem;
+  color: var(--color-navigation-blue);
+  font-family: 'League Spartan', sans-serif;
+  font-size: clamp(2.5rem, 2.8vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
 }
 
 .info-link {
@@ -494,6 +540,47 @@ async function login() {
     background-color 0.2s ease;
 }
 
+  .input-with-icon {
+    position: relative;
+  }
+
+  .input-with-icon .form-input {
+    padding-right: 3.25rem;
+  }
+
+  .input-icon-button {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: rgba(19, 63, 120, 0.65);
+    cursor: pointer;
+  }
+
+  .input-icon-button:hover {
+    background: rgba(19, 63, 120, 0.08);
+    color: var(--color-navigation-blue);
+  }
+
+  .input-icon-button:focus-visible {
+    outline: 2px solid var(--color-waterblue);
+    outline-offset: 2px;
+  }
+
+  .input-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
 .form-input::placeholder {
   color: rgba(19, 63, 120, 0.48);
 }
@@ -591,7 +678,7 @@ async function login() {
 
 
   .login-form-wrapper {
-    flex: 0 1 28rem;
+    flex: 0 1 23rem;
   }
 }
 </style>
