@@ -71,6 +71,21 @@ export async function validateDemoStudentCode(studentCode: string) {
   }
 }
 
+export async function fetchDemoStudentCodes() {
+  const configuration = await inioApiConfiguration(true)
+  const api = new ReportDataTba3Api(configuration)
+  const response = await api.testGroupsTgIdTestsTestIdGroupsGroupIdItemsGet({
+    tgId: DEMO_TEST_GROUP_ID,
+    testId: DEMO_TEST_ID,
+    groupId: DEMO_GROUP_ID,
+    type: 'students',
+  })
+
+  return (response.data?.studentsData ?? [])
+    .map((student) => student.code)
+    .filter((code): code is string => !!code)
+}
+
 export function useStudentLoginMutation() {
   return useMutation({ mutationFn: loginStudent })
 }

@@ -21,11 +21,11 @@ export async function apiConfiguration(): Promise<Configuration> {
     return config
 }
 
-export async function inioApiConfiguration(): Promise<Configuration2> {
+export async function inioApiConfiguration(forceDemoAccess = false): Promise<Configuration2> {
     const auth = useAuthStore()
     const configFromWindow = (window as CustomWindow).appConfig?.api?.inioApiUrl || ''
     const apiKey = DEMO_API_KEY_SCHOOL
-    const isDemoAccess = auth.isDemoAccess
+    const isDemoAccess = forceDemoAccess || auth.isDemoAccess
     const config = new Configuration2(
         isDemoAccess && apiKey
             ? {

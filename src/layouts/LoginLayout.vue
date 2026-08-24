@@ -2,7 +2,7 @@
 import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { DEMO_SCHOOL_NUMBER, useAuthStore } from '@/stores/auth'
-import { useStudentLoginMutation, validateDemoStudentCode } from '@/queries/useAuthMutations'
+import { fetchDemoStudentCodes, useStudentLoginMutation, validateDemoStudentCode } from '@/queries/useAuthMutations'
 
 type FormFields = {
   studentCode: string
@@ -25,6 +25,8 @@ const demoAccess = reactive({ student: false })
 const showStudentCode = ref(false)
 const demoValidationPending = ref(false)
 const demoError = ref('')
+const demoStudentCodes = ref<string[]>([])
+const demoCodesLoading = ref(false)
 
 const errors = reactive({
   studentCode: '',
@@ -37,7 +39,7 @@ const apiError = computed(() => demoError.value || studentLogin.error.value?.mes
 
 const isFormValid = computed(() => {
   if (demoAccess.student) {
-    return !!form.studentSchoolnumber?.trim() && !!form.studentCode?.trim()
+    return !!form.studentCode?.trim() && !demoCodesLoading.value
   }
   return !!form.studentCode?.trim() && !!form.studentPassword?.trim()
 })
@@ -62,13 +64,24 @@ watch(
 
 watch(
   () => demoAccess.student,
-  (enabled) => {
+  async (enabled) => {
     errors.studentPassword = ''
     errors.studentSchoolnumber = ''
     form.studentSchoolnumber = enabled ? DEMO_SCHOOL_NUMBER : ''
-    form.studentCode = enabled ? 'aaa' : ''
+    form.studentCode = ''
     demoError.value = ''
     studentLogin.reset()
+
+    if (enabled && demoStudentCodes.value.length === 0) {
+      demoCodesLoading.value = true
+      try {
+        demoStudentCodes.value = await fetchDemoStudentCodes()
+      } catch (error) {
+        demoError.value = error instanceof Error ? error.message : 'Demo-Codes konnten nicht geladen werden.'
+      } finally {
+        demoCodesLoading.value = false
+      }
+    }
   },
 )
 
@@ -78,17 +91,13 @@ async function login() {
   errors.studentSchoolnumber = ''
 
   if (demoAccess.student) {
-    if (!form.studentSchoolnumber?.trim()) {
-      errors.studentSchoolnumber = 'Du musst eine Schulnummer eingeben.'
-      return
-    }
     if (!form.studentCode?.trim()) {
-      errors.studentCode = 'Du musst einen Code eingeben.'
+      errors.studentCode = 'Bitte wähle einen Demo-Schülercode aus.'
       return
     }
 
     const normalizedCode = form.studentCode.trim()
-    auth.login(form.studentSchoolnumber.trim(), 'demo-student', undefined, normalizedCode)
+    auth.login(DEMO_SCHOOL_NUMBER, 'demo-student', undefined, normalizedCode)
     demoValidationPending.value = true
     try {
       await validateDemoStudentCode(normalizedCode)
@@ -199,21 +208,6 @@ async function login() {
                   </div>
                 </div>
 
-                <div v-if="demoAccess.student" class="form-group">
-                  <label for="studentSchoolnumber" class="form-label">Schulnummer</label>
-                  <input
-                    id="studentSchoolnumber"
-                    v-model="form.studentSchoolnumber"
-                    type="text"
-                    name="studentSchoolnumber"
-                    class="form-input"
-                    :class="{ 'input-error': errors.studentSchoolnumber }"
-                    placeholder="Schulnummer"
-                    autocomplete="off"
-                  />
-                  <p v-if="errors.studentSchoolnumber" class="error-message">{{ errors.studentSchoolnumber }}</p>
-                </div>
-
                 <div v-if="!demoAccess.student" class="form-group">
                   <label for="studentPassword" class="form-label">Passwort</label>
                   <input
@@ -230,7 +224,7 @@ async function login() {
 
                 <div class="form-group">
                   <label for="studentCode" class="form-label">Code</label>
-                  <div class="input-with-icon">
+                  <div v-if="!demoAccess.student" class="input-with-icon">
                     <input
                       id="studentCode"
                       v-model="form.studentCode"
@@ -275,6 +269,20 @@ async function login() {
                       </svg>
                     </button>
                   </div>
+                  <select
+                    v-else
+                    id="studentCode"
+                    v-model="form.studentCode"
+                    name="studentCode"
+                    class="form-input demo-code-select"
+                    :class="{ 'input-error': errors.studentCode }"
+                    :disabled="demoCodesLoading || demoStudentCodes.length === 0"
+                  >
+                    <option value="" disabled>
+                      {{ demoCodesLoading ? 'Demo-Codes werden geladen...' : 'Code auswählen' }}
+                    </option>
+                    <option v-for="code in demoStudentCodes" :key="code" :value="code">{{ code }}</option>
+                  </select>
                   <p v-if="errors.studentCode" class="error-message">{{ errors.studentCode }}</p>
                 </div>
 
