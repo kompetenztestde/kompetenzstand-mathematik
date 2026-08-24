@@ -1,13 +1,18 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import svgLoader from 'vite-svg-loader'
 
 // https://vite.dev/config/
+const env = loadEnv('', process.cwd(), '')
+
 export default defineConfig({
     plugins: [vue(), vueDevTools(), svgLoader()],
+    build: {
+        outDir: env.VITE_BUILD_DIR || 'dist',
+    },
     server: {
         proxy: {
             '/api-proxy': {
