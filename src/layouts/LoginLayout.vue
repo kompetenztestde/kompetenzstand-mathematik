@@ -269,7 +269,7 @@ async function login() {
   padding: 10px clamp(1rem, 2.5vw, 2rem) clamp(1rem, 2.5vw, 2rem);
   box-sizing: border-box;
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: auto;
   /* background: linear-gradient(180deg, #f5fbff 0%, #ffffff 100%); */
 }
 
