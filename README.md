@@ -1,46 +1,253 @@
 # TBA3 Prototypische Rückmeldung im Fach Mathematik Klassenstufe 8
 
-## 🚀 Entwicklungsumgebung
+Eine Webanwendung zur **Aufbereitung von VerA-8-Ergebnisdaten für Schüler:innen**, die die eigenen Testergebnisse
+schrittweise, altersgerecht und motivierend zurückmeldet.
+Das Projekt ist eine reine **Vue 3 + Vite Single-Page-App** (kein eigenes Backend). Die Daten kommen über generierte
+API-Clients aus der **TBA3-Schnittstelle**, die Texte über eine zur Laufzeit geladene Konfigurationsdatei.
 
-### Starten
+---
+
+## Entwicklungsumgebung
+
+### Voraussetzungen
+
+- [Node.js](https://nodejs.org/) ≥ 20.19 oder ≥ 22.12 (s. `engines` in `package.json`)
+- [pnpm](https://pnpm.io/) (via `corepack enable pnpm`)
+- Optional: [Docker](https://www.docker.com/) ≥ 24 für die containerisierte Entwicklung
+- Optional: Java 21 – nur nötig, wenn die API-Clients neu generiert werden (s. „TBA3-Schnittstelle")
+
+### Einrichtung
+
+Zwei Konfigurationsdateien werden zur Laufzeit erwartet und sind **nicht im Repository** enthalten
+(s. `.gitignore`, Abschnitt „Konfiguration"):
+
+```bash
+# Laufzeit-Konfiguration der API-Endpunkte
+touch public/config.js
+
+# Redaktionelle Texte, Schwellenwerte und Übungslinks
+cp src/assets/competence_guidingideas_texts.json public/config.json
+```
+
+Danach die Abhängigkeiten installieren:
 
 ```sh
 pnpm install
 ```
 
-### Compile und Hot-Reload für Entwicklung
+### Starten
 
 ```sh
+# Compile und Hot-Reload für Entwicklung
 pnpm run dev
 ```
 
-### Type-Check, Compile und Minify für Production
+- Frontend → [http://localhost:3000](http://localhost:3000)
+
+Alternativ mit Docker – der Container installiert beim Start die Abhängigkeiten und hält sich offen,
+`pnpm run dev` wird darin ausgeführt:
 
 ```sh
-pnpm run build
+docker compose up -d
+docker compose exec node pnpm run dev
 ```
 
-### Unit Tests mit [Vitest](https://vitest.dev/)
+> Hinweis: `docker-compose.yml` steht in `.gitignore`. Die im Repository liegende Datei dient als Vorlage und kann lokal
+> angepasst werden, ohne dass die Änderungen versioniert werden.
 
-```sh
-pnpm run test:unit
+### Skripte
+
+| Skript                          | Beschreibung                                                        |
+|---------------------------------|---------------------------------------------------------------------|
+| `pnpm run dev`                  | Dev-Server mit Hot Reload (Port 3000, inkl. API-Proxys)             |
+| `pnpm run build`                | Type-Check und Production-Build (`vue-tsc` + `vite build`)          |
+| `pnpm run build-only`           | Nur Build, ohne Type-Check                                          |
+| `pnpm run type-check`           | Type-Check via `vue-tsc --build`                                    |
+| `pnpm run preview`              | Vorschau des Production-Builds (Port 4173, inkl. API-Proxys)        |
+| `pnpm run test:unit`            | Unit-Tests mit [Vitest](https://vitest.dev/)                        |
+| `pnpm run lint`                 | Lint mit [oxlint](https://oxc.rs/) und [ESLint](https://eslint.org/), jeweils mit `--fix` |
+| `pnpm run format`               | Formatierung von `src/` mit [Prettier](https://prettier.io/)        |
+| `pnpm run generate:api-resources` | API-Client aus der TBA3-Spezifikation neu generieren               |
+| `pnpm run generate:api-new`     | API-Client für die inio-Reportdaten neu generieren                  |
+| `pnpm run generate:api-auth`    | API-Client für die inio-Authentifizierung neu generieren            |
+
+### Code-Konventionen
+
+- Prettier: keine Semikolons, einfache Anführungszeichen, Einrückung 4, Zeilenlänge 140 (`.prettierrc.json`)
+- Linting: oxlint (Kategorie `correctness` als Fehler) und ESLint mit Vue-/TypeScript-/Vitest-Regeln
+- Empfohlene VS-Code-Erweiterungen liegen in `.vscode/extensions.json` (Volar, Vitest Explorer, ESLint, oxc, Prettier)
+
+---
+
+## Konfiguration
+
+Die App ist so gebaut, dass Endpunkte und Texte **ohne Rebuild** ausgetauscht werden können. Beide Dateien liegen in
+`public/` und sind bewusst nicht versioniert.
+
+### `public/config.js` – Laufzeit-Endpunkte
+
+Wird in `index.html` als klassisches Script eingebunden und setzt `window.appConfig`. Ausgelesen wird sie in
+`src/queries/utils.ts`:
+
+```js
+window.appConfig = {
+    api: {
+        baseUrl: '/api-proxy',        // TBA3-Referenz-API (@tba3/api-resources)
+        inioApiUrl: '/api-inio',      // inio-Reportdaten (@tba3/api-new)
+        inioAuthApiUrl: '/api-auth',  // inio-Authentifizierung (@tba3/api-auth)
+        xApiKeySchool: 'TEST',        // Header X-API-KEY-SCHOOL
+    },
+    defaultPageSize: 20,
+}
 ```
 
-### Lint [ESLint](https://eslint.org/)
+Fehlt ein Wert, wird ein leerer `basePath` verwendet, d.h. es wird gegen den eigenen Origin (und damit im Dev-Betrieb
+gegen die Vite-Proxys) angefragt. Der API-Key fällt zusätzlich auf `VITE_X_API_KEY_SCHOOL` und schließlich auf `TEST`
+zurück.
 
-```sh
-pnpm run lint
+### `public/config.json` – Inhalte
+
+Wird beim App-Start in `src/services/configService.ts` per `fetch('/config.json')` geladen, bevor die Vue-Instanz
+gemountet wird, und danach über den Export `configJson` in Views und Composables verwendet. Als Vorlage dient
+`src/assets/competence_guidingideas_texts.json` mit folgenden Bereichen:
+
+| Schlüssel                | Inhalt                                                                 |
+|--------------------------|------------------------------------------------------------------------|
+| `competence_texts`       | Texte und Beschreibungen je Kompetenz `K1`–`K6`                        |
+| `guiding_ideas_texts`    | Texte und Beschreibungen je Leitidee `L1`–`L5`                          |
+| `start`                  | Titel und Info-Text des Einstiegs (auch im Info-Modal der Fußzeile)     |
+| `overallResult`          | Rückmeldetexte je Gesamtergebnis-Stufe (`K1A`, `K1B`, `K2`–`K5`)        |
+| `specialCases`, `specialCasesAdvices` | Texte und Hinweise für auffällige Bearbeitungsmuster       |
+| `areas`, `cutOffs`       | Bereichsgrenzen und Schwellenwerte für die Einordnung der Ergebnisse    |
+| `testInfo`               | Metadaten zum Testheft (Booklet, Fach, Klassenstufe)                    |
+| `exerciseLinks`          | Übungs-/Vertiefungslinks für die Abschlussseite                         |
+
+---
+
+## Technologien & Bibliotheken
+
+- [Vue 3](https://vuejs.org/) – JavaScript-Frontend-Framework, Composition API mit `<script setup>`
+- [Vite](https://vitejs.dev/) – Dev- und Build-Tool
+- [TypeScript](https://www.typescriptlang.org/) – Typisierung, Type-Check via `vue-tsc`
+- [Vue Router](https://router.vuejs.org/) – Routing der Schritt-Seiten
+- [Pinia](https://pinia.vuejs.org/) – State Management (Modal-Store)
+- [TanStack Query](https://tanstack.com/query/) – Data Fetching und Caching
+- [Vue I18n](https://vue-i18n.intlify.dev/) – Oberflächentexte (aktuell nur `de`)
+- [Apache ECharts](https://echarts.apache.org/) via [vue-echarts](https://github.com/ecomfe/vue-echarts) – Datenvisualisierung
+- [dotLottie für Vue](https://developers.lottiefiles.com/docs/dotlottie-player/) – Animationen
+- [Day.js](https://day.js.org/) – Zeit-/Dauerberechnungen (z.B. Bearbeitungsdauer)
+- [vite-svg-loader](https://github.com/jpkleemans/vite-svg-loader) – SVGs als Vue-Komponenten (`?component`)
+- [OpenAPI Generator](https://openapi-generator.tech/) – Erzeugung der API-Clients (`typescript-fetch`)
+- [Vitest](https://vitest.dev/) – Unit-Tests, [oxlint](https://oxc.rs/) und [ESLint](https://eslint.org/) – Linting
+
+---
+
+## Projektstruktur
+
+Das Repository ist ein **pnpm-Workspace**: die App liegt im Wurzelverzeichnis, die generierten API-Clients in
+`packages/`.
+
+```
+.
+├── src/                # Vue-3-App
+├── packages/           # Generierte API-Clients (pnpm-Workspace)
+│   ├── api-resources/  # @tba3/api-resources – TBA3-Referenz-API
+│   ├── api-new/        # @tba3/api-new       – inio-Reportdaten
+│   └── api-auth/       # @tba3/api-auth      – inio-Authentifizierung
+├── public/             # Statische Assets, config.js und config.json (nicht versioniert)
+├── docker/
+│   ├── Dockerfile              # Node 24 + pnpm + Java (für die Client-Generierung)
+│   └── development.entrypoint  # pnpm install und Container offen halten
+├── docker-compose.yml  # Dev-Container (Vorlage, lokal nicht versioniert)
+├── vite.config.ts      # Build, Alias @ → src, Dev-/Preview-Proxys
+├── vitest.config.ts    # Test-Setup (jsdom)
+└── .gitlab-ci.yml      # CI: Audit der Produktionsabhängigkeiten
 ```
 
-## 🛠️ Technologien & Bibliotheken
+### App-Struktur
 
-- [Vue 3](https://vuejs.org/) – JavaScript-Frontend-Framework
-- [Vite](https://vitejs.dev/) – Dev-Build-Tool
-- [Tanstack Query](https://tanstack.com/query/) - Data Fetching
+```
+src/
+├── views/          # Seiten der Schritt-Navigation (eine pro Route)
+├── components/     # Wiederverwendbare Komponenten inkl. Diagramme
+├── composables/    # Datenbeschaffung und fachliche Auswertung (use*.ts)
+├── queries/        # API-Konfiguration (Basis-URLs, API-Key)
+├── stores/         # Pinia-Stores
+├── router/         # Routendefinition der Schritte 1–7
+├── services/       # Laden der Laufzeit-Konfiguration (config.json)
+├── locales/        # Übersetzungen (de.json)
+├── themes/         # Fonts, Farbvariablen, Icons
+├── assets/         # Animationen, SVGs, Styles, Textvorlage
+├── types.ts        # Fachliche Typen und Mappings (Kompetenzen, Leitideen, Stufen)
+└── __tests__/      # Unit-Tests
+```
 
-## 📊 TBA3-Schnittstelle
+### Komponenten- und View-Struktur
 
-Die TBA3-Schnittstelle soll die Daten für Abbildungen möglichst standardisieren. Die Schnittstelle muss zwingend für Abbildungen bedient werden (Projektziel von TBA3).
+Views und Komponenten liegen jeweils in einem **eigenen Unterordner** nach demselben Muster:
+
+```
+KomponentenName/
+├── KomponentenName.vue   # Komponente (Composition API, <script setup>)
+├── styles.module.css     # Lokale CSS-Module-Styles
+└── icons/                # Nur von dieser Komponente genutzte Icons/Bilder
+```
+
+Übergreifende Styles liegen bewusst außerhalb: `src/themes/` (Fonts, Farb- und Designvariablen),
+`src/assets/styles/base.css` (Basis-Styles) und `src/assets/styles/component-layout.module.css`
+(geteiltes Layout-Modul). SVG-Icons werden über `vite-svg-loader` als Komponenten importiert:
+
+```ts
+import InfoIcon from '@/themes/icons/info.svg?component'
+```
+
+**Kernprinzip:** Views holen die Daten über Composables und geben sie als Props an die Darstellungskomponenten weiter.
+Diagrammkomponenten (`BarCharts`, `SingleBarChart`, `StackedBarChart`) enthalten keine Fetch-Logik, sondern erhalten
+ihre Werte von der einbindenden View.
+
+---
+
+## Anwendungsablauf
+
+Die Rückmeldung ist als lineare Abfolge von Schritten aufgebaut. Der Code der Schüler:in wird als Query-Parameter
+`?user=<code>` durch alle Schritte mitgeführt.
+
+| Route             | View               | Inhalt                                                                    |
+|-------------------|--------------------|---------------------------------------------------------------------------|
+| `/` → `/step-1`   | `HomeView`         | Auswahl des Test-Codes und Einstieg                                       |
+| `/step-2`         | `AnimationView`    | Animierte Einordnung des Gesamtergebnisses                                |
+| `/step-3`         | `SpecialView`      | „Das ist uns aufgefallen" – richtig/falsch/nicht bearbeitet               |
+| `/step-4/:subId?` | `CompetenceView`   | „Hier bist du stark" – stärkste Kompetenzen (`K1`–`K6`)                   |
+| `/step-5/:subId?` | `GuidingIdeaView`  | Stärkste Leitideen (`L1`–`L5`)                                            |
+| `/step-6/:subId?` | `BadResultsView`   | Bereiche mit Übungsbedarf                                                 |
+| `/step-7`         | `FinalView`        | Abschluss mit Übungs- und Vertiefungslinks                                |
+
+Die tatsächliche Schrittfolge ist **datenabhängig**: `src/composables/useNavigation.ts` baut aus den ermittelten
+Top-Performern und schwachen Bereichen eine Liste aller Schritte auf. Für jede starke Kompetenz bzw. Leitidee entsteht
+ein eigener Unterschritt (`:subId`); gibt es mehr als zwei schwache Bereiche, wird Schritt 6 zu einer einzelnen
+Übersichtsseite zusammengefasst. Die Fußzeile in `App.vue` rendert daraus die Seitenindikatoren und die Vor-/Zurück-Navigation.
+
+### Composables
+
+| Composable                | Aufgabe                                                                       |
+|---------------------------|-------------------------------------------------------------------------------|
+| `useUserItems`            | Items einer Schüler:in laden (`useUserItemsNew`), Trefferquote berechnen, Schulform und Testdaten |
+| `useCompetencesNew`       | Auswertung je Kompetenz `K1`–`K6` inkl. Vergleichswerte Gym/Nicht-Gym          |
+| `useGuidingIdeasNew`      | Auswertung je Leitidee `L1`–`L5`, Top- und schwache Bereiche                    |
+| `useOverallResultsNew`    | Gesamtscore und Zuordnung zu einer Rückmeldestufe (`K1A`–`K5`)                  |
+| `useSpecialCasesNew`      | Auffälligkeiten wie Bearbeitungsdauer und Anteil nicht bearbeiteter Aufgaben     |
+| `useNavigation`           | Aufbau der datenabhängigen Schrittfolge                                        |
+
+Die Varianten ohne `New`-Suffix (`useCompetences`, `useGuidingIdeas`, `useOverallResults`, `useSpecialCases`) sind die
+älteren Implementierungen gegen die TBA3-Referenz-API und bleiben zu Vergleichszwecken erhalten. Aktiv verwendet werden
+die `New`-Varianten gegen die inio-Reportdaten.
+
+---
+
+## TBA3-Schnittstelle
+
+Die TBA3-Schnittstelle soll die Daten für Abbildungen möglichst standardisieren. Die Schnittstelle muss zwingend für
+Abbildungen bedient werden (Projektziel von TBA3).
 
 ### Dokumentation
 
@@ -50,8 +257,62 @@ Die Dokumentation der Schnittstelle liegt hier vor: https://apps.indibit.eu/tba3
 
 Beispieldaten können hier abgerufen werden: https://apps.indibit.eu/tba3-api
 
+### API-Clients
+
+Die Clients werden **nicht von Hand geschrieben**, sondern mit dem OpenAPI Generator (`typescript-fetch`) aus den
+jeweiligen Spezifikationen erzeugt und als Workspace-Pakete eingebunden. Jedes Paket enthält unter `src/` die Ordner
+`apis/`, `models/` und `docs/` sowie `runtime.ts`.
+
+| Paket                  | Spezifikation                                                             | Neu generieren                      |
+|------------------------|---------------------------------------------------------------------------|-------------------------------------|
+| `@tba3/api-resources`  | `github.com/indibit-eu/tba3` → `tba3-spec.yml`                            | `pnpm run generate:api-resources`   |
+| `@tba3/api-new`        | `https://api.inio.de/swagger/report_data_tba3.json`                       | `pnpm run generate:api-new`         |
+| `@tba3/api-auth`       | `https://api.inio.de/swagger/auth.json`                                   | `pnpm run generate:api-auth`        |
+
+Die Generierung benötigt **Java 21** (der OpenAPI Generator ist ein Java-Tool); das Dev-Image in `docker/Dockerfile`
+bringt es bereits mit. Die erzeugten Dateien werden anschließend automatisch mit Prettier formatiert. Generierter Code
+sollte nicht manuell verändert werden – stattdessen die Spezifikation anpassen und neu generieren.
+
+### Dev-Proxys
+
+Um CORS im Entwicklungsbetrieb zu umgehen, leitet Vite drei Pfade weiter (identisch konfiguriert für `dev` und
+`preview`, s. `vite.config.ts`):
+
+| Pfad          | Ziel                                        | Verwendet von         |
+|---------------|---------------------------------------------|-----------------------|
+| `/api-proxy`  | `https://apps.indibit.eu/tba3-api/`         | `@tba3/api-resources` |
+| `/api-inio`   | `https://api.inio.de/report_data_tba3`      | `@tba3/api-new`       |
+| `/api-auth`   | `https://api.inio.de/report_data_tba3`      | `@tba3/api-auth`      |
+
+Im Production-Betrieb müssen die Endpunkte stattdessen über `public/config.js` als absolute URLs gesetzt werden.
+
+---
+
+## Tests & Qualitätssicherung
+
+```sh
+pnpm run test:unit    # Vitest (jsdom), Tests unter src/__tests__/
+pnpm run type-check   # vue-tsc über alle tsconfig-Projekte
+pnpm run lint         # oxlint und ESLint, jeweils mit --fix
+```
+
+### CI
+
+`.gitlab-ci.yml` definiert die Stages `audit` und `test`. Aktiv ist der Job `audit`, der die Abhängigkeiten mit
+`--frozen-lockfile --recursive` installiert und anschließend `pnpm audit --prod` ausführt. Als Image dient das
+projekteigene Dev-Image aus der GitLab-Registry der Uni Jena; der pnpm-Store und `node_modules` werden je Branch
+gecacht.
+
+---
+
 ## Entwürfe
 
 Klassenbericht https://5s9qgq.axshare.com/?id=5l8t5y&p=titel
 
 Schülerbericht https://www.figma.com/proto/onlT4EAaua1e4Hzd0fRmJE/TBAIII-L%C3%B6sungsdiagramm?page-id=0%3A1&node-id=5-35302&p=f&t=AUILFieapbO7wo9E-0&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=5%3A35302
+
+---
+
+## Lizenz
+
+Für dieses Repository ist derzeit keine Lizenzdatei hinterlegt.
