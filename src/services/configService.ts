@@ -5,8 +5,9 @@ export const configJson: any = {}
 export const isConfigLoading = ref(true)
 
 export async function loadConfig() {
-    if (import.meta.env.DEV) {
-        Object.assign(configJson, defaultConfig)
+    Object.assign(configJson, defaultConfig)
+
+    if (!import.meta.env.VITE_EXTERNAL_CONFIG) {
         isConfigLoading.value = false
         return
     }
