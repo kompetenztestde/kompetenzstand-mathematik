@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import HomeView from '@/views/HomeView/HomeView.vue'
 import AnimationView from '@/views/AnimationView/AnimationView.vue'
@@ -9,7 +9,7 @@ import BadResultsView from '@/views/BadResultsView/BadResultsView.vue'
 import FinalView from '@/views/FinalView/FinalView.vue'
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/login',

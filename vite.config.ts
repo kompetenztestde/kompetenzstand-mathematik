@@ -10,6 +10,7 @@ const env = loadEnv('', process.cwd(), '')
 
 export default defineConfig({
     plugins: [vue(), vueDevTools(), svgLoader()],
+    base: env.VITE_BASE_PATH || '/',
     build: {
         outDir: env.VITE_BUILD_DIR || 'dist',
     },
