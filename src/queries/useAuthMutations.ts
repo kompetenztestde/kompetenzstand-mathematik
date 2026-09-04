@@ -35,7 +35,7 @@ async function loginStudent(request: StudentLoginRequest) {
     throw new Error(data.message || 'Anmeldung fehlgeschlagen.')
   }
 
-  const reportConfiguration = await inioApiConfiguration()
+  const reportConfiguration = await inioApiConfiguration(false, data.data.token)
   const reportApi = new ReportDataTba3Api(reportConfiguration)
   const normalizedCode = normalizeStudentCode(request.loginCode)
   const reportResponse = await reportApi.testGroupsTgIdTestsTestIdGroupsGroupIdItemsGet({
