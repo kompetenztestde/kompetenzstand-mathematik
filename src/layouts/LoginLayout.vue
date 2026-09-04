@@ -403,7 +403,7 @@ async function login() {
 
 .info-text-secondary {
   margin-top: 1.25rem;
-  text-align: center;
+  /* text-align: center; */
   font-size: 1rem;
   line-height: 1.6;
   color: rgba(19, 63, 120, 0.84);
