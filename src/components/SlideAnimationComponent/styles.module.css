@@ -186,15 +186,19 @@
     .fixedIntroWaves {
         height: 100px;
     }
+
+    .sliderWrapper {
+        background: var(--color-white);
+    }
 }
 
 @media (max-width: 700px) {
     .label {
-        max-width: 20vw;
+        max-width: 85px;
     }
 }
 
-@media (min-width: 786px) and (max-width: 1024px) {
+@media (min-width: 786px) {
     .label {
         font-size: 16px;
         font-style: normal;

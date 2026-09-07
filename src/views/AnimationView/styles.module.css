@@ -104,6 +104,7 @@
         margin-bottom: 0;
         overflow-x: hidden;
         overflow-y: hidden;
+        background: var(--color-white);
     }
 
     .resultHeader {
@@ -119,6 +120,7 @@
 
         transform: translateY(120%);
         animation: slideInFromBottom 0.8s ease-out 18s forwards;
+        box-shadow: unset;
 
         overflow: scroll;
 
@@ -143,7 +145,9 @@
         padding: 0px 20px;
         gap: 8px;
         cursor: pointer;
-        min-height: 100px;
+        min-height: 150px;
+        background-color: var(--color-turquise);
+        z-index: 1;
     }
 
     .feedbackText {
@@ -151,19 +155,22 @@
         max-width: 250px;
         color: var(--color-navigation-blue);
         animation: fadeInQuick 0.5s ease-out forwards;
+        margin-bottom: -10px;
     }
 
-    .edgeIcon {
+    .edgeIconButton {
         position: static;
         transform: none;
         background: none;
         border: none;
+        transform: scale(0.69) !important;
+        transform-origin: center center;
     }
 
     .resultText {
         padding: 0;
         text-align: left;
-        margin-top: 5px;
+        margin-top: 15px;
     }
     .animationContainer {
         grid-row: 1;
@@ -178,15 +185,14 @@
     .buttonRefreshRow {
         display: flex;
         align-items: center;
-        padding: 10px 20px;
+        padding: 30px 20px 20px 20px;
         gap: 6px;
+        background: var(--color-white);
     }
 
     .refreshButtonText {
         display: block;
     }
-
-   
 }
 
 @keyframes fadeInQuick {
@@ -211,6 +217,13 @@
     .headerTopRow:first-child {
         justify-content: center;
         padding-bottom: 10px;
+    }
+
+    .resultText {
+        max-width: 420px;
+    }
+    .animationContainer {
+        overflow: visible;
     }
 }
 

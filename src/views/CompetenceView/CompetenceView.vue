@@ -35,7 +35,7 @@ const showDetails = () => {
                 <Confetti />
                 <div :class="[layout.baseIllustration, styles.illustrationHeader]">
                     <div @click="showDetails" :class="styles.titleRow">
-                        <h1>{{ currentItem.label }}</h1>
+                        <h1 :class="styles.title">{{ currentItem.label }}</h1>
                         <button
                             type="button"
                             :class="styles.infoButton"

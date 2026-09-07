@@ -73,7 +73,7 @@
 
     .fLabel span {
         display: inline-block;
-        transform: rotate(-45deg);
+        transform: rotate(-30deg);
         transform-origin: left bottom;
         position: absolute;
         overflow: visible;

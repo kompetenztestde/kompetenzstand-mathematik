@@ -135,8 +135,8 @@ const handleRefresh = () => {
                 @animation-finished="handleAnimationFinished"
             />
             <div v-if="showMobileFeedback" :class="styles.buttonRefreshRow">
-                <button type="button" @click="handleRefresh" :class="styles.edgeIcon" :aria-label="t('home.feedback')">
-                    <RefreshIcon aria-hidden="true" />
+                <button type="button" @click="handleRefresh" :class="styles.edgeIconButton" :aria-label="t('home.feedback')">
+                    <RefreshIcon :class="styles.edgeIcon" aria-hidden="true" />
                 </button>
                 <span :class="styles.refreshButtonText">nochmal abspielen</span>
             </div>

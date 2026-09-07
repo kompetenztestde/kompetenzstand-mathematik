@@ -42,25 +42,24 @@ const isMultiBad = computed(() => {
 })
 </script>
 <template>
-    <!-- <div> -->
-    <div :class="styles.page" v-if="!isMultiBad">
+    <div :class="[styles.page, { [styles.multiBadPage!]: isMultiBad }]" v-if="!isMultiBad">
         <GuidingIdeaComponent :data="badPerformers" type="negative" />
     </div>
-    <div :class="styles.page" v-else>
+    <div :class="[styles.page, { [styles.multiBadPage!]: isMultiBad }]" v-else>
         <div :class="styles.headerWrapper">
             <h1>{{ t('badResults.title') }}</h1>
         </div>
         <div :class="styles.introText">
-            <span class="text-body-big" >
+            <span :class="styles.badResultsText" class="text-body-big">
                 {{ t('badResults.text') }}
             </span>
-            <img :class="styles.contemplative" :src="Contemplative" alt="Contemptive Icon" />
+            <img v-if="isMobile" :class="styles.contemplative" :src="Contemplative" alt="Contemptive Icon" />
         </div>
         <BarCharts v-if="!isMobile" :badPerformers="badPerformers" :areas="calculatedAreas" />
         <div v-else :class="styles.mobileList">
             <div v-for="item in badPerformers" :key="item.label" :class="styles.mobileCard">
                 <div :class="styles.mobileCardHeader" @click="openInfo(item)">
-                    <span class="text-label-bold">{{ item.label }}</span>
+                    <span :class="styles.phoneItemLabel" class="text-label-bold">{{ item.label }}</span>
                     <InfoIcon aria-hidden="true" />
                 </div>
                 <SingleBarCharts :percentage="item.percentage" :areas="item.areas" />

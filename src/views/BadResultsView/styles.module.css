@@ -1,14 +1,13 @@
 .page {
-    padding: 20px;
     border-radius: 20;
     border-radius: 20px;
     background: var(--color-white);
-    box-shadow: 0 0 20px 0 rgba(34, 92, 115, 0.1);
     text-align: center;
     color: var(--color-navigation-blue);
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: subgrid;
+    align-content: flex-start;
 }
 
 .mobileList {
@@ -18,21 +17,22 @@
 }
 
 .headerWrapper {
-    grid-column: 4 / 10;
+    grid-column: 1 / -1;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     gap: 15px;
     width: 100%;
+    padding-top: 70px;
+    margin-bottom: 15px;
 }
 
 .introText {
     grid-column: 4 / 10;
     text-align: center;
     display: flex;
-    margin-top: 15px;
-    margin-bottom: 25px;
+    height: max-content;
 }
 
 .mobileCardHeader {
@@ -83,6 +83,11 @@
     padding: 0 0 12px 0;
 }
 
+.badResultsText {
+    height: max-content;
+    margin-bottom: 35px;
+}
+
 @media (min-width: 768px) and (max-width: 1100px) {
     .contemplative {
         position: static;
@@ -91,6 +96,10 @@
         height: 50px;
         margin-left: auto;
         margin-right: 0;
+    }
+    .headerWrapper,
+    .introText {
+        grid-column: 2 / 12;
     }
 }
 
@@ -122,10 +131,22 @@
     .headerWrapper {
         grid-column: 1 / -1;
         display: flex;
-        flex-direction: row; /* Lässt Text und Bild auf Handys nebeneinander fließen */
+        flex-direction: row;
         justify-content: center;
         align-items: center;
         gap: 10px;
         padding: 0 15px;
+        padding-top: 40px;
+    }
+    .multiBadPage {
+        padding: 20px;
+    }
+
+    .phoneItemLabel {
+        /* phone/label_bold2 */
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 1.13; /* 112.5% */
     }
 }
