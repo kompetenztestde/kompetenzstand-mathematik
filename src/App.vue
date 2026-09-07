@@ -137,21 +137,26 @@ const logout = () => {
                         <InfoIcon :class="styles.infoIcon" aria-hidden="true" />
                     </button>
                 </div>
+                <div :class="styles.navControls">
+                    <button
+                       v-if="!isHome" :disabled="currentIndex <= 0"
+                        @click="goBack"
+                        :class="styles.navBtn"
+                        :aria-label="t('accessibility.prev_page')"
+                    >
+                        <IconPageLeft :class="styles.navIcon" aria-hidden="true" />
+                    </button>
 
-                <button v-if="!isHome" :disabled="currentIndex <= 0" @click="goBack" :class="styles.navBtn" :aria-label="t('accessibility.prev_page')">
-                    <IconPageLeft :class="styles.navIcon" aria-hidden="true" />
-                </button>
-
-                <ul v-if="!isHome" :class="styles.pageIndicator" role="list">
-                    <li v-for="(step, index) in allSteps" :key="index">
-                        <button
-                            :class="`${styles.dot} ${index === currentIndex ? styles.active : ''}`"
-                            :aria-current="index === currentIndex ? 'page' : undefined"
-                            :aria-label="t('accessibility.go_to_page', { num: index + 1 })"
-                            @click="goTo(index)"
-                        ></button>
-                    </li>
-                </ul>
+                    <ul v-if="!isHome" :class="styles.pageIndicator" role="list">
+                        <li v-for="(step, index) in allSteps" :key="index" :class="styles.dotContainer">
+                            <button
+                                :class="[styles.dot, { [styles.active!]: index === currentIndex }]"
+                                :aria-current="index === currentIndex ? 'page' : undefined"
+                                :aria-label="t('accessibility.go_to_page', { num: index + 1 })"
+                                @click="goTo(index)"
+                            ></button>
+                        </li>
+                    </ul>
 
                 <button
                     v-if="!isHome"
@@ -172,6 +177,7 @@ const logout = () => {
                     </svg>
                     <span>Abmelden</span>
                 </button>
+              </div>
             </nav>
         </footer>
     </div>
