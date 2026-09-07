@@ -20,6 +20,13 @@ const toggleEnvelope = (index: number) => {
 }
 const links = competenceTexts.exerciseLinks || []
 const morphIconList = [MorphIcon1, MorphIcon2, MorphIcon3]
+
+const handleCardClick = (index: number) => {
+    const targetUrl = links[index]
+    if (targetUrl) {
+        window.open(targetUrl, '_blank', 'noopener,noreferrer')
+    }
+}
 </script>
 
 <template>
@@ -34,22 +41,10 @@ const morphIconList = [MorphIcon1, MorphIcon2, MorphIcon3]
                     :class="[styles.envelopeForm, openEnvelopeIndex === index ? styles.isOpen : '']"
                     :aria-expanded="openEnvelopeIndex === index"
                     :aria-label="`Brief ${index + 1} ${openEnvelopeIndex === index ? 'schließen' : 'öffnen'}`"
-                    @click="toggleEnvelope(index)"
-                >               
+                    @click="handleCardClick(index)"
+                >
                     <MorphCard :icon="morphIconList[index]" />
                     <h2 :class="styles.letterTitle">Aufgabe {{ index + 1 }}</h2>
-
-                    <a
-                        v-if="links[index]"
-                        :href="links[index]"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        :tabindex="openEnvelopeIndex === index ? 0 : -1"
-                        @click.stop
-                    >
-                        Zur Übung
-                        <span :class="styles.visuallyHidden"> (öffnet in neuem Fenster) </span>
-                    </a>
                 </button>
             </li>
         </ul>
