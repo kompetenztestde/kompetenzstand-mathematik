@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { ref, computed } from 'vue' // computed importieren
+import { ref, computed } from 'vue'
 import { useCompetencesNew } from '@/composables/useCompetencesNew'
 
 vi.mock('@/services/configService', () => ({
