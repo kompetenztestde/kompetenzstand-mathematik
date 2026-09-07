@@ -68,7 +68,7 @@ const level = computed(() => {
 })
 
 const levelLabel = computed<LevelLabel | undefined>(() => {
-    const rawValue = data.value?.[0]?.value // z.B. "III"
+    const rawValue = data.value?.[0]?.value
     if (!rawValue) return undefined
 
     return ROMAN_TO_LABEL[rawValue]

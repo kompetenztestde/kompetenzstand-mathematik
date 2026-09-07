@@ -109,9 +109,6 @@ onMounted(() => {
     updateBreakpoint()
     window.addEventListener('resize', updateBreakpoint)
 
-    // window.addEventListener('touchstart', preventSwipe, { passive: false })
-    // window.addEventListener('touchmove', preventSwipe, { passive: false })
-
     setTimeout(() => {
         isIntroSliding.value = true
     }, 12000)
