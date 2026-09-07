@@ -18,6 +18,7 @@ src/components/SideModal/icons/   closeIcon, speaker, startIcon, stopIcon, stopI
 src/views/HomeView/icons/         speaker, startIcon, stopIcon2
 src/themes/icons/info.svg
 src/themes/icons/waves.svg, dark_waves.svg, light_waves.svg
+src/themes/icons/new_waves/dark_waves.svg, waves.svg, light_waves.svg
 ```
 
 ## Animationen und Illustrationen — CC BY-SA 4.0
@@ -33,6 +34,7 @@ public/animation1.lottie, appear.lottie, swimming.lottie, scene1.json
 src/assets/animations/                       alle Lottie-Szenen, character.svg, CharacterC1.png
 src/components/GuidingIdeaComponent/icons/   Leitideen-Illustrationen und Emotions-Figuren
 src/themes/icons/Bocetos*.png
+src/themes/icons/new_waves/dark_waves.svg, waves.svg, light_waves.svg
 src/themes/icons/celebrate.png, contemplative.png, Ebene_1.png, solid.png, trophy.png
 src/views/BadResultsView/icons/contemplative.png
 src/views/CompetenceView/icons/trophy.png
@@ -42,7 +44,7 @@ src/views/FinalView/icons/morphIcon1.svg, morphIcon2.svg, morphIcon3.svg
 
 Vorgeschlagene Namensnennung bei Weiterverwendung:
 
-> Illustrationen: outermedia GmbH, CC BY-SA 4.0
+> Illustrationen: Raúl González Crespo - © outermedia GmbH, CC BY-SA 4.0
 
 ## Nicht mitlizenziert
 
