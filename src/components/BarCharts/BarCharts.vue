@@ -5,22 +5,17 @@ import '../../assets/styles/variables.css'
 import { useI18n } from 'vue-i18n'
 import { useModalStore } from '@/stores/modalStore'
 import { defineAsyncComponent } from 'vue'
-
+import Contemplative from './icons/contemplative.png'
 
 const VChart = defineAsyncComponent(async () => {
-    const [
-        { use },
-        { SVGRenderer },
-        { BarChart },
-        { GraphicComponent, GridComponent, TooltipComponent },
-        { default: VueECharts }
-    ] = await Promise.all([
-        import('echarts/core'),
-        import('echarts/renderers'),
-        import('echarts/charts'),
-        import('echarts/components'),
-        import('vue-echarts') 
-    ])
+    const [{ use }, { SVGRenderer }, { BarChart }, { GraphicComponent, GridComponent, TooltipComponent }, { default: VueECharts }] =
+        await Promise.all([
+            import('echarts/core'),
+            import('echarts/renderers'),
+            import('echarts/charts'),
+            import('echarts/components'),
+            import('vue-echarts'),
+        ])
 
     use([SVGRenderer, BarChart, GridComponent, TooltipComponent, GraphicComponent])
 
@@ -46,17 +41,35 @@ const props = defineProps<{
 
 const isMobile = ref(false)
 
-const dynamicMask = computed(() => {
-    const a1 = props.areas?.[0] ?? 33
-    const a2 = props.areas?.[1] ?? 66
+const a1 = computed(() => props.areas?.[0] ?? 33)
+const a2 = computed(() => props.areas?.[1] ?? 66)
 
+const maskArea1 = computed(() => {
     return `linear-gradient(to right, 
         rgba(0, 0, 0, 1) 0%, 
-        rgba(0, 0, 0, 1) ${a1}%, 
-        rgba(0, 0, 0, 0.7) ${a1}%, 
-        rgba(0, 0, 0, 0.7) ${a2}%, 
-        rgba(0, 0, 0, 0.3) ${a2}%, 
-        rgba(0, 0, 0, 0.3) 100%
+        rgba(0, 0, 0, 1) ${a1.value}%, 
+        transparent ${a1.value}%, 
+        transparent 100%
+    )`
+})
+
+const maskArea2 = computed(() => {
+    return `linear-gradient(to right, 
+        transparent 0%, 
+        transparent ${a1.value}%, 
+        rgba(0, 0, 0, 1) ${a1.value}%, 
+        rgba(0, 0, 0, 1) ${a2.value}%, 
+        transparent ${a2.value}%, 
+        transparent 100%
+    )`
+})
+
+const maskArea3 = computed(() => {
+    return `linear-gradient(to right, 
+        transparent 0%, 
+        transparent ${a2.value}%, 
+        rgba(0, 0, 0, 1) ${a2.value}%, 
+        rgba(0, 0, 0, 1) 100%
     )`
 })
 
@@ -107,7 +120,7 @@ const chartOption = computed(() => {
             {
                 type: 'bar',
                 data: props.badPerformers.map((item) => item.percentage),
-                barWidth: 40,
+                barWidth: 25,
                 itemStyle: { color: 'var(--color-berry)' },
             },
         ],
@@ -130,12 +143,24 @@ const openModal = (item: any) => {
             </div>
 
             <div :class="styles.chartContainer">
-                <div :class="styles.chartBackgroundWrapper" :style="{ '--mask': dynamicMask }">
-                    <div :class="styles.areaBorder" :style="{ left: areas[0] + '%' }"></div>
-                    <div :class="styles.areaBorder" :style="{ left: areas[1] + '%' }"></div>
+                <img :class="styles.contemplative" :src="Contemplative" alt="Contemplative Icon" />
+
+                <div :class="styles.chartBackgroundWrapper">
+                    <div :class="[styles.waveLayer, styles.waveDark]" :style="{ maskImage: maskArea1, WebkitMaskImage: maskArea1 }"></div>
+                    <div :class="[styles.waveLayer, styles.waveMedium]" :style="{ maskImage: maskArea2, WebkitMaskImage: maskArea2 }"></div>
+                    <div :class="[styles.waveLayer, styles.waveLight]" :style="{ maskImage: maskArea3, WebkitMaskImage: maskArea3 }"></div>
+
+                    <div :class="styles.areaBorder" :style="{ left: (areas[0] ?? 33) + '%' }"></div>
+                    <div :class="styles.areaBorder" :style="{ left: (areas[1] ?? 66) + '%' }"></div>
                 </div>
 
-                <VChart :class="styles.chart" :option="chartOption" :init-options="{ renderer: 'svg' }" @click="handleChartClick" autoresize />
+                <VChart
+                    :class="styles.chart"
+                    :option="chartOption"
+                    :init-options="{ renderer: 'svg' }"
+                    @click="handleChartClick"
+                    autoresize
+                />
                 <div :class="styles.scaleLabelsRow">
                     <span
                         :class="styles.scaleLabel"

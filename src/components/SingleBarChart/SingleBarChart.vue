@@ -5,51 +5,27 @@ import { useI18n } from 'vue-i18n'
 import styles from './styles.module.css'
 
 const VChart = defineAsyncComponent(async () => {
-    const [
-        { use },
-        { SVGRenderer },
-        { BarChart },
-        { GridComponent, MarkLineComponent },
-        { default: VueECharts }
-    ] = await Promise.all([
+    const [{ use }, { SVGRenderer }, { BarChart }, { GridComponent, MarkLineComponent }, { default: VueECharts }] = await Promise.all([
         import('echarts/core'),
         import('echarts/renderers'),
         import('echarts/charts'),
         import('echarts/components'),
-        import('vue-echarts')
+        import('vue-echarts'),
     ])
 
     use([SVGRenderer, BarChart, GridComponent, MarkLineComponent])
 
     return VueECharts
 })
-const { t } = useI18n()
 const props = defineProps<{
     percentage: number
     label?: string
     areas?: number[]
 }>()
 
-const dynamicMask = computed(() => {
-    const a1 = props.areas?.[0] ?? 33
-    const a2 = props.areas?.[1] ?? 66
+const chartOption = computed(() => {    
 
-    return `linear-gradient(to right, 
-        rgba(0, 0, 0, 1) 0%, 
-        rgba(0, 0, 0, 1) ${a1}%, 
-        rgba(0, 0, 0, 0.7) ${a1}%, 
-        rgba(0, 0, 0, 0.7) ${a2}%, 
-        rgba(0, 0, 0, 0.3) ${a2}%, 
-        rgba(0, 0, 0, 0.3) 100%
-    )`
-})
-
-const chartOption = computed(() => {
-    // let color = ['#ff8787', '#ff6b6b'];
-    // if (props.percentage >= 33 && props.percentage < 66) color = ['#ffd43b', '#fcc419'];
-    // if (props.percentage >= 66) color = ['#63e6be', '#42b883'];
-
-    let color = ['var(--color-pink)', 'var(--color-berry)']
+    let color = ['var(--color-berry)', 'var(--color-berry)']
     return {
         renderer: 'svg',
         animation: false,
@@ -86,7 +62,7 @@ const chartOption = computed(() => {
             {
                 type: 'bar',
                 data: [props.percentage],
-                barWidth: 28,
+                barWidth: 20,
                 itemStyle: {
                     color: {
                         type: 'linear',
@@ -112,11 +88,48 @@ watch(
     },
     { deep: true, immediate: true },
 )
+
+const a1 = computed(() => props.areas?.[0] ?? 33)
+const a2 = computed(() => props.areas?.[1] ?? 66)
+
+const maskArea1 = computed(() => {
+    return `linear-gradient(to right, 
+        rgba(0, 0, 0, 1) 0%, 
+        rgba(0, 0, 0, 1) ${a1.value}%, 
+        transparent ${a1.value}%, 
+        transparent 100%
+    )`
+})
+
+const maskArea2 = computed(() => {
+    return `linear-gradient(to right, 
+        transparent 0%, 
+        transparent ${a1.value}%, 
+        rgba(0, 0, 0, 1) ${a1.value}%, 
+        rgba(0, 0, 0, 1) ${a2.value}%, 
+        transparent ${a2.value}%, 
+        transparent 100%
+    )`
+})
+
+const maskArea3 = computed(() => {
+    return `linear-gradient(to right, 
+        transparent 0%, 
+        transparent ${a2.value}%, 
+        rgba(0, 0, 0, 1) ${a2.value}%, 
+        rgba(0, 0, 0, 1) 100%
+    )`
+})
 </script>
+
 
 <template>
     <div :class="styles.chartContainer">
-        <div :class="styles.chartBackgroundWrapper" :style="{ '--mask': dynamicMask }">
+        <div :class="styles.chartBackgroundWrapper">
+            <div :class="[styles.waveLayer, styles.waveDark]" :style="{ maskImage: maskArea1, WebkitMaskImage: maskArea1 }"></div>
+            <div :class="[styles.waveLayer, styles.waveMedium]" :style="{ maskImage: maskArea2, WebkitMaskImage: maskArea2 }"></div>
+            <div :class="[styles.waveLayer, styles.waveLight]" :style="{ maskImage: maskArea3, WebkitMaskImage: maskArea3 }"></div>
+
             <div :class="styles.areaBorder" :style="{ left: (areas?.[0] ?? 33) + '%' }"></div>
             <div :class="styles.areaBorder" :style="{ left: (areas?.[1] ?? 66) + '%' }"></div>
             <VChart :class="styles.chart" :option="chartOption" :init-options="{ renderer: 'svg' }" />
