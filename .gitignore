@@ -46,7 +46,6 @@ bundle-analysis.html
 
 # public configuration files
 config.js
-config.json
 docker-compose.yml
 .env
 coverage/

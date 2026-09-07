@@ -20,12 +20,15 @@ API-Clients aus der **TBA3-Schnittstelle**, die Texte über eine zur Laufzeit ge
 
 ### Einrichtung
 
-Zwei Konfigurationsdateien werden zur Laufzeit erwartet und sind **nicht im Repository** enthalten
+Drei Konfigurationsdateien werden zur Laufzeit erwartet und sind **nicht im Repository** enthalten
 (s. `.gitignore`, Abschnitt „Konfiguration"):
 
 ```bash
-# Laufzeit-Konfiguration der API-Endpunkte
-touch public/config.js
+# Laufzeit-Konfiguration der API-Endpunkte aus Vorlage kopieren
+cp public/config.example.js public/config.js
+
+# Optional: Umgebungsvariablen/Build-Fallback kopieren
+cp .env.example .env
 
 # Redaktionelle Texte, Schwellenwerte und Übungslinks
 cp src/assets/competence_guidingideas_texts.json public/config.json
@@ -107,17 +110,28 @@ Fehlt ein Wert, wird ein leerer `basePath` verwendet, d.h. es wird gegen den eig
 gegen die Vite-Proxys) angefragt. Der API-Key fällt zusätzlich auf `VITE_X_API_KEY_SCHOOL` und schließlich auf `TEST`
 zurück.
 
-Ersteinrichtung:
-Da public/config.js nicht versioniert wird, kopiere für die lokale Entwicklung die Vorlage public/config.example.js nach public/config.js und passe die Werte bei Bedarf an.
+### Ersteinrichtung:
+Kopiere für die lokale Entwicklung die Vorlage `public/config.example.js` nach `public/config.js` und passe die Werte bei Bedarf an.
+
+#### Optional: `.env` als Build-Fallback
+Standardmäßig wird die Konfiguration zur Laufzeit über `public/config.js` geladen (kein Rebuild erforderlich). 
+Falls du den API-Key stattdessen zur Build-Zeit fest in das Bundle einbrennen möchtest, kannst du eine `.env`-Datei auf Basis von `.env.example` anlegen:
+
+```env
+VITE_X_API_KEY_SCHOOL=TEST
+```
 
 Sicherheitshinweis zum API-Key:
 Da es sich um eine reine Client-Anwendung (Single Page Application) handelt, ist der xApiKeySchool für Endnutzer im Browser jederzeit einsehbar. Trage hier niemals geheime Server-Keys oder Admin-Credentials ein, sondern ausschließlich dafür vorgesehene Public-/Schul-API-Keys.
 
-### `public/config.json` – Inhalte
+### `public/config.json` – Inhalte & Schwellenwerte
 
-Wird beim App-Start in `src/services/configService.ts` per `fetch('/config.json')` geladen, bevor die Vue-Instanz
-gemountet wird, und danach über den Export `configJson` in Views und Composables verwendet. Als Vorlage dient
-`src/assets/competence_guidingideas_texts.json` mit folgenden Bereichen:
+Diese Datei steuert alle **redaktionellen Texte, Rückmeldungs-Logiken und Schwellenwerte**. Sie wird beim Start der Anwendung geladen (`fetch('/config.json')`), sodass Texte und Bewertungsgrenzen **ohne Rebuild der Anwendung** angepasst werden können.
+
+#### Ersteinrichtung:
+Kopiere die im Repository enthaltene Vorlage `src/assets/competence_guidingideas_texts.json` nach `public/config.json` oder nutze direkt die `public/config.json`
+
+#### Struktur der Datei:
 
 | Schlüssel                | Inhalt                                                                 |
 |--------------------------|------------------------------------------------------------------------|
@@ -162,11 +176,12 @@ Das Repository ist ein **pnpm-Workspace**: die App liegt im Wurzelverzeichnis, d
 │   ├── api-resources/  # @tba3/api-resources – TBA3-Referenz-API
 │   ├── api-new/        # @tba3/api-new       – inio-Reportdaten
 │   └── api-auth/       # @tba3/api-auth      – inio-Authentifizierung
-├── public/             # Statische Assets, config.js und config.json (nicht versioniert)
+├── public/             # Statische Assets, config.js(Vorlage: config.example.js) und config.json (nicht versioniert)
 ├── docker/
 │   ├── Dockerfile              # Node 24 + pnpm + Java (für die Client-Generierung)
 │   └── development.entrypoint  # pnpm install und Container offen halten
 ├── docker-compose.yml  # Dev-Container (Vorlage, lokal nicht versioniert)
+├── .env.example        # Vorlage für Build-Umgebungsvariablen
 ├── vite.config.ts      # Build, Alias @ → src, Dev-/Preview-Proxys
 ├── vitest.config.ts    # Test-Setup (jsdom)
 └── .gitlab-ci.yml      # CI: Audit der Produktionsabhängigkeiten
