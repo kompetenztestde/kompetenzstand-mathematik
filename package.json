@@ -2,8 +2,12 @@
     "name": "tba3-report-outermedia",
     "version": "0.0.0",
     "private": true,
+    "resolvers": {
+        "nanoid": ">=3.3.18"
+    },
     "overrides": {
-        "nanoid": "^3.3.18"
+        "nanoid": ">=3.3.18",
+        "postcss>nanoid": ">=3.3.18"
     },
     "type": "module",
     "scripts": {
