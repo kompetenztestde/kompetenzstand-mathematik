@@ -1,5 +1,7 @@
 # TBA3 Prototypische Rückmeldung im Fach Mathematik Klassenstufe 8
 
+[![Lizenz: MIT](https://img.shields.io/badge/Lizenz-MIT-yellow.svg)](LICENSE)
+
 Eine Webanwendung zur **Aufbereitung von VerA-8-Ergebnisdaten für Schüler:innen**, die die eigenen Testergebnisse
 schrittweise, altersgerecht und motivierend zurückmeldet.
 Das Projekt ist eine reine **Vue 3 + Vite Single-Page-App** (kein eigenes Backend). Die Daten kommen über generierte
@@ -57,19 +59,19 @@ docker compose exec node pnpm run dev
 
 ### Skripte
 
-| Skript                            | Beschreibung                                                                              |
-| --------------------------------- | ----------------------------------------------------------------------------------------- |
-| `pnpm run dev`                    | Dev-Server mit Hot Reload (Port 3000, inkl. API-Proxys)                                   |
-| `pnpm run build`                  | Type-Check und Production-Build (`vue-tsc` + `vite build`)                                |
-| `pnpm run build-only`             | Nur Build, ohne Type-Check                                                                |
-| `pnpm run type-check`             | Type-Check via `vue-tsc --build`                                                          |
-| `pnpm run preview`                | Vorschau des Production-Builds (Port 4173, inkl. API-Proxys)                              |
-| `pnpm run test:unit`              | Unit-Tests mit [Vitest](https://vitest.dev/)                                              |
-| `pnpm run lint`                   | Lint mit [oxlint](https://oxc.rs/) und [ESLint](https://eslint.org/), jeweils mit `--fix` |
-| `pnpm run format`                 | Formatierung von `src/` mit [Prettier](https://prettier.io/)                              |
-| `pnpm run generate:api-resources` | API-Client aus der TBA3-Spezifikation neu generieren                                      |
-| `pnpm run generate:api-new`       | API-Client für die inio-Reportdaten neu generieren                                        |
-| `pnpm run generate:api-auth`      | API-Client für die inio-Authentifizierung neu generieren                                  |
+| Skript                          | Beschreibung                                                        |
+|---------------------------------|---------------------------------------------------------------------|
+| `pnpm run dev`                  | Dev-Server mit Hot Reload (Port 3000, inkl. API-Proxys)             |
+| `pnpm run build`                | Type-Check und Production-Build (`vue-tsc` + `vite build`)          |
+| `pnpm run build-only`           | Nur Build, ohne Type-Check                                          |
+| `pnpm run type-check`           | Type-Check via `vue-tsc --build`                                    |
+| `pnpm run preview`              | Vorschau des Production-Builds (Port 4173, inkl. API-Proxys)        |
+| `pnpm run test:unit`            | Unit-Tests mit [Vitest](https://vitest.dev/)                        |
+| `pnpm run lint`                 | Lint mit [oxlint](https://oxc.rs/) und [ESLint](https://eslint.org/), jeweils mit `--fix` |
+| `pnpm run format`               | Formatierung von `src/` mit [Prettier](https://prettier.io/)        |
+| `pnpm run generate:api-resources` | API-Client aus der TBA3-Spezifikation neu generieren               |
+| `pnpm run generate:api-new`     | API-Client für die inio-Reportdaten neu generieren                  |
+| `pnpm run generate:api-auth`    | API-Client für die inio-Authentifizierung neu generieren            |
 
 ### Code-Konventionen
 
@@ -92,10 +94,10 @@ Wird in `index.html` als klassisches Script eingebunden und setzt `window.appCon
 ```js
 window.appConfig = {
     api: {
-        baseUrl: '/api-proxy', // TBA3-Referenz-API (@tba3/api-resources)
-        inioApiUrl: '/api-inio', // inio-Reportdaten (@tba3/api-new)
-        inioAuthApiUrl: '/api-auth', // inio-Authentifizierung (@tba3/api-auth)
-        xApiKeySchool: 'TEST', // Header X-API-KEY-SCHOOL
+        baseUrl: '/api-proxy',        // TBA3-Referenz-API (@tba3/api-resources)
+        inioApiUrl: '/api-inio',      // inio-Reportdaten (@tba3/api-new)
+        inioAuthApiUrl: '/api-auth',  // inio-Authentifizierung (@tba3/api-auth)
+        xApiKeySchool: 'TEST',        // Header X-API-KEY-SCHOOL
     },
     defaultPageSize: 20,
 }
@@ -117,16 +119,16 @@ Wird beim App-Start in `src/services/configService.ts` per `fetch('/config.json'
 gemountet wird, und danach über den Export `configJson` in Views und Composables verwendet. Als Vorlage dient
 `src/assets/competence_guidingideas_texts.json` mit folgenden Bereichen:
 
-| Schlüssel                             | Inhalt                                                               |
-| ------------------------------------- | -------------------------------------------------------------------- |
-| `competence_texts`                    | Texte und Beschreibungen je Kompetenz `K1`–`K6`                      |
-| `guiding_ideas_texts`                 | Texte und Beschreibungen je Leitidee `L1`–`L5`                       |
-| `start`                               | Titel und Info-Text des Einstiegs (auch im Info-Modal der Fußzeile)  |
-| `overallResult`                       | Rückmeldetexte je Gesamtergebnis-Stufe (`K1A`, `K1B`, `K2`–`K5`)     |
-| `specialCases`, `specialCasesAdvices` | Texte und Hinweise für auffällige Bearbeitungsmuster                 |
-| `areas`, `cutOffs`                    | Bereichsgrenzen und Schwellenwerte für die Einordnung der Ergebnisse |
-| `testInfo`                            | Metadaten zum Testheft (Booklet, Fach, Klassenstufe)                 |
-| `exerciseLinks`                       | Übungs-/Vertiefungslinks für die Abschlussseite                      |
+| Schlüssel                | Inhalt                                                                 |
+|--------------------------|------------------------------------------------------------------------|
+| `competence_texts`       | Texte und Beschreibungen je Kompetenz `K1`–`K6`                        |
+| `guiding_ideas_texts`    | Texte und Beschreibungen je Leitidee `L1`–`L5`                          |
+| `start`                  | Titel und Info-Text des Einstiegs (auch im Info-Modal der Fußzeile)     |
+| `overallResult`          | Rückmeldetexte je Gesamtergebnis-Stufe (`K1A`, `K1B`, `K2`–`K5`)        |
+| `specialCases`, `specialCasesAdvices` | Texte und Hinweise für auffällige Bearbeitungsmuster       |
+| `areas`, `cutOffs`       | Bereichsgrenzen und Schwellenwerte für die Einordnung der Ergebnisse    |
+| `testInfo`               | Metadaten zum Testheft (Booklet, Fach, Klassenstufe)                    |
+| `exerciseLinks`          | Übungs-/Vertiefungslinks für die Abschlussseite                         |
 
 ---
 
@@ -218,15 +220,15 @@ ihre Werte von der einbindenden View.
 Die Rückmeldung ist als lineare Abfolge von Schritten aufgebaut. Der Code der Schüler:in wird als Query-Parameter
 `?user=<code>` durch alle Schritte mitgeführt.
 
-| Route             | View              | Inhalt                                                      |
-| ----------------- | ----------------- | ----------------------------------------------------------- |
-| `/` → `/step-1`   | `HomeView`        | Auswahl des Test-Codes und Einstieg                         |
-| `/step-2`         | `AnimationView`   | Animierte Einordnung des Gesamtergebnisses                  |
-| `/step-3`         | `SpecialView`     | „Das ist uns aufgefallen" – richtig/falsch/nicht bearbeitet |
-| `/step-4/:subId?` | `CompetenceView`  | „Hier bist du stark" – stärkste Kompetenzen (`K1`–`K6`)     |
-| `/step-5/:subId?` | `GuidingIdeaView` | Stärkste Leitideen (`L1`–`L5`)                              |
-| `/step-6/:subId?` | `BadResultsView`  | Bereiche mit Übungsbedarf                                   |
-| `/step-7`         | `FinalView`       | Abschluss mit Übungs- und Vertiefungslinks                  |
+| Route             | View               | Inhalt                                                                    |
+|-------------------|--------------------|---------------------------------------------------------------------------|
+| `/` → `/step-1`   | `HomeView`         | Auswahl des Test-Codes und Einstieg                                       |
+| `/step-2`         | `AnimationView`    | Animierte Einordnung des Gesamtergebnisses                                |
+| `/step-3`         | `SpecialView`      | „Das ist uns aufgefallen" – richtig/falsch/nicht bearbeitet               |
+| `/step-4/:subId?` | `CompetenceView`   | „Hier bist du stark" – stärkste Kompetenzen (`K1`–`K6`)                   |
+| `/step-5/:subId?` | `GuidingIdeaView`  | Stärkste Leitideen (`L1`–`L5`)                                            |
+| `/step-6/:subId?` | `BadResultsView`   | Bereiche mit Übungsbedarf                                                 |
+| `/step-7`         | `FinalView`        | Abschluss mit Übungs- und Vertiefungslinks                                |
 
 Die tatsächliche Schrittfolge ist **datenabhängig**: `src/composables/useNavigation.ts` baut aus den ermittelten
 Top-Performern und schwachen Bereichen eine Liste aller Schritte auf. Für jede starke Kompetenz bzw. Leitidee entsteht
@@ -235,14 +237,14 @@ ein eigener Unterschritt (`:subId`); gibt es mehr als zwei schwache Bereiche, wi
 
 ### Composables
 
-| Composable             | Aufgabe                                                                                           |
-| ---------------------- | ------------------------------------------------------------------------------------------------- |
-| `useUserItems`         | Items einer Schüler:in laden (`useUserItemsNew`), Trefferquote berechnen, Schulform und Testdaten |
-| `useCompetencesNew`    | Auswertung je Kompetenz `K1`–`K6` inkl. Vergleichswerte Gym/Nicht-Gym                             |
-| `useGuidingIdeasNew`   | Auswertung je Leitidee `L1`–`L5`, Top- und schwache Bereiche                                      |
-| `useOverallResultsNew` | Gesamtscore und Zuordnung zu einer Rückmeldestufe (`K1A`–`K5`)                                    |
-| `useSpecialCasesNew`   | Auffälligkeiten wie Bearbeitungsdauer und Anteil nicht bearbeiteter Aufgaben                      |
-| `useNavigation`        | Aufbau der datenabhängigen Schrittfolge                                                           |
+| Composable                | Aufgabe                                                                       |
+|---------------------------|-------------------------------------------------------------------------------|
+| `useUserItems`            | Items einer Schüler:in laden (`useUserItemsNew`), Trefferquote berechnen, Schulform und Testdaten |
+| `useCompetencesNew`       | Auswertung je Kompetenz `K1`–`K6` inkl. Vergleichswerte Gym/Nicht-Gym          |
+| `useGuidingIdeasNew`      | Auswertung je Leitidee `L1`–`L5`, Top- und schwache Bereiche                    |
+| `useOverallResultsNew`    | Gesamtscore und Zuordnung zu einer Rückmeldestufe (`K1A`–`K5`)                  |
+| `useSpecialCasesNew`      | Auffälligkeiten wie Bearbeitungsdauer und Anteil nicht bearbeiteter Aufgaben     |
+| `useNavigation`           | Aufbau der datenabhängigen Schrittfolge                                        |
 
 Die Varianten ohne `New`-Suffix (`useCompetences`, `useGuidingIdeas`, `useOverallResults`, `useSpecialCases`) sind die
 älteren Implementierungen gegen die TBA3-Referenz-API und bleiben zu Vergleichszwecken erhalten. Aktiv verwendet werden
@@ -269,11 +271,11 @@ Die Clients werden **nicht von Hand geschrieben**, sondern mit dem OpenAPI Gener
 jeweiligen Spezifikationen erzeugt und als Workspace-Pakete eingebunden. Jedes Paket enthält unter `src/` die Ordner
 `apis/`, `models/` und `docs/` sowie `runtime.ts`.
 
-| Paket                 | Spezifikation                                       | Neu generieren                    |
-| --------------------- | --------------------------------------------------- | --------------------------------- |
-| `@tba3/api-resources` | `github.com/indibit-eu/tba3` → `tba3-spec.yml`      | `pnpm run generate:api-resources` |
-| `@tba3/api-new`       | `https://api.inio.de/swagger/report_data_tba3.json` | `pnpm run generate:api-new`       |
-| `@tba3/api-auth`      | `https://api.inio.de/swagger/auth.json`             | `pnpm run generate:api-auth`      |
+| Paket                  | Spezifikation                                                             | Neu generieren                      |
+|------------------------|---------------------------------------------------------------------------|-------------------------------------|
+| `@tba3/api-resources`  | `github.com/indibit-eu/tba3` → `tba3-spec.yml`                            | `pnpm run generate:api-resources`   |
+| `@tba3/api-new`        | `https://api.inio.de/swagger/report_data_tba3.json`                       | `pnpm run generate:api-new`         |
+| `@tba3/api-auth`       | `https://api.inio.de/swagger/auth.json`                                   | `pnpm run generate:api-auth`        |
 
 Die Generierung benötigt **Java 21** (der OpenAPI Generator ist ein Java-Tool); das Dev-Image in `docker/Dockerfile`
 bringt es bereits mit. Die erzeugten Dateien werden anschließend automatisch mit Prettier formatiert. Generierter Code
@@ -284,11 +286,11 @@ sollte nicht manuell verändert werden – stattdessen die Spezifikation anpasse
 Um CORS im Entwicklungsbetrieb zu umgehen, leitet Vite drei Pfade weiter (identisch konfiguriert für `dev` und
 `preview`, s. `vite.config.ts`):
 
-| Pfad         | Ziel                                   | Verwendet von         |
-| ------------ | -------------------------------------- | --------------------- |
-| `/api-proxy` | `https://apps.indibit.eu/tba3-api/`    | `@tba3/api-resources` |
-| `/api-inio`  | `https://api.inio.de/report_data_tba3` | `@tba3/api-new`       |
-| `/api-auth`  | `https://api.inio.de/report_data_tba3` | `@tba3/api-auth`      |
+| Pfad          | Ziel                                        | Verwendet von         |
+|---------------|---------------------------------------------|-----------------------|
+| `/api-proxy`  | `https://apps.indibit.eu/tba3-api/`         | `@tba3/api-resources` |
+| `/api-inio`   | `https://api.inio.de/report_data_tba3`      | `@tba3/api-new`       |
+| `/api-auth`   | `https://api.inio.de/report_data_tba3`      | `@tba3/api-auth`      |
 
 Im Production-Betrieb müssen die Endpunkte stattdessen über `public/config.js` als absolute URLs gesetzt werden.
 
@@ -330,9 +332,10 @@ gecacht.
 
 ## Lizenz
 
-Dieses Projekt steht unter der MIT-Lizenz (siehe LICENSE).
-Abhängigkeiten & Third-Party-Lizenzen
+Der **Quellcode** steht unter der [MIT-Lizenz](LICENSE), die **Animationen und Illustrationen** unter
+[CC BY-SA 4.0](LICENSE-CC-BY-SA-4.0.txt). Welche Datei unter welcher Lizenz steht, listet
+[`LICENSES.md`](LICENSES.md) auf – dort ist auch das Firmenlogo als Marke von beiden Lizenzen ausgenommen.
 
-Bei jedem Production-Build (pnpm run build) wird über rollup-plugin-license automatisch eine vollständige Übersicht aller verwendeten Open-Source-Pakete und Schriftarten in dist/THIRD-PARTY-NOTICES.txt generiert.
-
-Hinweis für Entwickler: Der Build-Prozess prüft neue NPM-Pakete automatisch gegen eine Positivliste zugelassener Lizenzen (ALLOWED_LICENSES in vite.config.ts). Fehlschläge beim Build durch neue Abhängigkeiten müssen dort nach manueller Prüfung angepasst werden.
+Die eingebundene Schriftart League Spartan steht unter der SIL Open Font License 1.1
+(`src/themes/fonts/OFL.txt`). Die Lizenztexte aller gebündelten npm-Pakete erzeugt der Build in
+`dist/THIRD-PARTY-NOTICES.txt`.
