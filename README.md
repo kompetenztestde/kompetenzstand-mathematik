@@ -105,22 +105,28 @@ Fehlt ein Wert, wird ein leerer `basePath` verwendet, d.h. es wird gegen den eig
 gegen die Vite-Proxys) angefragt. Der API-Key fällt zusätzlich auf `VITE_X_API_KEY_SCHOOL` und schließlich auf `TEST`
 zurück.
 
+Ersteinrichtung:
+    Da public/config.js nicht versioniert wird, kopiere für die lokale Entwicklung die Vorlage public/config.example.js nach public/config.js und passe die Werte bei Bedarf an.
+
+Sicherheitshinweis zum API-Key:
+    Da es sich um eine reine Client-Anwendung (Single Page Application) handelt, ist der xApiKeySchool für Endnutzer im Browser jederzeit einsehbar. Trage hier niemals geheime Server-Keys oder Admin-Credentials ein, sondern ausschließlich dafür vorgesehene Public-/Schul-API-Keys.
+
 ### `public/config.json` – Inhalte
 
 Wird beim App-Start in `src/services/configService.ts` per `fetch('/config.json')` geladen, bevor die Vue-Instanz
 gemountet wird, und danach über den Export `configJson` in Views und Composables verwendet. Als Vorlage dient
 `src/assets/competence_guidingideas_texts.json` mit folgenden Bereichen:
 
-| Schlüssel                | Inhalt                                                                 |
-|--------------------------|------------------------------------------------------------------------|
-| `competence_texts`       | Texte und Beschreibungen je Kompetenz `K1`–`K6`                        |
-| `guiding_ideas_texts`    | Texte und Beschreibungen je Leitidee `L1`–`L5`                          |
-| `start`                  | Titel und Info-Text des Einstiegs (auch im Info-Modal der Fußzeile)     |
-| `overallResult`          | Rückmeldetexte je Gesamtergebnis-Stufe (`K1A`, `K1B`, `K2`–`K5`)        |
-| `specialCases`, `specialCasesAdvices` | Texte und Hinweise für auffällige Bearbeitungsmuster       |
-| `areas`, `cutOffs`       | Bereichsgrenzen und Schwellenwerte für die Einordnung der Ergebnisse    |
-| `testInfo`               | Metadaten zum Testheft (Booklet, Fach, Klassenstufe)                    |
-| `exerciseLinks`          | Übungs-/Vertiefungslinks für die Abschlussseite                         |
+| Schlüssel                             | Inhalt                                                                               |
+|---------------------------------------|------------------------------------------------------------------------|
+| `competence_texts`                    | Texte und Beschreibungen je Kompetenz `K1`–`K6`                         |
+| `guiding_ideas_texts`                 | Texte und Beschreibungen je Leitidee `L1`–`L5`                          |
+| `start`                               | Titel und Info-Text des Einstiegs (auch im Info-Modal der Fußzeile)     |
+| `overallResult`                       | Rückmeldetexte je Gesamtergebnis-Stufe (`K1A`, `K1B`, `K2`–`K5`)        |
+| `specialCases`, `specialCasesAdvices` | Texte und Hinweise für auffällige Bearbeitungsmuster                    |
+| `areas`, `cutOffs`                    | Bereichsgrenzen und Schwellenwerte für die Einordnung der Ergebnisse    |
+| `testInfo`                            | Metadaten zum Testheft (Booklet, Fach, Klassenstufe)                    |
+| `exerciseLinks`                       | Übungs-/Vertiefungslinks für die Abschlussseite                         |
 
 ---
 
@@ -305,14 +311,12 @@ gecacht.
 
 ---
 
-## Entwürfe
-
-Klassenbericht https://5s9qgq.axshare.com/?id=5l8t5y&p=titel
-
-Schülerbericht https://www.figma.com/proto/onlT4EAaua1e4Hzd0fRmJE/TBAIII-L%C3%B6sungsdiagramm?page-id=0%3A1&node-id=5-35302&p=f&t=AUILFieapbO7wo9E-0&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=5%3A35302
-
----
-
 ## Lizenz
 
-Für dieses Repository ist derzeit keine Lizenzdatei hinterlegt.
+Dieses Projekt steht unter der MIT-Lizenz (siehe LICENSE).
+Abhängigkeiten & Third-Party-Lizenzen
+
+Bei jedem Production-Build (pnpm run build) wird über rollup-plugin-license automatisch eine vollständige Übersicht aller verwendeten Open-Source-Pakete und Schriftarten in dist/THIRD-PARTY-NOTICES.txt generiert.
+
+Hinweis für Entwickler: Der Build-Prozess prüft neue NPM-Pakete automatisch gegen eine Positivliste zugelassener Lizenzen (ALLOWED_LICENSES in vite.config.ts). Fehlschläge beim Build durch neue Abhängigkeiten müssen dort nach manueller Prüfung angepasst werden.
+
