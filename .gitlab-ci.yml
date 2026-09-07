@@ -19,4 +19,11 @@ audit:
     - pnpm install --frozen-lockfile --recursive
     - pnpm audit --prod
 
-
+test:
+  stage: test
+  image: $NODE  
+  script:
+    - pnpm install --frozen-lockfile --recursive
+    - pnpm run build
+    - pnpm run test:report
+  allow_failure: true
