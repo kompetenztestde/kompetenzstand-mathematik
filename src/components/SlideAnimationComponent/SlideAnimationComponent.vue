@@ -49,10 +49,8 @@ const isAnimating = computed(() => {
 })
 
 const preventSwipe = (event: TouchEvent) => {
-    if (isAnimating.value) {
-        if (event.cancelable) {
-            event.preventDefault()
-        }
+    if (isAnimating.value && event.cancelable) {
+        event.preventDefault()
     }
 }
 
@@ -111,9 +109,6 @@ onMounted(() => {
     updateBreakpoint()
     window.addEventListener('resize', updateBreakpoint)
 
-    window.addEventListener('touchstart', preventSwipe, { passive: false })
-    window.addEventListener('touchmove', preventSwipe, { passive: false })
-
     setTimeout(() => {
         isIntroSliding.value = true
     }, 12000)
@@ -152,7 +147,7 @@ onUnmounted(() => {
                 </div>
             </div>
 
-            <div v-else key="content" :class="styles.sliderWrapper">
+            <div v-else key="content" :class="styles.sliderWrapper" @touchstart="preventSwipe" @touchmove="preventSwipe">
                 <div class="sliderTrack" :style="{ '--mask': dynamicMask }">
                     <div :class="styles.movableContainer" :style="{ left: dynamicLeftPosition }">
                         <DotLottieVue
@@ -284,7 +279,5 @@ onUnmounted(() => {
         padding-top: 0px;
         height: 100px;
     }
-
-    
 }
 </style>

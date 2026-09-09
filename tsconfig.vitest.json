@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.app.json",
-  "include": ["src/**/__tests__/*", "env.d.ts"],
+  "include": ["src/**/__tests__/*", "env.d.ts", "src/__tests__/components/StackedBarChart.spec.ts", "src/__tests__/views/HomeView.spec.ts", "src/__tests__/views/CompetenceView.spec.ts", "src/__tests__/views/AnimationView.spec.ts", "src/__tests__/views/BadResultsView.spec.ts", "src/__tests__/views/FinalView.spec.ts", "src/__tests__/views/SpecialView.spec.ts", "src/__tests__/views/GuidingIdeaView.spec.ts", "src/__tests__/composables/useUserItems.spec.ts", "src/__tests__/composables/useSpecialCasesNew.spec.ts", "src/__tests__/composables/useOverallResultsNew.spec.ts", "src/__tests__/composables/useCompetencesNew.spec.ts", "src/__tests__/composables/useGuidingIdeasNew.spec.ts", "src/__tests__/composables/useNavigation.spec.ts"],
   "exclude": [],
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.vitest.tsbuildinfo",

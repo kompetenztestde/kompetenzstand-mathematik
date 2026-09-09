@@ -136,7 +136,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
                                     <Stop2 aria-hidden="true" />
                                 </button>
                             </div>
-                            <h2 data-tts>{{ modalStore.title }}</h2>
+                            <h2 :class="styles.title" data-tts>{{ modalStore.title }}</h2>
 
                             <div data-tts class="text-body" v-html="modalStore.content" role="document"></div>
                         </div>

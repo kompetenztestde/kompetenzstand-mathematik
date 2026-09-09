@@ -14,7 +14,6 @@
 .baseIllustration {
     grid-column: 1 / 5;
     background: var(--turquise-light, #deffff);
-    box-shadow: 0 0 20px 0 rgba(34, 92, 115, 0.1);
     display: flex;
     align-items: center;
     justify-content: start;
@@ -52,7 +51,7 @@
 
     .baseContentArea {
         grid-column: 1 / -1;
-        padding: 20px;
+        padding: 36px 36px 35px;
         gap: 15px;
     }
 
@@ -62,7 +61,7 @@
     }
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 786px) and (max-width: 1024px) {
     .baseCard {
         min-height: auto;
     }
@@ -76,7 +75,8 @@
 
     .baseContentArea {
         grid-column: 1 / -1; 
-        padding: 30px 20px;
+        /* padding: 30px 20px; */
+        padding:  52px 95px;
         gap: 15px;
     }
 

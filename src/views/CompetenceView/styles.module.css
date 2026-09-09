@@ -17,9 +17,9 @@
 }
 
 .trophyImg {
-    max-width: 100%;
-    height: auto;
-    margin-top: auto;
+    max-width: 250px;
+    max-height: 270px;
+    margin-bottom: auto;
 }
 
 .info {
@@ -31,7 +31,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 116px;
     width: 100%;
 }
 
@@ -64,16 +64,43 @@
     padding-bottom: 20px;
 }
 
+.title {
+    text-align: center;
+}
+
 @media only screen and (tabletup) {
     .page {
         grid-column: 1 / span 13 !important;
     }
 }
 
-@media (max-width: 783px) {
+@media (max-width: 768px) {
     .trophyImg {
         width: 173px;
         height: 195px;
         aspect-ratio: 55/62;
+    }
+    .illustrationHeader {
+        gap: 10px;
+    }
+    .titleRow {
+        padding-top: 55px;
+        align-items: flex-end;
+        gap: 0;
+    }
+    .title{
+        width: 200px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+     .titleRow {
+        padding-top: 55px;
+        align-items: flex-end;
+        gap: 0;
+    }
+
+    .illustrationHeader {
+        gap: 18px;
     }
 }

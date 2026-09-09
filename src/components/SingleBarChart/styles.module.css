@@ -14,7 +14,7 @@
 
 .barTrack {
     position: relative;
-    height: 28px;
+    height: 20px;
     border-radius: 6px;
     overflow: hidden;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -45,9 +45,8 @@
     border-radius: 0 4px 4px 0;
 }
 
-
 .chart {
-    height: 100px;
+    height: 70px;
     width: 100%;
     position: relative;
     z-index: 3;
@@ -74,6 +73,10 @@
 }
 
 
+.chartBackgroundWrapper::before {
+    display: none;
+}
+
 .chartBackgroundWrapper {
     position: relative;
     width: 100%;
@@ -81,19 +84,24 @@
     overflow: hidden;
 }
 
-
-
-.chartBackgroundWrapper::before {
-    content: '';
+.waveLayer {
     position: absolute;
     inset: 0;
-
-    background-image: url('@/themes/icons/waves.svg');
     background-repeat: repeat-x;
-    background-position: bottom;
-    background-size: cover;
-
-    -webkit-mask-image: var(--mask);
-    mask-image: var(--mask);
+    background-position: unset;
+    background-size: 100%;
     z-index: 0;
+    pointer-events: none;
+}
+
+.waveDark {
+    background-image: url('@/themes/icons/new_waves/dark_waves.svg');
+}
+
+.waveMedium {
+    background-image: url('@/themes/icons/new_waves/waves.svg');
+}
+
+.waveLight {
+    background-image: url('@/themes/icons/new_waves/light_waves.svg');
 }

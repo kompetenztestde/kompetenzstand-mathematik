@@ -50,3 +50,4 @@ config.json
 !public/config.js
 docker-compose.yml
 .env
+coverage/

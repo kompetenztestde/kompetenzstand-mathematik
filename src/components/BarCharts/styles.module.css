@@ -1,5 +1,5 @@
 .page {
-    grid-column: 1 / -1; 
+    grid-column: 1 / -1;
     display: grid;
     grid-template-columns: subgrid;
     width: 100%;
@@ -16,15 +16,10 @@
     grid-column: 2 / 5;
     display: flex;
     flex-direction: column;
-    height: calc(var(--item-count) * 70px);
-    padding-top: 20px;
+    height: calc(100% - 60px);
+    margin-top: 20px;
+    padding-top: 0;
     align-items: flex-start;
-}
-
-.chartContainer {
-    grid-column: 5 / 12;
-    position: relative;
-    height: calc((var(--item-count) * 70px) + 20px + 40px);
 }
 
 .chartRow {
@@ -39,11 +34,17 @@
     text-align: left;
     flex: 1;
     word-break: break-word;
+
+    /* tablet/label */
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1.06; /* 105.556% */
 }
 
 .yAxisLabel {
-    flex: 1 0 0;
-    height: 70px;
+    flex: 1;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -84,16 +85,26 @@
     z-index: 0;
 }
 
-.chartBackgroundWrapper::before {
-    content: '';
+.waveLayer {
     position: absolute;
     inset: 0;
-    background-image: url('@/themes/icons/waves.svg');
-    background-repeat: repeat-x;
-    background-position: bottom;
+    background-repeat: no-repeat;
+    background-position: bottom left;
     background-size: cover;
-    -webkit-mask-image: var(--mask);
-    mask-image: var(--mask);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.waveDark {
+    background-image: url('@/themes/icons/new_waves/dark_waves.svg');
+}
+
+.waveMedium {
+    background-image: url('@/themes/icons/new_waves/waves.svg');
+}
+
+.waveLight {
+    background-image: url('@/themes/icons/new_waves/light_waves.svg');
 }
 
 .scaleLabelsRow {
@@ -262,7 +273,25 @@
     padding-right: 10px;
 }
 
+.chartContainer {
+    grid-column: 5 / 12;
+    position: relative;
+    height: calc((var(--item-count) * 70px) + 20px + 40px);
+    container-type: inline-size;
+}
 
+.contemplative {
+    position: absolute;
+    width: clamp(45px, 8cqw, 65px);
+    height: auto;
+    aspect-ratio: 1 / 1;
+
+    top: -15px;
+    right: 21px;
+
+    z-index: 10;
+    pointer-events: none;
+}
 
 @media (max-width: 1000px) {
     .scaleLabel {

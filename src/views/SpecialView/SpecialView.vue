@@ -30,10 +30,6 @@ const total = computed(() => {
     return data.value?.length || 0
 })
 
-// const notWorkedOn = computed(() => {
-//     return total - correct - failed
-// })
-
 const notWorkedOn = computed(() => {
     if (!data.value) return 0
     const itemsWithMinusFrequency = data.value.filter((item) => item.descriptiveStatistics?.frequency === -1)
@@ -52,15 +48,17 @@ watch(data, (newVal) => {
     <div :class="styles.page">
         <h1 :class="styles.header">{{ t('specialView.title') }}</h1>
         <div :class="styles.container">
-                <StackedBarChart
-                    label="Aufgabenverteilung"
-                    :correctAnswers="correct"
-                    :falseAnswers="failed"
-                    :notWorkedOn="notWorkedOn"
-                    :total="total"
-                />
-            <div :class="['text-body-big-bold', styles.resultText]">{{ specialCaseResult.resultAndAdvice.result }}</div>
-            <div :class="['text-body-big', styles.adviceText]">{{ specialCaseResult.resultAndAdvice.advice }}</div>
+            <StackedBarChart
+                label="Aufgabenverteilung"
+                :correctAnswers="correct"
+                :falseAnswers="failed"
+                :notWorkedOn="notWorkedOn"
+                :total="total"
+            />
+            <template v-if="specialCaseResult?.resultAndAdvice">
+                <div :class="['text-body-big-bold', styles.resultText]">{{ specialCaseResult.resultAndAdvice.result }}</div>
+                <div :class="['text-body-big', styles.adviceText]">{{ specialCaseResult.resultAndAdvice.advice }}</div>
+            </template>
         </div>
     </div>
 </template>

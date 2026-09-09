@@ -68,7 +68,7 @@ const level = computed(() => {
 })
 
 const levelLabel = computed<LevelLabel | undefined>(() => {
-    const rawValue = data.value?.[0]?.value // z.B. "III"
+    const rawValue = data.value?.[0]?.value
     if (!rawValue) return undefined
 
     return ROMAN_TO_LABEL[rawValue]
@@ -135,8 +135,8 @@ const handleRefresh = () => {
                 @animation-finished="handleAnimationFinished"
             />
             <div v-if="showMobileFeedback" :class="styles.buttonRefreshRow">
-                <button type="button" @click="handleRefresh" :class="styles.edgeIcon" :aria-label="t('home.feedback')">
-                    <RefreshIcon aria-hidden="true" />
+                <button type="button" @click="handleRefresh" :class="styles.edgeIconButton" :aria-label="t('home.feedback')">
+                    <RefreshIcon :class="styles.edgeIcon" aria-hidden="true" />
                 </button>
                 <span :class="styles.refreshButtonText">nochmal abspielen</span>
             </div>
