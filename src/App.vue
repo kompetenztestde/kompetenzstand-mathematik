@@ -123,7 +123,7 @@ const logout = () => {
         </main>
 
         <SideModal v-if="!isAuthPage" />
-        <footer v-if="!isAuthPage" role="contentinfo">
+        <footer v-if="!isAuthPage" role="contentinfo" :class="styles.navbarFooter">
             <nav :aria-label="t('accessibility.pagination')" :class="styles.navigationBar">
             <div v-if="!isHome" :class="styles.reportDiv">
                     <h2 :class="styles.reportH1">{{ t('home.feedback') }}</h2>
@@ -168,17 +168,17 @@ const logout = () => {
                     <IconPageRight :class="styles.navIcon" aria-hidden="true" />
                 </button>
 
-                <button type="button" @click="logout" :class="styles.logoutBtn" aria-label="Abmelden" title="Abmelden">
-                    <svg :class="styles.logoutIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <path
-                            fill="currentColor"
-                            d="M13 21q-.425 0-.712-.288T12 20t.288-.712T13 19h6V5h-6q-.425 0-.712-.288T12 4t.288-.712T13 3h6q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm-1.825-8H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7.175L9.3 9.125q-.275-.275-.275-.675t.275-.7t.7-.313t.725.288L14.3 11.3q.3.3.3.7t-.3.7l-3.575 3.575q-.3.3-.712.288T9.3 16.25q-.275-.3-.262-.712t.287-.688z"
-                        />
-                    </svg>
-                    <span>Abmelden</span>
-                </button>
               </div>
             </nav>
+            <button type="button" @click="logout" :class="styles.logoutBtn" aria-label="Abmelden" title="Abmelden">
+                <svg :class="styles.logoutIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path
+                        fill="currentColor"
+                        d="M13 21q-.425 0-.712-.288T12 20t.288-.712T13 19h6V5h-6q-.425 0-.712-.288T12 4t.288-.712T13 3h6q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm-1.825-8H4q-.425 0-.712-.288T3 12t.288-.712T4 11h7.175L9.3 9.125q-.275-.275-.275-.675t.275-.7t.7-.313t.725.288L14.3 11.3q.3.3.3.7t-.3.7l-3.575 3.575q-.3.3-.712.288T9.3 16.25q-.275-.3-.262-.712t.287-.688z"
+                    />
+                </svg>
+                <span>Abmelden</span>
+            </button>
         </footer>
     </div>
 </template>

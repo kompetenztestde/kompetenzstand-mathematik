@@ -26,7 +26,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px 15px 20px;
+    padding: 15px 190px 15px 20px;
     z-index: 100;
 }
 
@@ -68,7 +68,7 @@
 
 @media (min-width: 768px) {
     .navigationBar {
-        padding: 25px 50px 25px 50px;
+        padding: 25px 190px 25px 50px;
     }
 }
 
@@ -155,10 +155,15 @@
 }
 
 .logoutBtn {
+    position: absolute;
+    top: 50%;
+    right: clamp(12px, 3vw, 50px);
+    transform: translateY(-50%);
+    z-index: 110;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin-left: auto;
+    max-width: calc(100vw - 24px);
     border: 1px solid var(--color-navigation-blue);
     border-radius: 4px;
     padding: 6px 10px;
@@ -167,6 +172,7 @@
     cursor: pointer;
     font: inherit;
     font-weight: 700;
+    white-space: nowrap;
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -259,6 +265,13 @@
     z-index: 10;
 }
 
+.navbarFooter {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--color-turquise);
+}
+
 .mainBody:has(:global(.noPaddingPage)) {
     padding: 0 !important;
     height: 100% !important;
@@ -295,7 +308,7 @@
         display: flex;
         width: 100%;
         height: 88px;
-        padding: 10px 21px 20px 21px;
+        padding: 10px 140px 20px 21px;
         justify-content: center;
         align-items: center;
         gap: 3px;
@@ -332,7 +345,7 @@
 @media (min-width: 768px) and (max-width: 1024px) {
     .navigationBar {
         padding-left: 25px;
-        padding-right: 25px;
+        padding-right: 170px;
         position: relative;
     }
 
@@ -352,5 +365,23 @@
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 520px) {
+    .logoutBtn {
+        padding: 6px;
+    }
+
+    .logoutBtn span {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 }
