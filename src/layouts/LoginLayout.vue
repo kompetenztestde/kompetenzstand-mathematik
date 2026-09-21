@@ -163,7 +163,7 @@ async function login() {
           </p>
 
           <p class="info-text-secondary">
-            Dieses Portal dient zu Evaluations- und Demonstationszwecken. Wenn Sie nicht Teil der Evaluation sind, können Sie sich mit dem Demo-Zugang anmelden.
+            Dieses Portal dient zu Evaluations- und Demonstrationszwecken. Wenn Sie nicht Teil der Evaluation sind, können Sie sich mit dem Demo-Zugang anmelden.
           </p>
 
           <div class="logos-section">
