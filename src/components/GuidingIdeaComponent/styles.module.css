@@ -95,6 +95,7 @@
 .descriptionText {
     display: block;
     padding-top: 20px;
+    text-align: left;
 }
 
 @media (max-width: 768px) {
