@@ -7,7 +7,11 @@ schrittweise, altersgerecht und motivierend zurückmeldet.
 Das Projekt ist eine reine **Vue 3 + Vite Single-Page-App** (kein eigenes Backend). Die Daten kommen über generierte
 API-Clients aus der **TBA3-Schnittstelle**, die Texte über eine zur Laufzeit geladene Konfigurationsdatei.
 
+* [Technische Dokumentation](#technische-dokumentation)
+* [Inhaltliche Dokumentation](#inhaltliche-dokumentation)
+
 ---
+
 ## Technische Dokumentation
 
 ### Entwicklungsumgebung
