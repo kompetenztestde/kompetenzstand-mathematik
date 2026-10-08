@@ -147,7 +147,9 @@ async function login() {
     <div class="login-wrapper">
       <div class="login-content-wrapper">
         <div class="login-info-section">
-          <h1 class="login-title">Kompetenzstand-Mathematik</h1>
+          <h1 class="login-title">
+            Kompetenzstand-Mathematik: <span class="login-report-type">Schülerbericht</span>
+          </h1>
           <p class="info-text-main">
             Prototypisches Rückmeldeportal im
             <a
@@ -354,6 +356,7 @@ async function login() {
 }
 
 .login-info-section {
+  container-type: inline-size;
   width: 100%;
   color: var(--color-navigation-blue);
   display: flex;
@@ -378,10 +381,16 @@ async function login() {
   margin: 0 0 1.25rem;
   color: var(--color-navigation-blue);
   font-family: 'League Spartan', sans-serif;
-  font-size: clamp(2.5rem, 2.8vw, 2.75rem);
+  font-size: clamp(0.75rem, 4.4cqi, 2rem);
   font-weight: 600;
   line-height: 1.05;
   letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.login-report-type {
+  display: inline-block;
+  font-weight: 400;
 }
 
 .info-link {
